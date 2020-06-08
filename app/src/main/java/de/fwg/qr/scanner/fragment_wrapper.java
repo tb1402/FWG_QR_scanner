@@ -15,7 +15,7 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public abstract class fragment_wrapper extends Fragment {
     network net;
-    WeakReference<networkCallbackInterface> ref;
+    //WeakReference<networkCallbackInterface> ref;
     Activity a;
     Context c;
 
@@ -25,7 +25,7 @@ public abstract class fragment_wrapper extends Fragment {
         a=requireActivity();
         c=requireContext();
         net=new network(c);
-        ref=new WeakReference<>((networkCallbackInterface) this);
+        //ref=new WeakReference<>((networkCallbackInterface) this);
         setHasOptionsMenu(true);
     }
     void lockUI(boolean state){
