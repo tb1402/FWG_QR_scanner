@@ -87,11 +87,34 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Fragment f;
         switch(id){
             case R.id.item_frgm_history:
-               Fragment f=new fragmentHistory();
-               show(f);
-               break;
+                f = new fragmentHistory();
+                show(f);
+                break;
+            case R.id.item_frgm_information:
+                f = new fragmentInformation();
+                show(f);
+                break;
+            case R.id.item_frgm_about:
+                f = new fragmentAbout();
+                show(f);
+                break;
+            case R.id.item_frgm_agb:
+                f = new fragmentAGB();
+                show(f);
+                break;
+            case R.id.item_frgm_help:
+                f = new fragmentHelp();
+                show(f);
+            case R.id.item_frgm_scan:
+                f = new fragmentScan();
+                show(f);
+                break;
+            default:
+                // todo default bei fehler
+                break;
         }
 
         drawer = findViewById(R.id.drawer_layout);

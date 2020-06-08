@@ -13,14 +13,125 @@
         <action
             android:id="@+id/action_fragmentScan_to_fragmentAGB"
             app:destination="@id/fragmentAGB" />
+        <action
+            android:id="@+id/action_fragmentScan_to_fragmentInformation"
+            app:destination="@id/fragmentInformation" />
+        <action
+            android:id="@+id/action_fragmentScan_to_fragmentHistory"
+            app:destination="@id/fragmentHistory" />
+        <action
+            android:id="@+id/action_fragmentScan_to_fragmentHelp"
+            app:destination="@id/fragmentHelp" />
+        <action
+            android:id="@+id/action_fragmentScan_to_fragmentAbout"
+            app:destination="@id/fragmentAbout" />
     </fragment>
     <fragment
         android:id="@+id/fragmentAGB"
-        android:name="de.fwg.qr.scanner.FragmentAGB"
+        android:name="de.fwg.qr.scanner.fragmentAGB"
         android:label="fragment_agb"
         tools:layout="@layout/fragment_agb" >
         <action
             android:id="@+id/action_fragmentAGB_to_fragmentScan"
             app:destination="@id/fragmentScan" />
+        <action
+            android:id="@+id/action_fragmentAGB_to_fragmentHistory"
+            app:destination="@id/fragmentHistory" />
+        <action
+            android:id="@+id/action_fragmentAGB_to_fragmentHelp"
+            app:destination="@id/fragmentHelp" />
+        <action
+            android:id="@+id/action_fragmentAGB_to_fragmentAbout"
+            app:destination="@id/fragmentAbout" />
+        <action
+            android:id="@+id/action_fragmentAGB_to_fragmentInformation"
+            app:destination="@id/fragmentInformation" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAbout"
+        android:name="de.fwg.qr.scanner.fragmentAbout"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" >
+        <action
+            android:id="@+id/action_fragmentAbout_to_fragmentAGB"
+            app:destination="@id/fragmentAGB" />
+        <action
+            android:id="@+id/action_fragmentAbout_to_fragmentInformation"
+            app:destination="@id/fragmentInformation" />
+        <action
+            android:id="@+id/action_fragmentAbout_to_fragmentInformation2"
+            app:destination="@id/fragmentInformation" />
+        <action
+            android:id="@+id/action_fragmentAbout_to_fragmentScan"
+            app:destination="@id/fragmentScan" />
+        <action
+            android:id="@+id/action_fragmentAbout_to_fragmentHelp"
+            app:destination="@id/fragmentHelp" />
+        <action
+            android:id="@+id/action_fragmentAbout_to_fragmentHistory"
+            app:destination="@id/fragmentHistory" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentHelp"
+        android:name="de.fwg.qr.scanner.fragmentHelp"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_help" >
+        <action
+            android:id="@+id/action_fragmentHelp_to_fragmentAGB"
+            app:destination="@id/fragmentAGB" />
+        <action
+            android:id="@+id/action_fragmentHelp_to_fragmentInformation"
+            app:destination="@id/fragmentInformation" />
+        <action
+            android:id="@+id/action_fragmentHelp_to_fragmentScan"
+            app:destination="@id/fragmentScan" />
+        <action
+            android:id="@+id/action_fragmentHelp_to_fragmentAbout"
+            app:destination="@id/fragmentAbout" />
+        <action
+            android:id="@+id/action_fragmentHelp_to_fragmentHistory"
+            app:destination="@id/fragmentHistory" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentHistory"
+        android:name="de.fwg.qr.scanner.fragmentHistory"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_fragmentHistory_to_fragmentAGB"
+            app:destination="@id/fragmentAGB" />
+        <action
+            android:id="@+id/action_fragmentHistory_to_fragmentInformation"
+            app:destination="@id/fragmentInformation" />
+        <action
+            android:id="@+id/action_fragmentHistory_to_fragmentScan"
+            app:destination="@id/fragmentScan" />
+        <action
+            android:id="@+id/action_fragmentHistory_to_fragmentHelp"
+            app:destination="@id/fragmentHelp" />
+        <action
+            android:id="@+id/action_fragmentHistory_to_fragmentAbout"
+            app:destination="@id/fragmentAbout" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentInformation"
+        android:name="de.fwg.qr.scanner.fragmentInformation"
+        android:label="fragment_information"
+        tools:layout="@layout/fragment_information" >
+        <action
+            android:id="@+id/action_fragmentInformation_to_fragmentAGB"
+            app:destination="@id/fragmentAGB" />
+        <action
+            android:id="@+id/action_fragmentInformation_to_fragmentScan"
+            app:destination="@id/fragmentScan" />
+        <action
+            android:id="@+id/action_fragmentInformation_to_fragmentHistory"
+            app:destination="@id/fragmentHistory" />
+        <action
+            android:id="@+id/action_fragmentInformation_to_fragmentHelp"
+            app:destination="@id/fragmentHelp" />
+        <action
+            android:id="@+id/action_fragmentInformation_to_fragmentAbout"
+            app:destination="@id/fragmentAbout" />
     </fragment>
 </navigation>
