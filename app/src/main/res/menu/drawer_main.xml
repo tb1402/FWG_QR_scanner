@@ -12,5 +12,8 @@
             android:orderInCategory="15"
             android:title="@string/item_history_title"
             />
+        <item
+            android:id="@+id/nav_agb"
+            android:title="@string/agb" />
     </group>
 </menu>
