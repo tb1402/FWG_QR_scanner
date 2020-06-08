@@ -45,7 +45,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         NavigationView navView=findViewById(R.id.nav_view);//needed for navigation controller
         navCon= Navigation.findNavController(this,R.id.host_fragment);
         Toolbar tb=findViewById(R.id.toolbar);
-        abdt=new ActionBarDrawerToggle(this,drawer,tb,R.string.msg_navigation_drawer_open,R.string.msg_naviagtion_drawer_close);
+        abdt=new ActionBarDrawerToggle(this,drawer,tb,R.string.msg_navigation_drawer_open,R.string.msg_navigation_drawer_close);
 
         //setup Navigation
         NavigationUI.setupActionBarWithNavController(this,navCon,drawer);
