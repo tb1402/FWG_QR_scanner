@@ -8,11 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class fragmentAGB extends Fragment {
+public class fragmentAGB extends fragment_wrapper {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showStartIcon();
     }
 
     @Override

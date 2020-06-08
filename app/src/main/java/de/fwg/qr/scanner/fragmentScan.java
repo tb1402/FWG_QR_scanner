@@ -17,16 +17,20 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import java.lang.ref.WeakReference;
+
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class fragmentScan extends fragment_wrapper implements networkCallbackInterface {
 
     ImageView test;
     VideoView videoView;
+    WeakReference<networkCallbackInterface> ref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ref=new WeakReference<>((networkCallbackInterface) this);
         if(!net.isNetworkAvailable()){
             Toast.makeText(c, "Keine Netzwerkverbindung!", Toast.LENGTH_SHORT).show();
             a.finishAffinity();

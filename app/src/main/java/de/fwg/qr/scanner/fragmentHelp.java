@@ -14,6 +14,7 @@ public class fragmentHelp extends fragment_wrapper {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showStartIcon();
     }
 
     @Override
