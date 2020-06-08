@@ -13,5 +13,5 @@
 
     <!--strings for the drawer-->
     <string name="item_history_title">Verlauf</string>
-
+    <string name="agb">AGB</string>
 </resources>

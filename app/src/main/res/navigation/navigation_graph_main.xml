@@ -9,5 +9,18 @@
         android:id="@+id/fragmentScan"
         android:name="de.fwg.qr.scanner.fragmentScan"
         android:label="fragment_scan"
-        tools:layout="@layout/fragment_scan" />
+        tools:layout="@layout/fragment_scan" >
+        <action
+            android:id="@+id/action_fragmentScan_to_fragmentAGB"
+            app:destination="@id/fragmentAGB" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAGB"
+        android:name="de.fwg.qr.scanner.FragmentAGB"
+        android:label="fragment_agb"
+        tools:layout="@layout/fragment_agb" >
+        <action
+            android:id="@+id/action_fragmentAGB_to_fragmentScan"
+            app:destination="@id/fragmentScan" />
+    </fragment>
 </navigation>
