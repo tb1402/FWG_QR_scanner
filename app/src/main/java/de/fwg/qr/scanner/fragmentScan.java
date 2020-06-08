@@ -45,6 +45,7 @@ public class fragmentScan extends fragment_wrapper implements networkCallbackInt
     public void onViewCreated(View v, @Nullable Bundle sis){
         test=v.findViewById(R.id.imageView);
         videoView=v.findViewById(R.id.vw);
+        lockUI(true);
         net.makeImageRequest(ref,"test","/1.jpg");
         PlayVideo();
     }
@@ -57,6 +58,7 @@ public class fragmentScan extends fragment_wrapper implements networkCallbackInt
     @Override
     public void onImageCallback(String name, Bitmap image) {
         Log.i("fwg",name);
+        lockUI(false);
         if(name.contentEquals("test")){
             test.setImageBitmap(image);
         }
