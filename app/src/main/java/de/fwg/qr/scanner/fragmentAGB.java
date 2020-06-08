@@ -8,12 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentAGB#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FragmentAGB extends Fragment {
+public class fragmentAGB extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

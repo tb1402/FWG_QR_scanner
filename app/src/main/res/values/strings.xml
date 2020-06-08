@@ -12,6 +12,10 @@
 
 
     <!--strings for the drawer-->
+    <string name="item_scan_title">Einscannen</string>
     <string name="item_history_title">Verlauf</string>
-    <string name="agb">AGB</string>
+    <string name="item_help_title">Anleitung</string>
+    <string name="item_information_title">Information</string>
+    <string name="item_about_title">Über uns</string>
+    <string name="item_agb_title">AGB</string>
 </resources>
