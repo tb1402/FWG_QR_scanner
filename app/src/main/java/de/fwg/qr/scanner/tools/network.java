@@ -20,17 +20,16 @@ import java.util.Map;
 import de.fwg.qr.scanner.R;
 
 public class network {
-    private String baseURL="https://srv.cloud-tb.de";
+    private String baseURL="https://web.cloud-tb.de";
     private Context c;
 
     public network(Context c){
         this.c=c;
     }
-    boolean isNetworkAvailable() {
+    public boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
     }
     private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data,String requestURL){
         final networkCallbackInterface nci=w.get();
@@ -61,7 +60,7 @@ public class network {
                     public void onResponse(Bitmap response) {
                         nci.onImageCallback(name,response);
                     }
-                }, 0, 0, null,
+                }, 0, 0, null, Bitmap.Config.RGB_565,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -69,10 +68,10 @@ public class network {
                     }
                 });
     }
-    void makePostRequest(WeakReference<networkCallbackInterface> nci,String operation,String data,String requestURL){
+    public void makePostRequest(WeakReference<networkCallbackInterface> nci,String operation,String data,String requestURL){
         requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci,operation,data,requestURL));
     }
-    void makeImageRequest(WeakReference<networkCallbackInterface> nci,String name,String imageURL){
+    public void makeImageRequest(WeakReference<networkCallbackInterface> nci,String name,String imageURL){
         requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci,name,imageURL));
     }
 }
