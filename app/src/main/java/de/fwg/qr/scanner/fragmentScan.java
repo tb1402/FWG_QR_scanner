@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
-public class fragmentScan extends fragment_wrapper implements networkCallbackInterface {
+public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {
 
     ImageView test;
     VideoView videoView;
@@ -30,23 +30,24 @@ public class fragmentScan extends fragment_wrapper implements networkCallbackInt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ref=new WeakReference<>((networkCallbackInterface) this);
-        if(!net.isNetworkAvailable()){
+        ref = new WeakReference<>((networkCallbackInterface) this);
+        if (!net.isNetworkAvailable()) {
             Toast.makeText(c, "Keine Netzwerkverbindung!", Toast.LENGTH_SHORT).show();
             a.finishAffinity();
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_scan, container, false);
     }
+
     @Override
-    public void onViewCreated(View v, @Nullable Bundle sis){
-        test=v.findViewById(R.id.imageView);
-        videoView=v.findViewById(R.id.vw);
+    public void onViewCreated(View v, @Nullable Bundle sis) {
+        test = v.findViewById(R.id.imageView);
+        videoView = v.findViewById(R.id.vw);
         lockUI(true);
-        net.makeImageRequest(ref,"test","/1.jpg");
+        net.makeImageRequest(ref, "test", "/1.jpg");
         PlayVideo();
     }
 
@@ -57,16 +58,15 @@ public class fragmentScan extends fragment_wrapper implements networkCallbackInt
 
     @Override
     public void onImageCallback(String name, Bitmap image) {
-        Log.i("fwg",name);
+        Log.i("fwg", name);
         lockUI(false);
-        if(name.contentEquals("test")){
+        if (name.contentEquals("test")) {
             test.setImageBitmap(image);
         }
     }
-    private void PlayVideo()
-    {
-        try
-        {
+
+    private void PlayVideo() {
+        try {
             a.getWindow().setFormat(PixelFormat.TRANSLUCENT);
             MediaController mediaController = new MediaController(getActivity());
             mediaController.setAnchorView(videoView);
@@ -75,20 +75,16 @@ public class fragmentScan extends fragment_wrapper implements networkCallbackInt
             videoView.setMediaController(mediaController);
             videoView.setVideoURI(video);
             videoView.requestFocus();
-            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
-            {
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
-                public void onPrepared(MediaPlayer mp)
-                {
+                public void onPrepared(MediaPlayer mp) {
                     videoView.start();
                 }
             });
 
 
-        }
-        catch(Exception e)
-        {
-            System.out.println("Video Play Error :"+e.toString());
+        } catch (Exception e) {
+            System.out.println("Video Play Error :" + e.toString());
         }
 
     }

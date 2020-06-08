@@ -9,7 +9,7 @@
         android:id="@+id/item_frgm_scan"
         android:name="de.fwg.qr.scanner.fragmentScan"
         android:label="fragment_scan"
-        tools:layout="@layout/fragment_scan" >
+        tools:layout="@layout/fragment_scan">
         <action
             android:id="@+id/action_fragmentScan_to_fragmentAGB"
             app:destination="@id/item_frgm_agb" />
@@ -30,7 +30,7 @@
         android:id="@+id/item_frgm_agb"
         android:name="de.fwg.qr.scanner.fragmentAGB"
         android:label="fragment_agb"
-        tools:layout="@layout/fragment_agb" >
+        tools:layout="@layout/fragment_agb">
         <action
             android:id="@+id/action_fragmentAGB_to_fragmentScan"
             app:destination="@id/item_frgm_scan" />
@@ -51,7 +51,7 @@
         android:id="@+id/item_frgm_about"
         android:name="de.fwg.qr.scanner.fragmentAbout"
         android:label="fragment_about"
-        tools:layout="@layout/fragment_about" >
+        tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_fragmentAbout_to_fragmentAGB"
             app:destination="@id/item_frgm_agb" />
@@ -75,7 +75,7 @@
         android:id="@+id/item_frgm_help"
         android:name="de.fwg.qr.scanner.fragmentHelp"
         android:label="fragment_help"
-        tools:layout="@layout/fragment_help" >
+        tools:layout="@layout/fragment_help">
         <action
             android:id="@+id/action_fragmentHelp_to_fragmentAGB"
             app:destination="@id/item_frgm_agb" />
@@ -96,7 +96,7 @@
         android:id="@+id/item_frgm_history"
         android:name="de.fwg.qr.scanner.fragmentHistory"
         android:label="fragment_history"
-        tools:layout="@layout/fragment_history" >
+        tools:layout="@layout/fragment_history">
         <action
             android:id="@+id/action_fragmentHistory_to_fragmentAGB"
             app:destination="@id/item_frgm_agb" />
@@ -117,7 +117,7 @@
         android:id="@+id/item_frgm_information"
         android:name="de.fwg.qr.scanner.fragmentInformation"
         android:label="fragment_information"
-        tools:layout="@layout/fragment_information" >
+        tools:layout="@layout/fragment_information">
         <action
             android:id="@+id/action_fragmentInformation_to_fragmentAGB"
             app:destination="@id/item_frgm_agb" />

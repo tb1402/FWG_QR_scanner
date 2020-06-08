@@ -2,14 +2,11 @@ package de.fwg.qr.scanner;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class fragmentInformation extends fragment_wrapper {
-
+public class fragmentInformation extends fragmentWrapper {
 
 
     @Override

@@ -20,45 +20,49 @@ import java.util.Map;
 import de.fwg.qr.scanner.R;
 
 public class network {
-    private String baseURL="https://web.cloud-tb.de";
+    private String baseURL = "https://web.cloud-tb.de";
     private Context c;
 
-    public network(Context c){
-        this.c=c;
+    public network(Context c) {
+        this.c = c;
     }
+
     public boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
-    private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data,String requestURL){
-        final networkCallbackInterface nci=w.get();
-        StringRequest r=new StringRequest(Request.Method.POST, baseURL+requestURL, new Response.Listener<String>() {
+
+    private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data, String requestURL) {
+        final networkCallbackInterface nci = w.get();
+        StringRequest r = new StringRequest(Request.Method.POST, baseURL + requestURL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                nci.onPostCallback(operation,response);
+                nci.onPostCallback(operation, response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                nci.onPostCallback("error",error.toString());
+                nci.onPostCallback("error", error.toString());
             }
-        }){protected Map<String, String> getParams(){
-            Map<String, String> d=new HashMap<>();
-            d.put("data",data);
-            return d;
-        }
+        }) {
+            protected Map<String, String> getParams() {
+                Map<String, String> d = new HashMap<>();
+                d.put("data", data);
+                return d;
+            }
         };
-        r.setRetryPolicy(new DefaultRetryPolicy(5000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        r.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return r;
     }
-    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w,final String name, String imageURL){
-        final networkCallbackInterface nci=w.get();
+
+    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, String imageURL) {
+        final networkCallbackInterface nci = w.get();
         return new ImageRequest(baseURL + imageURL,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
-                        nci.onImageCallback(name,response);
+                        nci.onImageCallback(name, response);
                     }
                 }, 0, 0, null, Bitmap.Config.RGB_565,
                 new Response.ErrorListener() {
@@ -68,10 +72,12 @@ public class network {
                     }
                 });
     }
-    public void makePostRequest(WeakReference<networkCallbackInterface> nci,String operation,String data,String requestURL){
-        requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci,operation,data,requestURL));
+
+    public void makePostRequest(WeakReference<networkCallbackInterface> nci, String operation, String data, String requestURL) {
+        requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci, operation, data, requestURL));
     }
-    public void makeImageRequest(WeakReference<networkCallbackInterface> nci,String name,String imageURL){
-        requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci,name,imageURL));
+
+    public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String imageURL) {
+        requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, imageURL));
     }
 }

@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface{
+public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface {
     /**
      * WICHTIG!!!
      * Diese Klasse bleibt unverändert, hier wird nur Code eingefügt, der zur Navigation dient!!!
@@ -41,40 +41,44 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //initialize variables
-        drawer=findViewById(R.id.drawer_layout);
-        NavigationView navView=findViewById(R.id.nav_view);//needed for navigation controller
-        navCon= Navigation.findNavController(this,R.id.host_fragment);
-        Toolbar tb=findViewById(R.id.toolbar);
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.nav_view);//needed for navigation controller
+        navCon = Navigation.findNavController(this, R.id.host_fragment);
+        Toolbar tb = findViewById(R.id.toolbar);
 
         //Toolbar and Drawer toggle setup
         tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
         setSupportActionBar(tb);//set the toolbar as Action bar
-        abdt=new ActionBarDrawerToggle(this,drawer,tb,R.string.msg_navigation_drawer_open,R.string.msg_navigation_drawer_close);
+        abdt = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close);
         drawer.addDrawerListener(abdt);
         abdt.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
 
         //setup Navigation
-        NavigationUI.setupActionBarWithNavController(this,navCon,drawer);
-        NavigationUI.setupWithNavController(navView,navCon);
+        NavigationUI.setupActionBarWithNavController(this, navCon, drawer);
+        NavigationUI.setupWithNavController(navView, navCon);
 
         //initialize textview in navigation header with version and build date
-        TextView tv=navView.getHeaderView(0).findViewById(R.id.nav_header_tv_ver);
+        TextView tv = navView.getHeaderView(0).findViewById(R.id.nav_header_tv_ver);
         tv.setText(getNavigationHeaderText());
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navCon, drawer);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //todo setup options menu
         return true;
     }
+
     @Override
-    public boolean onPrepareOptionsMenu (Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         //todo setup options
         return true;
     }
+
     @Override
     public void onBackPressed() {
         //handle drawer, if back button is pressed
@@ -84,11 +88,12 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         Fragment f;
-        switch(id){
+        switch (id) {
             case R.id.item_frgm_history:
                 f = new fragmentHistory();
                 show(f);
@@ -123,6 +128,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     /**
      * make fragment transaction to show Fragment
+     *
      * @param fragment fragment, which needs to be shown
      */
     private void show(Fragment fragment) {
@@ -162,14 +168,14 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
      * Builds a String based on the last update date of the package info (a.k.a. the build date of the application)
      * and the current version string to be shown in the TextView in navigation header
      * returns undefined resource string, if an error occurred
+     *
      * @return crafted string
      */
-    private String getNavigationHeaderText(){
+    private String getNavigationHeaderText() {
         try {
             PackageInfo pInfo = getApplicationContext().getPackageManager().getPackageInfo(new ContextWrapper(getApplicationContext()).getPackageName(), 0);
-            return pInfo.versionName+" - "+new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(new Date(pInfo.lastUpdateTime));
-        }
-        catch(PackageManager.NameNotFoundException e) {
+            return pInfo.versionName + " - " + new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(new Date(pInfo.lastUpdateTime));
+        } catch (PackageManager.NameNotFoundException e) {
             return getString(R.string.error_undefined);
         }
     }

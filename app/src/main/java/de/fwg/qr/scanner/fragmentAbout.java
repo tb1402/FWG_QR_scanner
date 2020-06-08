@@ -2,13 +2,11 @@ package de.fwg.qr.scanner;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class fragmentAbout extends fragment_wrapper {
+public class fragmentAbout extends fragmentWrapper {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -13,7 +13,7 @@ import de.fwg.qr.scanner.tools.drawerToggleInterface;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
-public abstract class fragment_wrapper extends Fragment {
+public abstract class fragmentWrapper extends Fragment {
     network net;
     //WeakReference<networkCallbackInterface> ref;
     Activity a;
@@ -22,29 +22,31 @@ public abstract class fragment_wrapper extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        a=requireActivity();
-        c=requireContext();
-        net=new network(c);
+        a = requireActivity();
+        c = requireContext();
+        net = new network(c);
         //ref=new WeakReference<>((networkCallbackInterface) this);
         setHasOptionsMenu(true);
     }
-    void lockUI(boolean state){
-        if(state){
+
+    void lockUI(boolean state) {
+        if (state) {
             a.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        }
-        else{
+        } else {
             a.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
     }
-    void showStartIcon(){
-        WeakReference<drawerToggleInterface> ic=new WeakReference<>((drawerToggleInterface) a);
-        final drawerToggleInterface ici=ic.get();
+
+    void showStartIcon() {
+        WeakReference<drawerToggleInterface> ic = new WeakReference<>((drawerToggleInterface) a);
+        final drawerToggleInterface ici = ic.get();
         ici.showHamburgerIcon();
     }
-    void showBackIcon(){
-        WeakReference<drawerToggleInterface> ic=new WeakReference<>((drawerToggleInterface) a);
-        final drawerToggleInterface ici=ic.get();
+
+    void showBackIcon() {
+        WeakReference<drawerToggleInterface> ic = new WeakReference<>((drawerToggleInterface) a);
+        final drawerToggleInterface ici = ic.get();
         ici.showBackIcon();
     }
 }

@@ -11,23 +11,26 @@ public class requestQueueSingleton {
     private static Context c;
     private RequestQueue rq;
 
-    private requestQueueSingleton(Context c){
-        requestQueueSingleton.c =c;
-        rq= getRequestQueue();
+    private requestQueueSingleton(Context c) {
+        requestQueueSingleton.c = c;
+        rq = getRequestQueue();
     }
-    static synchronized requestQueueSingleton getInstance(Context c){
-        if(queueSingleton==null){
-            queueSingleton=new requestQueueSingleton(c);
+
+    static synchronized requestQueueSingleton getInstance(Context c) {
+        if (queueSingleton == null) {
+            queueSingleton = new requestQueueSingleton(c);
         }
         return queueSingleton;
     }
-    RequestQueue getRequestQueue(){
-        if(rq==null){
-            rq= Volley.newRequestQueue(c.getApplicationContext());
+
+    RequestQueue getRequestQueue() {
+        if (rq == null) {
+            rq = Volley.newRequestQueue(c.getApplicationContext());
         }
         return rq;
     }
-    <T> void addToRq(Request<T> r){
+
+    <T> void addToRq(Request<T> r) {
         getRequestQueue().add(r);
     }
 }
