@@ -45,11 +45,11 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         NavigationView navView=findViewById(R.id.nav_view);//needed for navigation controller
         navCon= Navigation.findNavController(this,R.id.host_fragment);
         Toolbar tb=findViewById(R.id.toolbar);
-        abdt=new ActionBarDrawerToggle(this,drawer,tb,R.string.msg_navigation_drawer_open,R.string.msg_navigation_drawer_close);
 
         //Toolbar and Drawer toggle setup
         tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
         setSupportActionBar(tb);//set the toolbar as Action bar
+        abdt=new ActionBarDrawerToggle(this,drawer,tb,R.string.msg_navigation_drawer_open,R.string.msg_navigation_drawer_close);
         drawer.addDrawerListener(abdt);
         abdt.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
 
@@ -113,8 +113,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 show(f);
                 break;
             default:
-                // todo default bei fehler
-                break;
+                return false;
         }
 
         drawer = findViewById(R.id.drawer_layout);
