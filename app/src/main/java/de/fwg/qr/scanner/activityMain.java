@@ -47,15 +47,15 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         Toolbar tb=findViewById(R.id.toolbar);
         abdt=new ActionBarDrawerToggle(this,drawer,tb,R.string.msg_navigation_drawer_open,R.string.msg_navigation_drawer_close);
 
-        //setup Navigation
-        NavigationUI.setupActionBarWithNavController(this,navCon,drawer);
-        NavigationUI.setupWithNavController(navView,navCon);
-
         //Toolbar and Drawer toggle setup
         tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
         setSupportActionBar(tb);//set the toolbar as Action bar
         drawer.addDrawerListener(abdt);
         abdt.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
+
+        //setup Navigation
+        NavigationUI.setupActionBarWithNavController(this,navCon,drawer);
+        NavigationUI.setupWithNavController(navView,navCon);
 
         //initialize textview in navigation header with version and build date
         TextView tv=navView.getHeaderView(0).findViewById(R.id.nav_header_tv_ver);
