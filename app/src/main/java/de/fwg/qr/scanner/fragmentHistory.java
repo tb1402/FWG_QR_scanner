@@ -14,7 +14,6 @@ public class fragmentHistory extends fragment_wrapper {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override

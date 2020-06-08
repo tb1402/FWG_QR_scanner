@@ -1,6 +1,9 @@
 package de.fwg.qr.scanner;
 
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -10,13 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class fragmentScan extends fragment_wrapper implements networkCallbackInterface {
 
     ImageView test;
+    VideoView videoView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,9 @@ public class fragmentScan extends fragment_wrapper implements networkCallbackInt
     @Override
     public void onViewCreated(View v, @Nullable Bundle sis){
         test=v.findViewById(R.id.imageView);
+        videoView=v.findViewById(R.id.vw);
         net.makeImageRequest(ref,"test","/1.jpg");
+        PlayVideo();
     }
 
     @Override
@@ -48,5 +56,34 @@ public class fragmentScan extends fragment_wrapper implements networkCallbackInt
         if(name.contentEquals("test")){
             test.setImageBitmap(image);
         }
+    }
+    private void PlayVideo()
+    {
+        try
+        {
+            a.getWindow().setFormat(PixelFormat.TRANSLUCENT);
+            MediaController mediaController = new MediaController(getActivity());
+            mediaController.setAnchorView(videoView);
+
+            Uri video = Uri.parse("https://web.cloud-tb.de/smb/yt_arch/GenesisVEVO/Genesis_-_I_Can_t_Dance_Official_Music_Video.mp4");
+            videoView.setMediaController(mediaController);
+            videoView.setVideoURI(video);
+            videoView.requestFocus();
+            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
+            {
+
+                public void onPrepared(MediaPlayer mp)
+                {
+                    videoView.start();
+                }
+            });
+
+
+        }
+        catch(Exception e)
+        {
+            System.out.println("Video Play Error :"+e.toString());
+        }
+
     }
 }
