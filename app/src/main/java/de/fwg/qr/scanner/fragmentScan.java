@@ -71,13 +71,19 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             MediaController mediaController = new MediaController(getActivity());
             mediaController.setAnchorView(videoView);
 
-            Uri video = Uri.parse("https://web.cloud-tb.de/smb/yt_arch/GenesisVEVO/Genesis_-_I_Can_t_Dance_Official_Music_Video.mp4");
+            Uri video = Uri.parse(net.baseURL+"/Genesis_-_Jesus_He_Knows_Me_Official_Music_Video.mp4");
             videoView.setMediaController(mediaController);
             videoView.setVideoURI(video);
             videoView.requestFocus();
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
                 public void onPrepared(MediaPlayer mp) {
+                    videoView.start();
+                }
+            });
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
                     videoView.start();
                 }
             });
