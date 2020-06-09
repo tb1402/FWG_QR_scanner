@@ -18,4 +18,5 @@
     <string name="item_information_title">Information</string>
     <string name="item_about_title">Über uns</string>
     <string name="item_agb_title">AGB</string>
+    <string name="item_map">Karte</string>
 </resources>

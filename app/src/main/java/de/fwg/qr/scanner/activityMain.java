@@ -69,7 +69,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //todo setup options menu
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         return true;
     }
 
