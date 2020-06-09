@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/item_frgm_scan"
         android:name="de.fwg.qr.scanner.fragmentScan"
-        android:label="fragment_scan"
+        android:label="@string/item_scan_title"
         tools:layout="@layout/fragment_scan">
         <action
             android:id="@+id/action_fragmentScan_to_fragmentAGB"
@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/item_frgm_agb"
         android:name="de.fwg.qr.scanner.fragmentAGB"
-        android:label="fragment_agb"
+        android:label="@string/item_agb_title"
         tools:layout="@layout/fragment_agb">
         <action
             android:id="@+id/action_fragmentAGB_to_fragmentScan"
@@ -50,7 +50,7 @@
     <fragment
         android:id="@+id/item_frgm_about"
         android:name="de.fwg.qr.scanner.fragmentAbout"
-        android:label="fragment_about"
+        android:label="@string/item_about_title"
         tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_fragmentAbout_to_fragmentAGB"
@@ -74,7 +74,7 @@
     <fragment
         android:id="@+id/item_frgm_help"
         android:name="de.fwg.qr.scanner.fragmentHelp"
-        android:label="fragment_help"
+        android:label="@string/item_help_title"
         tools:layout="@layout/fragment_help">
         <action
             android:id="@+id/action_fragmentHelp_to_fragmentAGB"
@@ -95,7 +95,7 @@
     <fragment
         android:id="@+id/item_frgm_history"
         android:name="de.fwg.qr.scanner.fragmentHistory"
-        android:label="fragment_history"
+        android:label="@string/item_history_title"
         tools:layout="@layout/fragment_history">
         <action
             android:id="@+id/action_fragmentHistory_to_fragmentAGB"
@@ -116,7 +116,7 @@
     <fragment
         android:id="@+id/item_frgm_information"
         android:name="de.fwg.qr.scanner.fragmentInformation"
-        android:label="fragment_information"
+        android:label="@string/item_information_title"
         tools:layout="@layout/fragment_information">
         <action
             android:id="@+id/action_fragmentInformation_to_fragmentAGB"

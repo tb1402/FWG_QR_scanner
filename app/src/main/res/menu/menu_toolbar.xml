@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/tb_item_map"
+        android:icon="@drawable/ic_map"
+        android:title="@string/item_map"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/tb_item_settings"
+        android:title="Item" />
+</menu>

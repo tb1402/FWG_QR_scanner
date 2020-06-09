@@ -20,7 +20,7 @@ import java.util.Map;
 import de.fwg.qr.scanner.R;
 
 public class network {
-    private String baseURL = "https://web.cloud-tb.de";
+    public static String baseURL = "https://srv.cloud-tb.de";
     private Context c;
 
     public network(Context c) {
