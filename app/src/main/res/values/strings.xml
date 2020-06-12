@@ -19,6 +19,7 @@
     <string name="item_about_title">Über uns</string>
     <string name="item_agb_title">AGB</string>
     <string name="item_map">Karte</string>
+    <string name="item_frgm_escape_routes">Fluchtwege</string>
 
     <!--other title strings-->
     <string name="title_settings">Einstellungen</string>
