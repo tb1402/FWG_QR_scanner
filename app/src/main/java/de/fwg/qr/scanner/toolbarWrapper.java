@@ -3,6 +3,7 @@ package de.fwg.qr.scanner;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,5 +38,13 @@ public abstract class toolbarWrapper extends AppCompatActivity {
     }
     void setToolbarTitle(String title){
         tb.setTitle(title);
+    }
+    void lockUI(boolean state) {
+        if (state) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
     }
 }
