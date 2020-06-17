@@ -17,6 +17,11 @@
             android:orderInCategory="15"
             android:title="@string/item_history_title" />
         <item
+            android:id="@+id/item_frgm_escape_routes"
+            android:icon="@drawable/ic_escape_routes"
+            android:orderInCategory="15"
+            android:title="@string/item_frgm_escape_routes" />
+        <item
             android:id="@+id/item_frgm_information"
             android:icon="@drawable/ic_information"
             android:orderInCategory="30"
