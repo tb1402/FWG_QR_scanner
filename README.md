@@ -13,6 +13,9 @@ QR Code Scanner für das FWG Kronach. Erstellt vom Info Kurs der Q11
 - Philipp Möckel, [@philippmkl](https://github.com/philippmkl)
 - Nico Fröba,
 
+### App (UI), Bilder, Videos
+- Niklas Schoberth, 
+
 ### PHP-Backend
 - Ben Welsch, [@Benni013](https://github.com/benni013)
 - Denis Eckert,
