@@ -1,34 +1,33 @@
 package de.fwg.qr.scanner;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import de.fwg.qr.scanner.tools.preferencesManager;
 
 public class activityStart extends AppCompatActivity {
-
-    SharedPreferences prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs = getSharedPreferences("de.fwg.qr.scanner", MODE_PRIVATE);
-        setContentView(R.layout.activity_start);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
         setContentView(R.layout.fragment_start);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (prefs.getBoolean("firstRun", true)) {
-            prefs.edit().putBoolean("firstRun", false).commit();
-        } else {
-            //setContentView(R.layout.activity_main);
+        preferencesManager pm=new preferencesManager(getApplicationContext());
+        if(!pm.isFirstRun()){
+            //setContentView(R.layout.activity_main);//this doesnt help, because it only trys to apply the layout file to the current activity
+            //solution:
+            //start a new intent for target actvity here
+            finish();//exit the current activity
+            /** i think we should rethink how we gonna start the start activity, because the solution
+             * above needs unnecessary resources.
+             * Im thinking of starting the activityMain always at first, and check if its the first run, if so then
+             * start this activity
+             */
         }
     }
 }

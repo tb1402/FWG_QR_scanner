@@ -17,7 +17,8 @@
 
         <activity
             android:name=".activityStart"
-            android:label="@string/title_activity_start">
+            android:label="@string/title_activity_start"
+            android:theme="@style/AppTheme.NoActionBar">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

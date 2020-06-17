@@ -31,6 +31,7 @@ public class fragmentEscapeRoutes extends fragmentWrapper implements networkCall
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showStartIcon();
         ref = new WeakReference<>((networkCallbackInterface) this);
         if (!net.isNetworkAvailable()) {
             Toast.makeText(c, "Keine Netzwerkverbindung!", Toast.LENGTH_SHORT).show();
