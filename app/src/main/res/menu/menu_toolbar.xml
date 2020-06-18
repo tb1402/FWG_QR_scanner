@@ -9,5 +9,5 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/tb_item_settings"
-        android:title="Item" />
+        android:title="@string/title_settings" />
 </menu>

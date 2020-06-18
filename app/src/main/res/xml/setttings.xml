@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Allgemein"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/settings_mode_string_values"
+            android:entryValues="@array/settings_mode_int_values"
+            android:key="mode"
+            android:title="Modus" />
+    </PreferenceCategory>
+</PreferenceScreen>

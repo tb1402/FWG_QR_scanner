@@ -7,9 +7,10 @@ public class preferencesManager {
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    public static String preferenceName="FWG_QR";
 
     public preferencesManager(Context c){
-        preferences=c.getSharedPreferences("FWG_QR",Context.MODE_PRIVATE);
+        preferences=c.getSharedPreferences(preferenceName,Context.MODE_PRIVATE);
     }
     public boolean isFirstRun(){
         if(preferences.contains("firstrun")){
@@ -33,5 +34,8 @@ public class preferencesManager {
     }
     public int getInt(String name, int default_value){
         return preferences.getInt(name,default_value);
+    }
+    public int getMode(){
+        return Integer.parseInt(preferences.getString("mode","1"));
     }
 }
