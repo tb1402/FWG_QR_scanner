@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".fragmentStart">
 
+    <!-- ToDo:
+    - add Quick Guide
+    -->
+
     <TextView
         android:id="@+id/textViewStart"
         android:layout_width="match_parent"

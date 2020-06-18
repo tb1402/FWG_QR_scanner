@@ -16,8 +16,7 @@ public class fragmentStart extends fragmentWrapper {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_start, container, false);
     }
@@ -28,8 +27,7 @@ public class fragmentStart extends fragmentWrapper {
         view.findViewById(R.id.btn_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(fragmentStart.this)
-                        .navigate(R.id.action_fragmentStart_to_fragmentAGB);
+                NavHostFragment.findNavController(fragmentStart.this).navigate(R.id.action_fragmentStart_to_fragmentAGB);
             }
         });
     }

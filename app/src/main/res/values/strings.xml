@@ -29,6 +29,7 @@
     <!-- button strings -->
     <string name="next">Weiter</string>
     <string name="agb_accept">AGB Akzeptieren</string>
+    <string name="agb_decline">AGB Ablehnen</string>
 
     <!--settings strings-->
     <string name="mode_info">Info</string>

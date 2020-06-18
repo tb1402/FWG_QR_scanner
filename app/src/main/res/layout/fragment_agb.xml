@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".fragmentAGB">
 
+    <!-- ToDo:
+    - add AGB
+    -->
+
     <TextView
         android:id="@+id/textViewAccept"
         android:layout_width="match_parent"
@@ -23,6 +27,19 @@
         android:text="@string/agb_accept"
         app:layout_constraintBottom_toBottomOf="@id/textViewAccept"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <Button
+        android:id="@+id/btn_decline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/agb_decline"
+        app:layout_constraintBottom_toBottomOf="@id/textViewAccept"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9" />

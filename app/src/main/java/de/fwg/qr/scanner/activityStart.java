@@ -3,31 +3,26 @@ package de.fwg.qr.scanner;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-import de.fwg.qr.scanner.tools.preferencesManager;
-
-public class activityStart extends AppCompatActivity {
+public class activityStart extends AppCompatActivity implements de.fwg.qr.scanner.tools.drawerToggleInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_start);
+        setContentView(R.layout.activity_start);
+
+        //Toolbar setup
+        Toolbar tb = findViewById(R.id.toolbar);
+        tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
+        setSupportActionBar(tb);//set the toolbar as Action bar
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        preferencesManager pm=new preferencesManager(getApplicationContext());
-        if(!pm.isFirstRun()){
-            //setContentView(R.layout.activity_main);//this doesnt help, because it only trys to apply the layout file to the current activity
-            //solution:
-            //start a new intent for target actvity here
-            finish();//exit the current activity
-            /** i think we should rethink how we gonna start the start activity, because the solution
-             * above needs unnecessary resources.
-             * Im thinking of starting the activityMain always at first, and check if its the first run, if so then
-             * start this activity
-             */
-        }
+    public void showHamburgerIcon() {
+    }
+
+    @Override
+    public void showBackIcon() {
     }
 }
