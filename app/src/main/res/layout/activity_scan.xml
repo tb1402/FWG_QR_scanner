@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragmentScan">
+    tools:context=".activityScan">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <SurfaceView
-            android:id="@+id/surfaceView"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="99dp"
+            android:layout_height="99dp"
+            android:src="@drawable/ic_error" />
+
+        <VideoView
+            android:id="@+id/videoView"
             android:layout_width="match_parent"
-            android:layout_height="540dp" />
+            android:layout_height="419dp" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:text="Hier bitte den QR-Code \n einscannen lassen"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="23dp"
-
-            />
+            android:layout_height="212dp" />
 
     </LinearLayout>
+
 
 </FrameLayout>
