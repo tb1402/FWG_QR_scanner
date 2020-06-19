@@ -31,8 +31,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Objects;
 
+import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class fragmentScan extends fragmentWrapper implements networkCallbackInterface, Runnable {
@@ -103,7 +103,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             MediaController mediaController = new MediaController(getActivity());
             mediaController.setAnchorView(videoView);
 
-            Uri video = Uri.parse(net.baseURL + "/Genesis_-_Jesus_He_Knows_Me_Official_Music_Video.mp4");
+            Uri video = Uri.parse(network.baseURL + "/Genesis_-_Jesus_He_Knows_Me_Official_Music_Video.mp4");
             videoView.setMediaController(mediaController);
             videoView.setVideoURI(video);
             videoView.requestFocus();
@@ -128,8 +128,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     }
 
     private void initialize() {
+        newIntent();
         barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
-        source = new CameraSource.Builder(getContext(), barcodeDetector).setAutoFocusEnabled(true).setRequestedFps(20).setRequestedPreviewSize(1920, 1080).setFacing(source.CAMERA_FACING_BACK).build();
+        source = new CameraSource.Builder(c, barcodeDetector)
+                .setAutoFocusEnabled(true)
+                .setRequestedFps(20)
+                .setRequestedPreviewSize(1920, 1080)
+                .setFacing(CameraSource.CAMERA_FACING_BACK).build();
     }
 
     private void startCamera() {
@@ -181,16 +186,16 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 final SparseArray<Barcode> detectedFrames = detections.getDetectedItems();
                 if (detectedFrames.size() != 0) {
                     barcodeValue = detectedFrames.valueAt(0).displayValue;
-                    //newIntent(barcodeValue);
+                    newIntent();
                 }
             }
         });
     }
 
-    private void newIntent(String barcodeValue) {
-        if (i == null && barcodeValue != "") {
+    private void newIntent() {
+        if (i == null && !barcodeValue.contentEquals("")) {
             i = new Intent(getActivity(), activityScan.class);
-            i.putExtra(Intent.EXTRA_TEXT, barcodeValue);
+            i.putExtra(Intent.EXTRA_TEXT, barcodeValue);//todo consider changing Intent.EXTRA_TEXT to a custom name
             startActivity(i);
         }
 
@@ -199,8 +204,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void run() {
         while (true) {
-            if (barcodeValue != "") {
-                newIntent(this.barcodeValue);
+            if (!barcodeValue.contentEquals("")) {
+                newIntent();
                 barcodeValue = "";
                 break;
             }

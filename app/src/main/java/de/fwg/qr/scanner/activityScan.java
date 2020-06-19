@@ -7,31 +7,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.lang.ref.WeakReference;
 
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
-public class activityScan extends AppCompatActivity implements networkCallbackInterface {
+public class activityScan extends toolbarWrapper implements networkCallbackInterface {
 
     private ImageView image;
     private VideoView video;
     private TextView text;
     private WeakReference<networkCallbackInterface> ref;
 
-    private Intent recievedIntent = null;
     private String barcodeValue = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(R.layout.toolbar_scan,this,getString(R.string.title_scanned));
         super.onCreate(savedInstanceState);
-        if (recievedIntent == null) {
-            recievedIntent = getIntent();
-            barcodeValue = recievedIntent.getStringExtra(Intent.EXTRA_TEXT);
-        }
-        setContentView(R.layout.activity_scan);
+        Intent recievedIntent = getIntent();//global attribute not needed (my hint to check for null was only meant for scanning the code
+        barcodeValue = recievedIntent.getStringExtra(Intent.EXTRA_TEXT);
+
     }
 
 

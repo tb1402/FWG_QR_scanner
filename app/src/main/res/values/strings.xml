@@ -25,6 +25,7 @@
     <!--other title strings-->
     <string name="title_settings">Einstellungen</string>
     <string name="title_activity_start">Einführung</string>
+    <string name="title_scanned">Eingescannt</string><!--todo change string value, just a placeholder-->
 
     <!-- button strings -->
     <string name="next">Weiter</string>
