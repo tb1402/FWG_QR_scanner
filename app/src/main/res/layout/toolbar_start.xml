@@ -19,5 +19,4 @@
         android:layout_marginTop="56dp"
         app:defaultNavHost="false"
         app:navGraph="@navigation/navigation_graph_start" />
-
 </FrameLayout>

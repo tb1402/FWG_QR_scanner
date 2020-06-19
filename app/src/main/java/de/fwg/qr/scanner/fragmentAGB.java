@@ -1,6 +1,5 @@
 package de.fwg.qr.scanner;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,7 @@ public class fragmentAGB extends fragmentWrapper {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         p = new preferencesManager(c);
-        if(!p.isFirstRun()){
+        if (!p.isFirstRun()) {
             showStartIcon();
         }
     }

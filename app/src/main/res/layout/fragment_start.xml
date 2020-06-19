@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="#000000"
     tools:context=".fragmentStart">
 
-    <!-- ToDo:
-    - add Quick Guide
+    <!--
+    ToDo:
+        - add Welcome Message
+        - add fragment quickGuide
     -->
 
     <TextView
         android:id="@+id/textViewStart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="@dimen/inner_frame_layout_padding"
         android:text="@string/lorem_ipsum"
-        app:layout_constraintBottom_toTopOf="@id/btn_next"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,8 +29,12 @@
         android:id="@+id/btn_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:background="@color/background"
+        android:padding="@dimen/inner_frame_layout_padding"
         android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="@id/textViewStart"
+        android:textColor="@color/common_google_signin_btn_text_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
