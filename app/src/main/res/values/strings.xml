@@ -35,4 +35,7 @@
     <!--settings strings-->
     <string name="mode_info">Info</string>
     <string name="mode_rallye">Rallye</string>
+
+    <!--other strings-->
+    <string name="network_buffering">Laden…</string>
 </resources>
