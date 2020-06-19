@@ -3,7 +3,7 @@
     android:id="@+id/custom_toast_container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#222222"
+    android:background="@color/background"
     android:orientation="horizontal"
     android:padding="8dp">
 
