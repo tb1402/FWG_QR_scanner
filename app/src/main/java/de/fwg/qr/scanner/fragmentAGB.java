@@ -12,11 +12,15 @@ import androidx.annotation.NonNull;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 public class fragmentAGB extends fragmentWrapper {
+    private preferencesManager p;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //showStartIcon();
+        p = new preferencesManager(c);
+        if(!p.isFirstRun()){
+            showStartIcon();
+        }
     }
 
     @Override
@@ -27,15 +31,14 @@ public class fragmentAGB extends fragmentWrapper {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        preferencesManager p = new preferencesManager(c);
         Button btn_accept = view.findViewById(R.id.btn_accept);
         Button btn_decline = view.findViewById(R.id.btn_decline);
-        if (p.isFirstRun()||!p.getBoolean("agb_ac",false)) {
+        if (p.isFirstRun()) {
             btn_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     preferencesManager pm = new preferencesManager(c);
-                    pm.saveBoolean("agb_ac", true);
+                    pm.saveBoolean("firstrun", false);
                     requireActivity().finish();
                 }
             });
