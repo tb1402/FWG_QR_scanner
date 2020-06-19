@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/black"
     tools:context=".fragmentStart">
 
     <!--
@@ -20,7 +20,7 @@
         android:layout_margin="16dp"
         android:padding="@dimen/inner_frame_layout_padding"
         android:text="@string/lorem_ipsum"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
