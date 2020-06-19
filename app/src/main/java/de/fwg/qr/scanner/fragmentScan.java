@@ -35,7 +35,7 @@ import java.lang.ref.WeakReference;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
-public class fragmentScan extends fragmentWrapper implements networkCallbackInterface, Runnable {
+public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {
 
     ImageView test;
     VideoView videoView;
@@ -79,8 +79,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         initialize();
         startCamera();
         detection();
-        Thread t = new Thread(this);
-        t.start();
     }
 
     @Override
@@ -128,13 +126,26 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     }
 
     private void initialize() {
-        newIntent();
+        i=null;
         barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
         source = new CameraSource.Builder(c, barcodeDetector)
                 .setAutoFocusEnabled(true)
                 .setRequestedFps(20)
                 .setRequestedPreviewSize(1920, 1080)
                 .setFacing(CameraSource.CAMERA_FACING_BACK).build();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        source.release();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initialize();
+        startCamera();
+        detection();
     }
 
     private void startCamera() {
@@ -197,18 +208,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             i = new Intent(getActivity(), activityScan.class);
             i.putExtra(Intent.EXTRA_TEXT, barcodeValue);//todo consider changing Intent.EXTRA_TEXT to a custom name
             startActivity(i);
-        }
-
-    }
-
-    @Override
-    public void run() {
-        while (true) {
-            if (!barcodeValue.contentEquals("")) {
-                newIntent();
-                barcodeValue = "";
-                break;
-            }
         }
 
     }
