@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-feature android:name="android.hardware.camera2" />
 
     <application
         android:allowBackup="true"
@@ -14,14 +15,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activitySettings"
-            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".activityStart"
+            android:label="@string/title_activity_start"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activitySettings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activityScan"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activityMain"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

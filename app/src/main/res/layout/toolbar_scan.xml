@@ -4,20 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".activitySettings">
+    tools:context=".activityScan">
 
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/settings"
-        android:layout_marginTop="56dp"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+    <include layout="@layout/content_scan" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

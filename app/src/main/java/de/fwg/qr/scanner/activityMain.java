@@ -1,5 +1,14 @@
 package de.fwg.qr.scanner;
 
+import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,19 +20,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import android.content.ContextWrapper;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
-
 import com.google.android.material.navigation.NavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import de.fwg.qr.scanner.tools.preferencesManager;
 
 public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface {
     /**
@@ -39,6 +42,13 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //check if first run
+        preferencesManager pm = new preferencesManager(getApplicationContext());
+        if (pm.isFirstRun()) {
+            Intent intent = new Intent(this, activityStart.class);
+            startActivity(intent);
+        }
 
         //initialize variables
         drawer = findViewById(R.id.drawer_layout);
@@ -77,6 +87,18 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     public boolean onPrepareOptionsMenu(Menu menu) {
         //todo setup options
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.tb_item_settings) {
+            Intent i = new Intent(getApplicationContext(), activitySettings.class);
+            startActivity(i);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
