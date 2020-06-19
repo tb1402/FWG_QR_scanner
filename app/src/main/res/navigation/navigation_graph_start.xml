@@ -20,9 +20,5 @@
         android:name="de.fwg.qr.scanner.fragmentAGB"
         android:label="@string/item_agb_title"
         tools:layout="@layout/fragment_agb">
-
-        <action
-            android:id="@+id/action_fragmentAGB_to_fragmentStart"
-            app:destination="@id/fragmentStart" />
     </fragment>
 </navigation>

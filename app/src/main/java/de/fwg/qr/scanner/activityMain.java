@@ -45,10 +45,9 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
         //check if first run
         preferencesManager pm = new preferencesManager(getApplicationContext());
-        if (pm.isFirstRun()) {
+        if (pm.isFirstRun()||!pm.getBoolean("agb_ac",false)) {
             Intent intent = new Intent(this, activityStart.class);
             startActivity(intent);
-            finish();
         }
 
         //initialize variables

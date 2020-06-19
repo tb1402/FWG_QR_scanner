@@ -16,7 +16,7 @@ public class fragmentAGB extends fragmentWrapper {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showStartIcon();
+        //showStartIcon();
     }
 
     @Override
@@ -30,23 +30,19 @@ public class fragmentAGB extends fragmentWrapper {
         preferencesManager p = new preferencesManager(c);
         Button btn_accept = view.findViewById(R.id.btn_accept);
         Button btn_decline = view.findViewById(R.id.btn_decline);
-        if (p.isFirstRun()) {
+        if (p.isFirstRun()||!p.getBoolean("agb_ac",false)) {
             btn_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    preferencesManager pm = new preferencesManager(requireActivity().getApplicationContext());
-                    pm.saveBoolean("firstrun", false);
-                    Intent intent = new Intent(requireActivity(), activityMain.class);
-                    startActivity(intent);
+                    preferencesManager pm = new preferencesManager(c);
+                    pm.saveBoolean("agb_ac", true);
                     requireActivity().finish();
                 }
             });
             btn_decline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(requireActivity(), activityStart.class);
-                    startActivity(intent);
-                    requireActivity().finish();
+                    requireActivity().finishAffinity();
                 }
             });
         } else {

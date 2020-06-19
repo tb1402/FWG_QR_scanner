@@ -1,28 +1,30 @@
 package de.fwg.qr.scanner;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class activityStart extends AppCompatActivity implements de.fwg.qr.scanner.tools.drawerToggleInterface {
+public class activityStart extends toolbarWrapper {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
-
-        //Toolbar setup
-        Toolbar tb = findViewById(R.id.toolbar);
-        tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
-        setSupportActionBar(tb);//set the toolbar as Action bar
+        setContentView(R.layout.toolbar_start);
+        Toolbar tb=findViewById(R.id.toolbar);
+        tb.setTitle(getString(R.string.app_name));
+        setSupportActionBar(tb);
+        getSupportFragmentManager().beginTransaction().replace(R.id.start_fragment,new fragmentStart()).commit();
     }
-
     @Override
-    public void showHamburgerIcon() {
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.tb_item_map).setVisible(false);
+        menu.findItem(R.id.tb_item_settings).setVisible(false);
+        return true;
     }
-
     @Override
-    public void showBackIcon() {
+    public void onBackPressed(){
+        Toast.makeText(getApplicationContext(),"Bitte erst StartGuide beenden!",Toast.LENGTH_SHORT).show();
     }
 }
