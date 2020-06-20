@@ -7,16 +7,11 @@
     android:background="?android:attr/colorBackground"
     tools:context=".fragmentStart">
 
-    <!--
-    ToDo:
-        - add Welcome content
-    -->
-
     <TextView
         android:id="@+id/textViewStartTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginVertical="16dp"
         android:padding="5dp"
         android:text="@string/welcome_start"
         android:textColor="?android:attr/textColorPrimary"
@@ -30,19 +25,44 @@
         android:id="@+id/textViewStartBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginVertical="16dp"
+        android:gravity="start"
         android:padding="5dp"
-        android:text="@string/lorem_ipsum"
+        android:text="@string/welcome_message"
         android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewStartTitle" />
 
+    <TextView
+        android:id="@+id/textViewStartGithub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:gravity="start"
+        android:padding="5dp"
+        android:text="@string/github_link"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewStartBody" />
+
+    <TextView
+        android:id="@+id/textViewStartTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:gravity="start"
+        android:padding="5dp"
+        android:text="@string/dev_team"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewStartGithub" />
+
     <Button
         android:id="@+id/btnStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:layout_marginVertical="24dp"
         android:background="?android:attr/colorButtonNormal"
         android:padding="5dp"
         android:text="@string/next"
