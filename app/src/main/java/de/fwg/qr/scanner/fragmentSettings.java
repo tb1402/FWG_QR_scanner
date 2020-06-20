@@ -11,8 +11,8 @@ public class fragmentSettings extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        PreferenceManager pm=getPreferenceManager();
+        PreferenceManager pm = getPreferenceManager();
         pm.setSharedPreferencesName(preferencesManager.preferenceName);
-        setPreferencesFromResource(R.xml.setttings,rootKey);
+        setPreferencesFromResource(R.xml.setttings, rootKey);
     }
 }

@@ -23,7 +23,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(R.layout.toolbar_scan,this,getString(R.string.title_scanned));
+        super.onCreate(R.layout.toolbar_scan, this, getString(R.string.title_scanned));
         super.onCreate(savedInstanceState);
         Intent recievedIntent = getIntent();//global attribute not needed (my hint to check for null was only meant for scanning the code
         barcodeValue = recievedIntent.getStringExtra(Intent.EXTRA_TEXT);

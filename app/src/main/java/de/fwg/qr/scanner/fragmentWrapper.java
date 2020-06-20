@@ -11,7 +11,6 @@ import java.lang.ref.WeakReference;
 
 import de.fwg.qr.scanner.tools.drawerToggleInterface;
 import de.fwg.qr.scanner.tools.network;
-import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public abstract class fragmentWrapper extends Fragment {
     network net;

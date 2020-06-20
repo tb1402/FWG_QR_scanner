@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.fragment.NavHostFragment;
 
 import de.fwg.qr.scanner.tools.preferencesManager;
 
@@ -30,26 +31,26 @@ public class fragmentAGB extends fragmentWrapper {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button btn_accept = view.findViewById(R.id.btn_accept);
-        Button btn_decline = view.findViewById(R.id.btn_decline);
+        Button btnAccept = view.findViewById(R.id.btnAccept);
+        Button btnDecline = view.findViewById(R.id.btnDecline);
         if (p.isFirstRun()) {
-            btn_accept.setOnClickListener(new View.OnClickListener() {
+            btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     preferencesManager pm = new preferencesManager(c);
                     pm.saveBoolean("firstrun", false);
-                    requireActivity().finish();
+                    NavHostFragment.findNavController(fragmentAGB.this).navigate(R.id.action_fragmentAGB_to_fragmentQuickGuide);
                 }
             });
-            btn_decline.setOnClickListener(new View.OnClickListener() {
+            btnDecline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     requireActivity().finishAffinity();
                 }
             });
         } else {
-            btn_accept.setVisibility(View.GONE);
-            btn_decline.setVisibility(View.GONE);
+            btnAccept.setVisibility(View.GONE);
+            btnDecline.setVisibility(View.GONE);
         }
     }
 }

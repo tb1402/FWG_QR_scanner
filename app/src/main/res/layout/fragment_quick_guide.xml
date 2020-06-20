@@ -5,20 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    tools:context=".fragmentStart">
+    tools:context=".fragmentQuickGuide">
 
     <!--
     ToDo:
-        - add Welcome content
+        - add QuickGuide content
     -->
 
     <TextView
-        android:id="@+id/textViewStartTitle"
+        android:id="@+id/textViewQuickGuideTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:padding="5dp"
-        android:text="@string/welcome_start"
+        android:text="@string/quick_guide"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewStartBody"
+        android:id="@+id/textViewQuickGuideBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -36,16 +36,16 @@
         android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewStartTitle" />
+        app:layout_constraintTop_toBottomOf="@id/textViewQuickGuideTitle" />
 
     <Button
-        android:id="@+id/btnStart"
+        android:id="@+id/btnQuickGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:background="?android:attr/colorButtonNormal"
         android:padding="5dp"
-        android:text="@string/next"
+        android:text="@string/start_using"
         android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

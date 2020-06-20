@@ -8,10 +8,6 @@ import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -23,6 +19,9 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -126,7 +125,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     }
 
     private void initialize() {
-        i=null;
+        i = null;
         barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
         source = new CameraSource.Builder(c, barcodeDetector)
                 .setAutoFocusEnabled(true)
@@ -134,6 +133,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 .setRequestedPreviewSize(1920, 1080)
                 .setFacing(CameraSource.CAMERA_FACING_BACK).build();
     }
+
     @Override
     public void onPause() {
         super.onPause();
