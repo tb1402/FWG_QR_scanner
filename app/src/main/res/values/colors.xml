@@ -9,6 +9,8 @@
     <color name="textColor">#FFFFFF</color>
     <color name="buttonColor">#5A5A5A</color>
 
+    <color name="black_overlay">#66000000</color>
+
     <!-- these colors do not work
     <color name="background">?android:attr/colorBackground</color>
     <color name="textColor">?android:attr/textColorPrimary</color>

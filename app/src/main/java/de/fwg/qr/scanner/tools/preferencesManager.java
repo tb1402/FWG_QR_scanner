@@ -44,4 +44,8 @@ public class preferencesManager {
     public int getMode() {
         return Integer.parseInt(preferences.getString("mode", "1"));
     }
+    public String getVideoResolution(){
+        //todo add content
+        return "high";
+    }
 }

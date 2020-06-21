@@ -28,7 +28,8 @@
     <string name="title_scanned">Eingescannt</string><!--todo change string value, just a placeholder-->
     <string name="welcome_start">Willkommen zum FWG QR Scanner</string>
     <string name="quick_guide">Quick Guide</string>
-    <string name="agb">Allgemeine Geschäftbedingungen</string>
+    <string name="agb">Allgemeine Geschäftsbedingungen</string>
+    <string name="title_activity_fullscreen_video_playback">Video Player</string>
 
     <!-- button strings -->
     <string name="next">Weiter</string>
@@ -45,6 +46,9 @@
     <string name="dev_team">Entwicklerteam:\n Q11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth, und Ben Welsch</string>
     <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a></string>
 
+    <!--Video Playback Strings-->
+    <string name="video_url_error">Fehler: Problem mit der Video-URL</string>
     <!--other strings-->
+    <string name="network_no_connection">Keine Netzwerkverbindung!</string>
     <string name="network_buffering">Laden…</string>
 </resources>

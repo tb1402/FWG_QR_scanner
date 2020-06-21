@@ -1,15 +1,18 @@
 package de.fwg.qr.scanner;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.Toast;
@@ -48,15 +51,15 @@ public class fragmentEscapeRoutes extends fragmentWrapper implements networkCall
     @Override
     public void onViewCreated(View v, @Nullable Bundle sis) {
         test = v.findViewById(R.id.imageView);
-        videoView = v.findViewById(R.id.vw);
+        test.setVisibility(View.GONE);
         lockUI(true);
-        net.makeImageRequest(ref, "test", "/1.jpg");
+        //net.makeImageRequest(ref, "test", "/1.jpg");
         pd = new ProgressDialog(c);
         pd.setTitle(getString(R.string.network_buffering));
         pd.setCancelable(false);
         //a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        pd.show();
-        PlayVideo();
+        Intent i=new Intent(c,activityFullscreenVideoPlayback.class);
+        startActivity(i);
     }
 
     @Override
@@ -73,55 +76,4 @@ public class fragmentEscapeRoutes extends fragmentWrapper implements networkCall
         }
     }
 
-    /**
-     * Under Construction!
-     */
-    private void PlayVideo() {
-        try {
-            a.getWindow().setFormat(PixelFormat.TRANSLUCENT);
-            MediaController mediaController = new MediaController(getActivity());
-            mediaController.setAnchorView(videoView);
-
-            final MediaPlayer.OnInfoListener il = new MediaPlayer.OnInfoListener() {
-                @Override
-                public boolean onInfo(MediaPlayer mediaPlayer, int i, int i1) {
-                    switch (i) {
-                        case MediaPlayer.MEDIA_INFO_BUFFERING_START: {
-                            pd.show();
-                            return true;
-                        }
-                        case MediaPlayer.MEDIA_INFO_BUFFERING_END: {
-                            pd.hide();
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            };
-
-            Uri video = Uri.parse(network.baseURL + "/Genesis_-_Jesus_He_Knows_Me_Official_Music_Video.mp4");
-            videoView.setMediaController(mediaController);
-            videoView.setVideoURI(video);
-            videoView.requestFocus();
-            videoView.setOnInfoListener(il);
-            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-                public void onPrepared(MediaPlayer mp) {
-                    pd.hide();
-                    videoView.start();
-                }
-            });
-            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    videoView.start();
-                }
-            });
-
-
-        } catch (Exception e) {
-            System.out.println("Video Play Error :" + e.toString());
-        }
-
-    }
 }
