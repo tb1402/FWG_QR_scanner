@@ -23,6 +23,12 @@ public class fragmentStart extends fragmentWrapper {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        /* Getting color values
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = c.getTheme();
+        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+        @ColorInt int color = typedValue.data;
+        Log.i("COLOR", Integer.toHexString(color));*/
 
         view.findViewById(R.id.btnStart).setOnClickListener(new View.OnClickListener() {
             @Override
