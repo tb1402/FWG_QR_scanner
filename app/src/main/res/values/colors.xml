@@ -3,9 +3,13 @@
     <color name="colorPrimary">#46ff5a</color>
     <color name="colorPrimaryDark">#3d944c</color>
     <color name="colorAccent">#03A9F4</color>
-    <color name="background">#404040</color>
 
-    <!-- needs testing, this does currently not work
+    <!-- set default colors -->
+    <color name="background">#404040</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="buttonColor">#5A5A5A</color>
+
+    <!-- these colors do not work
     <color name="background">?android:attr/colorBackground</color>
     <color name="textColor">?android:attr/textColorPrimary</color>
     <color name="buttonColor">?android:attr/colorButtonNormal</color>-->

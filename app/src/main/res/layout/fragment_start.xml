@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="@color/background"
     tools:context=".fragmentStart">
 
     <TextView
@@ -14,7 +14,7 @@
         android:layout_marginVertical="16dp"
         android:padding="5dp"
         android:text="@string/welcome_start"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textColor"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +29,7 @@
         android:gravity="start"
         android:padding="5dp"
         android:text="@string/welcome_message"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewStartTitle" />
@@ -42,7 +42,7 @@
         android:gravity="start"
         android:padding="5dp"
         android:text="@string/github_link"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewStartBody" />
 
@@ -54,7 +54,7 @@
         android:gravity="start"
         android:padding="5dp"
         android:text="@string/dev_team"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewStartGithub" />
 
@@ -63,10 +63,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="24dp"
-        android:background="?android:attr/colorButtonNormal"
+        android:background="@color/buttonColor"
         android:padding="5dp"
         android:text="@string/next"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
