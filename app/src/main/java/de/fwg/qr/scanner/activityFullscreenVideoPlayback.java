@@ -37,16 +37,7 @@ import de.fwg.qr.scanner.tools.preferencesManager;
  * status bar and navigation/system bar) with user interaction.
  */
 public class activityFullscreenVideoPlayback extends AppCompatActivity {
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
 
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
     private static final int AUTO_HIDE_DELAY_MILLIS = 1000;
 
     /**
@@ -73,18 +64,6 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     };
-    //private View mControlsView;
-    /*private final Runnable mShowPart2Runnable = new Runnable() {
-        @Override
-        public void run() {
-            // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
-            //mControlsView.setVisibility(View.VISIBLE);
-        }
-    };*/
     private boolean mVisible;
     private final Runnable mHideRunnable = new Runnable() {
         @Override
@@ -92,29 +71,6 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
             hide();
         }
     };
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    /*private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (AUTO_HIDE) {
-                        delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    view.performClick();
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        }
-    };*/
     private VideoView vw;
     private ProgressBar pb;
 
@@ -124,6 +80,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);//hide status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//set fullscreen mode
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//request landscape mode
 
         //network setup and check if connection is available
@@ -146,6 +103,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         vw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //delayedHide(AUTO_HIDE_DELAY_MILLIS);
                 toggle();
             }
         });
@@ -198,6 +156,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         vw.stopPlayback();
+        lockUI(false);
         getSupportActionBar().show();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         finish();
@@ -207,7 +166,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         // Hide UI first
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.hide();
+            //actionBar.hide();
         }
         //mControlsView.setVisibility(View.GONE);
         mVisible = false;
@@ -260,6 +219,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
                             if(pb.getVisibility()==View.VISIBLE){
                                 pb.setVisibility(View.GONE);
                                 lockUI(false);
+                                delayedHide(AUTO_HIDE_DELAY_MILLIS);
                             }
                             return true;
                         }
@@ -280,6 +240,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
                     if(pb.getVisibility()==View.VISIBLE){
                         pb.setVisibility(View.GONE);
                         lockUI(false);
+                        delayedHide(AUTO_HIDE_DELAY_MILLIS);
                     }
                     vw.start();
                 }
@@ -287,7 +248,20 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
             vw.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
+                    if(pb.getVisibility()==View.GONE){
+                        pb.setVisibility(View.VISIBLE);
+                        lockUI(true);
+                    }
                     vw.start();
+                }
+            });
+            vw.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                @Override
+                public boolean onInfo(MediaPlayer mediaPlayer, int i, int i1) {
+                    if(i==703){
+                        Toast.makeText(getApplicationContext(),"Bitrate: "+i1+"kbps",Toast.LENGTH_SHORT).show();
+                    }
+                    return false;
                 }
             });
 
@@ -299,7 +273,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
     }
     private void lockUI(boolean state) {
         if (state) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
