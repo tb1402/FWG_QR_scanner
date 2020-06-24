@@ -4,7 +4,6 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -46,11 +44,11 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         // set dark mode on android 9 and earlier as default, else follow system default
-        if (Build.VERSION.SDK_INT < 29) {
+        /*if (Build.VERSION.SDK_INT < 29) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        }
+        }*/
 
         //check if first run
         preferencesManager pm = new preferencesManager(getApplicationContext());
