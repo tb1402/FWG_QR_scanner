@@ -73,6 +73,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
     };
     private VideoView vw;
     private ProgressBar pb;
+    private boolean isEscapeRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +115,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
         Intent i=getIntent();
-        boolean isEscapeRoute=i.getBooleanExtra("isER",false);
+        isEscapeRoute=i.getBooleanExtra("isER",false);
         if(isEscapeRoute){//check if given video url is escape route sequence
             parseEscapeRouteSequence(i.getStringExtra("seq"));
         }
@@ -209,18 +210,14 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
                 public boolean onInfo(MediaPlayer mediaPlayer, int i, int i1) {
                     switch (i) {
                         case MediaPlayer.MEDIA_INFO_BUFFERING_START: {
-                            if(pb.getVisibility()==View.GONE){
-                                pb.setVisibility(View.VISIBLE);
-                                lockUI(true);
-                            }
+                            pb.setVisibility(View.VISIBLE);
+                            lockUI(true);
                             return true;
                         }
                         case MediaPlayer.MEDIA_INFO_BUFFERING_END: {
-                            if(pb.getVisibility()==View.VISIBLE){
-                                pb.setVisibility(View.GONE);
-                                lockUI(false);
-                                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                            }
+                            pb.setVisibility(View.GONE);
+                            lockUI(false);
+                            delayedHide(AUTO_HIDE_DELAY_MILLIS);
                             return true;
                         }
                     }
@@ -237,22 +234,28 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
             vw.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
                 public void onPrepared(MediaPlayer mp) {
-                    if(pb.getVisibility()==View.VISIBLE){
-                        pb.setVisibility(View.GONE);
-                        lockUI(false);
-                        delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                    }
+                    pb.setVisibility(View.GONE);
+                    lockUI(false);
+                    delayedHide(AUTO_HIDE_DELAY_MILLIS);
                     vw.start();
                 }
             });
             vw.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    if(pb.getVisibility()==View.GONE){
-                        pb.setVisibility(View.VISIBLE);
-                        lockUI(true);
+                    //pb.setVisibility(View.VISIBLE);
+                    //lockUI(true);
+                    if(isEscapeRoute){
+                        //todo load stuff
                     }
-                    vw.start();
+                    else{
+                        vw.stopPlayback();
+                        lockUI(false);
+                        getSupportActionBar().show();
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        finish();
+                    }
+
                 }
             });
             vw.setOnInfoListener(new MediaPlayer.OnInfoListener() {

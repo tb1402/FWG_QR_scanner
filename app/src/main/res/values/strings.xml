@@ -46,8 +46,12 @@
     <string name="dev_team">Entwicklerteam:\n Q11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth, und Ben Welsch</string>
     <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a></string>
 
-    <!--Video Playback Strings-->
+    <!--Video Strings-->
     <string name="video_url_error">Fehler: Problem mit der Video-URL</string>
+    <string name="video_quality_high">Hoch (1920x1080p)</string>
+    <string name="video_quality_medium">Mittel (1270x720p)</string>
+    <string name="video_quality_low">Niedrig (640x480p)</string>
+    <string name="video_quality">Video Qualität</string>
     <!--other strings-->
     <string name="network_no_connection">Keine Netzwerkverbindung!</string>
     <string name="network_buffering">Laden…</string>

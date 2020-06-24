@@ -12,5 +12,11 @@
             android:entryValues="@array/settings_mode_int_values"
             android:key="mode"
             android:title="Modus" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/settings_video_quality_names"
+            android:entryValues="@array/settings_video_quality_values"
+            android:key="video_quality"
+            android:title="@string/video_quality" />
     </PreferenceCategory>
 </PreferenceScreen>
