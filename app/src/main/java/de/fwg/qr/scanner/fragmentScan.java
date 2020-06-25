@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -28,6 +29,9 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
@@ -38,6 +42,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     ImageView test;
     VideoView videoView;
+    TextView textView;
     WeakReference<networkCallbackInterface> ref;
 
     private CameraSource source;
@@ -75,6 +80,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 201);
         }
+        textView=v.findViewById(R.id.textView);
         initialize();
         startCamera();
         detection();
@@ -82,7 +88,15 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     @Override
     public void onPostCallback(String operation, String response) {
-
+        Log.i("fwg",response);
+        if(operation.contentEquals("getInfo")) {
+            try {
+                JSONObject o = new JSONObject(response);
+                textView.setText(o.getString("Text"));
+            } catch (JSONException e) {
+                Toast.makeText(c, "json_err" + e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -207,7 +221,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         if (i == null && !barcodeValue.contentEquals("")) {
             i = new Intent(getActivity(), activityScan.class);
             i.putExtra(Intent.EXTRA_TEXT, barcodeValue);//todo consider changing Intent.EXTRA_TEXT to a custom name
-            startActivity(i);
+            //startActivity(i);
+            Log.i("fwg","scanned");
+            net.makePostRequest(ref,"getInfo",barcodeValue,"getInfo.php");
         }
 
     }

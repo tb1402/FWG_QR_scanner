@@ -35,7 +35,7 @@ public class network {
 
     private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data, String requestURL) {
         final networkCallbackInterface nci = w.get();
-        StringRequest r = new StringRequest(Request.Method.POST, baseURL + requestURL, new Response.Listener<String>() {
+        StringRequest r = new StringRequest(Request.Method.POST, baseURL +"/api/"+ requestURL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 nci.onPostCallback(operation, response);
