@@ -18,4 +18,14 @@
         <item>medium</item>
         <item>low</item>
     </string-array>
+    <string-array name="settings_image_quality_names">
+        <item>@string/image_quality_high</item>
+        <item>@string/image_quality_low</item>
+        <item>@string/image_quality_orig</item>
+    </string-array>
+    <string-array name="settings_image_quality_values">
+        <item>orig</item>
+        <item>high</item>
+        <item>low</item>
+    </string-array>
 </resources>
