@@ -5,37 +5,24 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.HashMap;
-
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 public class activityFullscreenVideoPlayback extends AppCompatActivity {
 
     private static final int AUTO_HIDE_DELAY_MILLIS = 1000;
@@ -132,7 +119,6 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         }
     }
     private String craftURLForSimplePlayback(String id){
-        id="test";//todo remove test
         preferencesManager p=new preferencesManager(getApplicationContext());
         return network.baseURL+"/videos/"+p.getVideoResolution()+"/"+id+"/000.mp4";
     }
@@ -160,6 +146,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         lockUI(false);
         getSupportActionBar().show();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        show();
         finish();
     }
 

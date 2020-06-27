@@ -1,20 +1,16 @@
 package de.fwg.qr.scanner;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -22,8 +18,8 @@ import androidx.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 
-import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
+import de.fwg.qr.scanner.tools.reinitializeToolbarInterface;
 
 public class fragmentEscapeRoutes extends fragmentWrapper implements networkCallbackInterface {
 
@@ -59,7 +55,9 @@ public class fragmentEscapeRoutes extends fragmentWrapper implements networkCall
         pd.setCancelable(false);
         //a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent i=new Intent(c,activityFullscreenVideoPlayback.class);
-        startActivity(i);
+        i.putExtra("isER",false);
+        i.putExtra("id","test");
+        startActivityForResult(i,12);
     }
 
     @Override
@@ -74,6 +72,18 @@ public class fragmentEscapeRoutes extends fragmentWrapper implements networkCall
         if (name.contentEquals("test")) {
             test.setImageBitmap(image);
         }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+       if(requestCode==12){
+           WeakReference<reinitializeToolbarInterface> ref=new WeakReference<>((reinitializeToolbarInterface) a);
+           reinitializeToolbarInterface rti=ref.get();
+           rti.reinitializeToolbar();
+           Log.i("fwg","called");
+       }
+       else{
+           super.onActivityResult(requestCode,resultCode,data);
+       }
     }
 
 }

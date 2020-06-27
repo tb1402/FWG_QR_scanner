@@ -56,9 +56,17 @@ public class network {
         return r;
     }
 
-    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, String imageURL) {
+    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, String id, int number, boolean preview) {
         final networkCallbackInterface nci = w.get();
-        return new ImageRequest(baseURL + imageURL,
+        String url;
+        if(preview){
+            url=baseURL+"/images/low/"+id+"/"+number+".png";
+        }
+        else{
+            preferencesManager p=new preferencesManager(c);
+            url=baseURL+"/images/"+p.getImageResolution()+"/"+id+"/"+number+".png";
+        }
+        return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
@@ -77,7 +85,15 @@ public class network {
         requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci, operation, data, requestURL));
     }
 
-    public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String imageURL) {
-        requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, imageURL));
+    /**
+     * Method to make a request for an image
+     * @param nci reference to networkCallbackInterface for callback
+     * @param name name of the request, to differentiate the request in callback
+     * @param id the id of the station
+     * @param number the number of the image being requested
+     * @param preview is image needed for preview only? if so, only low resolution image will be given back
+     */
+    public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String id, int number, boolean preview) {
+        requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, id,number,preview));
     }
 }
