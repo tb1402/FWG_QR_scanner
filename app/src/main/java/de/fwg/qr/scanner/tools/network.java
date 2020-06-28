@@ -33,9 +33,9 @@ public class network {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data, String requestURL) {
+    private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data) {
         final networkCallbackInterface nci = w.get();
-        StringRequest r = new StringRequest(Request.Method.POST, baseURL +"/api/"+ requestURL, new Response.Listener<String>() {
+        StringRequest r = new StringRequest(Request.Method.POST, baseURL +"/api/"+ operation, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 nci.onPostCallback(operation, response);
@@ -81,8 +81,14 @@ public class network {
                 });
     }
 
-    public void makePostRequest(WeakReference<networkCallbackInterface> nci, String operation, String data, String requestURL) {
-        requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci, operation, data, requestURL));
+    /**
+     * Method to make a request and send post data with it
+     * @param nci reference to networkCallbackInterface for callback
+     * @param operation name of requested api file, this value will also be given back in callback method, along with the response from the server
+     * @param data post data to be send to the server
+     */
+    public void makePostRequest(WeakReference<networkCallbackInterface> nci, String operation, String data) {
+        requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci, operation, data));
     }
 
     /**

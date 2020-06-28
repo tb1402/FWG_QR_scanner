@@ -173,7 +173,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             i = new Intent(getActivity(), activityScan.class);
             i.putExtra("barcode", barcodeValue);
             Log.i("fwg","scanned");
-            net.makePostRequest(ref,"getInfo",barcodeValue,"getInfo.php");
+            net.makePostRequest(ref,"getInfo",barcodeValue);
             //startActivity(i);
         }
 
