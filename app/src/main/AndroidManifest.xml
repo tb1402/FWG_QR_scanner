@@ -26,22 +26,28 @@
             android:configChanges="uiMode"
             android:label="@string/title_activity_start"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitySettings"
             android:configChanges="uiMode"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activityScan"
             android:configChanges="uiMode"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activityPictureFullscreen"
+            android:configChanges="uiMode"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activityMain"
             android:configChanges="uiMode"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

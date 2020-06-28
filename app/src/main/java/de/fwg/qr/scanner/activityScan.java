@@ -37,6 +37,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private String bild = "";
     private String video = "";
 
+    private static final int VIDEO_CALL = 0;
+    private static final int IMAGE_CALL = 1;
+
     private int imagePosition = 0;
     private int i = 0;
     private ArrayList<Bitmap> images;
@@ -64,13 +67,14 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         imageSwitcher = findViewById(R.id.imageSwitcher);
         buttonPre = findViewById(R.id.buttonPrevious);
         buttonNext = findViewById(R.id.buttonNext);
-        videoButton = findViewById(R.id.videoButton); //TODO: Consider loading an icon for actionButton
+        videoButton = findViewById(R.id.videoButton);
         if (Integer.parseInt(video) > 0) {
             videoButton.setVisibility(View.VISIBLE);
         } else {
             videoButton.setVisibility(View.INVISIBLE);
-         }
+        }
         assignButtons();
+        clickableImageSwitcher();
         getImages();
     }
 
@@ -89,12 +93,11 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     @Override
     public void onImageCallback(String name, Bitmap image) {
         lockUI(false);
-        if (name.contentEquals("Images")) {
+        if (name.contentEquals("ImagePreview")) {
             images.add(image);
             if (i >= Integer.parseInt(bild)) {
                 setImageSwitcher();
             }
-
         }
     }
 
@@ -127,7 +130,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             videoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    newIntent();
+                    newIntent(VIDEO_CALL);
                 }
             });
         }
@@ -153,17 +156,32 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     public void getImages() {
         lockUI(true);
         for (i = 0; i < Integer.parseInt(bild); i++) {
-            net.makeImageRequest(ref, "Images", ID, i, true);
+            net.makeImageRequest(ref, "ImagePreview", ID, i, true);
         }
 
     }
 
-    public void newIntent() {
-        if (intent == null && Integer.parseInt(video) > 0) { //Check for video number unnecessary, getting checked before; just for safety purposes
+    public void newIntent(int operation) {
+        if (intent == null && Integer.parseInt(video) > 0 && operation == VIDEO_CALL) { //Check for video number unnecessary, getting checked before; just for safety purposes
             intent = new Intent(this, activityFullscreenVideoPlayback.class);
             intent.putExtra("ID", ID);
             startActivity(intent);
         }
+        if (intent == null && operation == IMAGE_CALL) {
+            intent = new Intent(this, activityPictureFullscreen.class);
+            intent.putExtra("ID", ID);
+            intent.putExtra("Position", imagePosition);
+            startActivity(intent);
+        }
+    }
+
+    public void clickableImageSwitcher() {
+        imageSwitcher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newIntent(IMAGE_CALL);
+            }
+        });
     }
 
 
