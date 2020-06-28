@@ -47,8 +47,8 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="#B9DCDB"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_video_play_foreground" />
+        android:scaleType="center"
+        android:src="@drawable/ic_video_play" />
 
 
 </RelativeLayout>

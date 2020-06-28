@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
@@ -7,4 +7,5 @@
     <dimen name="text_width">120dp</dimen>
     <dimen name="text_size">25sp</dimen>
     <dimen name="edittext_size">20sp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">64dp</dimen>
 </resources>
