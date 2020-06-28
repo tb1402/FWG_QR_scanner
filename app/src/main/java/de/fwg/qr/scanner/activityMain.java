@@ -28,7 +28,7 @@ import java.util.Locale;
 
 import de.fwg.qr.scanner.tools.preferencesManager;
 
-public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface,de.fwg.qr.scanner.tools.reinitializeToolbarInterface {
+public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface {
     /**
      * WICHTIG!!!
      * Diese Klasse bleibt unverändert, hier wird nur Code eingefügt, der zur Navigation dient!!!
@@ -146,6 +146,10 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 f = new fragmentScan();
                 show(f);
                 break;
+            case R.id.item_frgm_escape_routes:
+                f=new fragmentEscapeRoutes();
+                show(f);
+                break;
             default:
                 return false;
         }
@@ -207,22 +211,5 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         } catch (PackageManager.NameNotFoundException e) {
             return getString(R.string.error_undefined);
         }
-    }
-    @Override
-    public void reinitializeToolbar(){
-        invalidateOptionsMenu();
-        setSupportActionBar(null);
-        Toolbar tb = findViewById(R.id.toolbar);
-
-        //Toolbar and Drawer toggle setup
-        setSupportActionBar(tb);//set the toolbar as Action bar
-        drawer.removeDrawerListener(abdt);
-        abdt = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close);
-        drawer.addDrawerListener(abdt);
-        abdt.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
-        NavigationUI.setupActionBarWithNavController(this, navCon, drawer);
-        NavigationView navView = findViewById(R.id.nav_view);
-        NavigationUI.setupWithNavController(navView, navCon);
-        showHamburgerIcon();
     }
 }

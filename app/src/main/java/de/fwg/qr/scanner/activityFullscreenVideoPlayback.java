@@ -111,7 +111,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
             lockUI(true);
             String id=i.getStringExtra("id");
             if(id!=null) {
-                if (id.length() != 10) {
+                if (id.length() != 4) {
                     Toast.makeText(getApplicationContext(), getString(R.string.video_url_error), Toast.LENGTH_SHORT).show();
                 }
             }

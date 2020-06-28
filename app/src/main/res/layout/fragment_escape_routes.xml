@@ -11,4 +11,10 @@
             android:layout_height="99dp"
             android:src="@drawable/ic_error" />
 
+        <Button
+            android:id="@+id/but_vs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
 </LinearLayout>

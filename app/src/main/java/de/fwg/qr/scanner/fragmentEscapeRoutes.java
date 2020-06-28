@@ -1,7 +1,5 @@
 package de.fwg.qr.scanner;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,23 +8,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
-import de.fwg.qr.scanner.tools.reinitializeToolbarInterface;
 
 public class fragmentEscapeRoutes extends fragmentWrapper implements networkCallbackInterface {
 
-    VideoView videoView;
     ImageView test;
     WeakReference<networkCallbackInterface> ref;
     ProgressDialog pd;
+    Button testb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,17 +44,21 @@ public class fragmentEscapeRoutes extends fragmentWrapper implements networkCall
     @Override
     public void onViewCreated(View v, @Nullable Bundle sis) {
         test = v.findViewById(R.id.imageView);
-        test.setVisibility(View.GONE);
-        lockUI(true);
         //net.makeImageRequest(ref, "test", "/1.jpg");
         pd = new ProgressDialog(c);
         pd.setTitle(getString(R.string.network_buffering));
         pd.setCancelable(false);
         //a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        Intent i=new Intent(c,activityFullscreenVideoPlayback.class);
-        i.putExtra("isER",false);
-        i.putExtra("id","test");
-        startActivityForResult(i,12);
+        testb=v.findViewById(R.id.but_vs);
+        testb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(c,activityFullscreenVideoPlayback.class);
+                i.putExtra("isER",false);
+                i.putExtra("id","test");
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -73,17 +74,4 @@ public class fragmentEscapeRoutes extends fragmentWrapper implements networkCall
             test.setImageBitmap(image);
         }
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-       if(requestCode==12){
-           WeakReference<reinitializeToolbarInterface> ref=new WeakReference<>((reinitializeToolbarInterface) a);
-           reinitializeToolbarInterface rti=ref.get();
-           rti.reinitializeToolbar();
-           Log.i("fwg","called");
-       }
-       else{
-           super.onActivityResult(requestCode,resultCode,data);
-       }
-    }
-
 }
