@@ -69,7 +69,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             videoButton.setVisibility(View.VISIBLE);
         } else {
             videoButton.setVisibility(View.INVISIBLE);
-        }
+         }
         assignButtons();
         getImages();
     }
