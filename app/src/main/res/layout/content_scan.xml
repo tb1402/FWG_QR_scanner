@@ -12,7 +12,7 @@
     <ImageSwitcher
         android:id="@+id/imageSwitcher"
         android:layout_width="match_parent"
-        android:layout_height="250dp" />
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/buttonPrevious"
@@ -35,6 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonNext"
-        android:textColor="#FFFFFF"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:textColor="#FFFFFF" />
 </RelativeLayout>
