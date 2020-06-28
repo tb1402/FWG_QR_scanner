@@ -51,6 +51,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         bild = receivedIntent.getStringExtra("Bild");
         video = receivedIntent.getStringExtra("Video");
         setToolbarTitle(name);
+        setupAbHome();
         //System.out.println(bild);
         images = new ArrayList<Bitmap>();
         imageView = new ImageView(this);
