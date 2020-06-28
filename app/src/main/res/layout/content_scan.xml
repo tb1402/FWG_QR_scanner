@@ -37,4 +37,13 @@
         android:layout_below="@+id/buttonNext"
         android:scrollbars="vertical"
         android:textColor="#FFFFFF" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/videoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true" />
+
+
 </RelativeLayout>

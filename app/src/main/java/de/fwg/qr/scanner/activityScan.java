@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private Button buttonPre;
     private Button buttonNext;
     private TextView textView;
+    private FloatingActionButton videoButton;
 
     private WeakReference<networkCallbackInterface> ref;
     network net;
@@ -37,6 +40,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private int imagePosition = 0;
     private int i = 0;
     private ArrayList<Bitmap> images;
+    private Intent intent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,6 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         video = receivedIntent.getStringExtra("Video");
         setToolbarTitle(name);
         setupAbHome();
-        //System.out.println(bild);
         images = new ArrayList<Bitmap>();
         imageView = new ImageView(this);
         textView = findViewById(R.id.textView);
@@ -61,8 +64,20 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         imageSwitcher = findViewById(R.id.imageSwitcher);
         buttonPre = findViewById(R.id.buttonPrevious);
         buttonNext = findViewById(R.id.buttonNext);
+        videoButton = findViewById(R.id.videoButton); //TODO: Consider loading an icon for actionButton
+        if (Integer.parseInt(video) > 0) {
+            videoButton.setVisibility(View.VISIBLE);
+        } else {
+            videoButton.setVisibility(View.INVISIBLE);
+        }
         assignButtons();
         getImages();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        intent = null;
     }
 
 
@@ -108,6 +123,14 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
                 imageView.setImageBitmap(images.get(imagePosition));
             }
         });
+        if (Integer.parseInt(video) > 0) {
+            videoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newIntent();
+                }
+            });
+        }
     }
 
     public void setImageSwitcher() {
@@ -131,10 +154,17 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     public void getImages() {
         lockUI(true);
         for (i = 0; i < Integer.parseInt(bild); i++) {
-            System.out.print("i größer als 0");
             net.makeImageRequest(ref, "Images", ID, i, true);
         }
 
+    }
+
+    public void newIntent() {
+        if (intent == null && Integer.parseInt(video) > 0) { //Check for video number unnecessary, getting checked before; just for safety purposes
+            intent = new Intent(this, activityFullscreenVideoPlayback.class);
+            intent.putExtra("ID", ID);
+            startActivity(intent);
+        }
     }
 
 
