@@ -148,7 +148,6 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             }
         });
 
-
     }
 
     public void getImages() {
