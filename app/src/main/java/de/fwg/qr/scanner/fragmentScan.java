@@ -42,13 +42,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     private Intent i = null;
     private String barcodeValue = "";
+    private JSONObject object = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ref = new WeakReference<>((networkCallbackInterface) this);
         if (!net.isNetworkAvailable()) {
-            Toast.makeText(c, "Keine Netzwerkverbindung!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(c, getString(R.string.network_no_connection), Toast.LENGTH_SHORT).show();
             a.finishAffinity();
         }
     }
@@ -77,8 +78,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         Log.i("fwg",response);
         if(operation.contentEquals("getInfo")) {
             try {
-                JSONObject o = new JSONObject(response);
-                textView.setText(o.getString("Text"));
+                object = new JSONObject(response);
+                i.putExtra("ID", barcodeValue);
+                i.putExtra("Name", object.getString("Name"));
+                i.putExtra("Text", object.getString("Text"));
+                i.putExtra("Bild", object.getString("Bild"));
+                i.putExtra("Video", object.getString("Video"));
+                startActivity(i);
             } catch (JSONException e) {
                 i = null;
                 Toast.makeText(c, "json_err" + e.toString(), Toast.LENGTH_SHORT).show();
@@ -88,11 +94,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     @Override
     public void onImageCallback(String name, Bitmap image) {
-        Log.i("fwg", name);
-        lockUI(false);
-        if (name.contentEquals("test")) {
-            //test.setImageBitmap(image);
-        }
     }
 
     private void initialize() {
@@ -152,7 +153,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
 
-
             @Override
             public void release() {
             }
@@ -171,10 +171,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private void newIntent() {
         if (i == null && !barcodeValue.contentEquals("")) {
             i = new Intent(getActivity(), activityScan.class);
-            i.putExtra("barcode", barcodeValue);
             Log.i("fwg","scanned");
             net.makePostRequest(ref,"getInfo",barcodeValue);
-            //startActivity(i);
         }
 
     }
