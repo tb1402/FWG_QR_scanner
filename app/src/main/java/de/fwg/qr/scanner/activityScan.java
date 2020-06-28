@@ -9,15 +9,17 @@ import android.widget.Button;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class activityScan extends toolbarWrapper implements networkCallbackInterface {
 
-    private ImageView image;
+    private ImageView imageView;
     private ImageSwitcher imageSwitcher;
     private Button buttonPre;
     private Button buttonNext;
@@ -33,13 +35,15 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private String video = "";
 
     private int imagePosition = 0;
-    private String[] imageURL;
+    private int i = 0;
+    private ArrayList<Bitmap> images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(R.layout.toolbar_scan, this, getString(R.string.title_scanned));
         super.onCreate(savedInstanceState);
         net = new network(this);
+        ref = new WeakReference<>((networkCallbackInterface) this);
         Intent receivedIntent = getIntent();
         ID = receivedIntent.getStringExtra("ID");
         name = receivedIntent.getStringExtra("Name");
@@ -47,8 +51,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         bild = receivedIntent.getStringExtra("Bild");
         video = receivedIntent.getStringExtra("Video");
         setToolbarTitle(name);
-        imageURL = new String[Integer.parseInt(bild)];
-        image = findViewById(R.id.imageView);
+        //System.out.println(bild);
+        images = new ArrayList<Bitmap>();
+        imageView = new ImageView(this);
         textView = findViewById(R.id.textView);
         textView.setText(text);
         textView.setMovementMethod(new ScrollingMovementMethod());
@@ -56,7 +61,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         buttonPre = findViewById(R.id.buttonPrevious);
         buttonNext = findViewById(R.id.buttonNext);
         assignButtons();
-        setImageURL();
+        getImages();
     }
 
 
@@ -68,11 +73,13 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     @Override
     public void onImageCallback(String name, Bitmap image) {
         lockUI(false);
-        if (name.contentEquals("test")) {
-            this.image.setImageBitmap(image);
+        if (name.contentEquals("Images")) {
+            images.add(image);
+            if (i >= Integer.parseInt(bild)) {
+                setImageSwitcher();
+            }
 
         }
-
     }
 
     public void assignButtons() {
@@ -80,10 +87,11 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             @Override
             public void onClick(View view) {
                 if (imagePosition <= 0) {
-                    imagePosition = (imageURL.length - 1);
+                    imagePosition = (Integer.parseInt(bild) - 1);
                 } else {
                     imagePosition--;
                 }
+                imageView.setImageBitmap(images.get(imagePosition));
             }
 
         });
@@ -91,23 +99,42 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (imagePosition >= (imageURL.length - 1)) {
+                if (imagePosition >= (Integer.parseInt(bild) - 1)) {
                     imagePosition = 0;
                 } else {
                     imagePosition++;
                 }
+                imageView.setImageBitmap(images.get(imagePosition));
             }
         });
     }
 
     public void setImageSwitcher() {
+        imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                if (imageView.getDrawable() == null) {
+                    imageView.setImageBitmap(images.get(imagePosition));
+                    return imageView;
+                } else {
+                    imageSwitcher.removeView(imageView);
+                    imageView.setImageBitmap(images.get(imagePosition));
+                    return imageView;
+                }
+            }
+        });
+
 
     }
 
-    public void setImageURL() {
-        for (int i = 0; i < imageURL.length; i++) {
-            imageURL[i] = network.baseURL + "/images/" /* + net.getImRes() + "/" */ + ID + "/" + i + ".png";
+    public void getImages() {
+        lockUI(true);
+        for (i = 0; i < Integer.parseInt(bild); i++) {
+            System.out.print("i größer als 0");
+            net.makeImageRequest(ref, "Images", ID, i, true);
         }
+
     }
+
 
 }
