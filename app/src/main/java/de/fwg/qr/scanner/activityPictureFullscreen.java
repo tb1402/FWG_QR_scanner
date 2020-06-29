@@ -44,6 +44,7 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
         }
         imageView = (ImageView) findViewById(R.id.imageView);
         button = (FloatingActionButton) findViewById(R.id.fab);
+        button.setVisibility(View.INVISIBLE);
         textView = findViewById(R.id.textView);
         progressBar = findViewById(R.id.progressBar);
         assignButton();
@@ -68,6 +69,7 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
             imageView.setImageBitmap(image);
             textView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
+            button.setVisibility(View.VISIBLE);
         }
 
     }
