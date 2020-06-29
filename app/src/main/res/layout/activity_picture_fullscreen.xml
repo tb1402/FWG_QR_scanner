@@ -22,7 +22,24 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:backgroundTint="@color/background"
+        android:backgroundTint="#B9DCDB"
         android:src="@drawable/ic_outline_close_24" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView"
+        android:text="@string/image_loading"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp" />
 
 </RelativeLayout>

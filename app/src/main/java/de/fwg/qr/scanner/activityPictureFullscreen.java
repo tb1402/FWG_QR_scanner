@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +21,8 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
 
     private ImageView imageView;
     private FloatingActionButton button;
+    private ProgressBar progressBar;
+    private TextView textView;
 
     private Intent receivedIntent = null;
     private String ID = "";
@@ -40,6 +44,8 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
         }
         imageView = (ImageView) findViewById(R.id.imageView);
         button = (FloatingActionButton) findViewById(R.id.fab);
+        textView = findViewById(R.id.textView);
+        progressBar = findViewById(R.id.progressBar);
         assignButton();
         net.makeImageRequest(ref, "Image", ID, imagePosition, false);
 
@@ -60,6 +66,8 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
     public void onImageCallback(String name, Bitmap image) {
         if (name.contentEquals("Image")) {
             imageView.setImageBitmap(image);
+            textView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
     }

@@ -60,6 +60,10 @@
     <string name="video_quality_medium">Mittel (1270x720p)</string>
     <string name="video_quality_low">Niedrig (640x480p)</string>
     <string name="video_quality">Video Qualität</string>
+
+    <!--Image Strings-->
+    <string name="image_loading">Bild wird geladen</string>
+
     <!--other strings-->
     <string name="network_no_connection">Keine Netzwerkverbindung!</string>
     <string name="network_buffering">Laden…</string>
