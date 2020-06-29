@@ -67,8 +67,8 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
     public void onImageCallback(String name, Bitmap image) {
         if (name.contentEquals("Image")) {
             imageView.setImageBitmap(image);
-            textView.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
             button.setVisibility(View.VISIBLE);
         }
 

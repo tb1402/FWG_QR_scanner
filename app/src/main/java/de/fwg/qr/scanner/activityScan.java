@@ -145,7 +145,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             @Override
             public View makeView() {
                 if (progressBar.getVisibility() == View.VISIBLE) {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
                 }
                 if (imageView.getDrawable() == null) {
                     imageView.setImageBitmap(images.get(imagePosition));
