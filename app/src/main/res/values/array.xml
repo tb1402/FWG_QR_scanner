@@ -24,8 +24,8 @@
         <item>@string/image_quality_orig</item>
     </string-array>
     <string-array name="settings_image_quality_values">
-        <item>orig</item>
         <item>high</item>
         <item>low</item>
+        <item>orig</item>
     </string-array>
 </resources>
