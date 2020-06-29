@@ -1,10 +1,6 @@
 package de.fwg.qr.scanner;
 
 import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
@@ -19,6 +15,9 @@ import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.preferencesManager;
@@ -109,7 +108,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         else {
             pb.setVisibility(View.VISIBLE);
             lockUI(true);
-            String id=i.getStringExtra("id");
+            String id = i.getStringExtra("ID"); //Hab den namen von "id" zu "ID" geändert, ansonsten hätte es nichts bekommen und ich wollte es bei mir nicht wegen consistency ändern
             if(id!=null) {
                 if (id.length() != 4) {
                     Toast.makeText(getApplicationContext(), getString(R.string.video_url_error), Toast.LENGTH_SHORT).show();
