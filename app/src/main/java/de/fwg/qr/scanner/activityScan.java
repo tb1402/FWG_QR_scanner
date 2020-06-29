@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -27,6 +28,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private Button buttonNext;
     private TextView textView;
     private FloatingActionButton videoButton;
+    private ProgressBar progressBar;
 
     private WeakReference<networkCallbackInterface> ref;
     network net;
@@ -64,6 +66,8 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         textView = findViewById(R.id.textView);
         textView.setText(text);
         textView.setMovementMethod(new ScrollingMovementMethod());
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         imageSwitcher = findViewById(R.id.imageSwitcher);
         buttonPre = findViewById(R.id.buttonPrevious);
         buttonNext = findViewById(R.id.buttonNext);
@@ -140,6 +144,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
+                if (progressBar.getVisibility() == View.VISIBLE) {
+                    progressBar.setVisibility(View.GONE);
+                }
                 if (imageView.getDrawable() == null) {
                     imageView.setImageBitmap(images.get(imagePosition));
                     return imageView;
