@@ -5,9 +5,7 @@ import java.util.Date;
 public class historyEntry {
 
     /**
-     * The Id of the visited Station Base64Decoded into an 64bit int
-     * 64^10 > 2^32 => int32 is too small, but even a signed long can store more information
-     * congrats, you reduced saving space from 10 to 8 bytes.....
+     * The Id of the visited Station as String
      */
     public String StationId;
     /**
@@ -29,7 +27,7 @@ public class historyEntry {
 
     /**
      * Constructor for a newly created entry, where the time being used is the time of creation
-     * @param stationId Id of the visited station as String, being converted to an Int
+     * @param stationId Id of the visited station
      */
     public historyEntry(String stationId){
         StationId = stationId;
@@ -38,7 +36,7 @@ public class historyEntry {
 
     /**
      * Constructor to build an already existent entry, read from the file, with a specific date
-     * @param stationId Id of the visited station as an Long
+     * @param stationId Id of the visited station
      * @param timeVisited Time the station was visited
      */
     public historyEntry(String stationId, Date timeVisited){
