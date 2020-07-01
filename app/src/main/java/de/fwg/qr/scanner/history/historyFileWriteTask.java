@@ -52,12 +52,8 @@ public class historyFileWriteTask extends AsyncTask<historyEntry, Object, Object
 
         // Unlock File
         historyManager.FileLocked = false;
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Object o) {
         if(Callback != null)
             Callback.onFinished();
+        return null;
     }
 }

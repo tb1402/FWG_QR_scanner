@@ -28,6 +28,21 @@ public class historyManager {
     }
 
     /**
+     * synchronously get all entries of the Users history
+     * @return All Entries saved in the Users History
+     */
+    public historyEntry[] getEntries(){
+        historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), null);
+        try {
+            return readTask.execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new historyEntry[0];
+    }
+
+
+    /**
      * Synchronously adds an Entry to the Users History
      * @param newEntry The Entry which should be inserted
      */
@@ -77,20 +92,6 @@ public class historyManager {
             }
         });
         readTask.execute();
-    }
-
-    /**
-     * synchronously get all entries of the Users history
-     * @return All Entries saved in the Users History
-     */
-    public historyEntry[] getEntries(){
-        historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), null);
-        try {
-            return  readTask.execute().get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new historyEntry[0];
     }
 
     /**

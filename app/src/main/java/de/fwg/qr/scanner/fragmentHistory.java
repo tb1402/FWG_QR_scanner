@@ -35,9 +35,11 @@ public class fragmentHistory extends fragmentWrapper {
 
         // historyManager instance
         final historyManager manager = new historyManager(getContext());
-        lockUI(true);
+        //lockUI(true);
         //manager.clearHistory();
-        // DEBUG TEST: manager.addEntry(new historyEntry("Hallo Du Da"));
+
+        // DEBUG TEST:
+        manager.addEntry(new historyEntry("Hallo Du Da"));
 
 
         manager.getAssociatedEntriesAsync(new taskResultCallback() {
@@ -46,7 +48,7 @@ public class fragmentHistory extends fragmentWrapper {
                 historyEntry[] entries = (historyEntry[])result;
                 historyListAdapter adapter = new historyListAdapter(getContext(), entries);
                 listHistory.setAdapter(adapter);
-                lockUI(false);
+                //lockUI(false);
             }
         });
     }

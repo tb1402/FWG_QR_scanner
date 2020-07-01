@@ -32,6 +32,7 @@ public class historyFileReadTask extends AsyncTask<Object, Object, historyEntry[
         if(!HistoryFile.exists()) {
             // file does not exist:
             // the entries array list stays empty
+            historyManager.FileLocked = false;
             return new historyEntry[0]; // simply return no elements
             // File gets created when the first entry gets inserted
         }
@@ -64,14 +65,12 @@ public class historyFileReadTask extends AsyncTask<Object, Object, historyEntry[
             } // catch is not important, just required, we already checked
             // if the file exists so this should NEVER lead to any kind of exception
         }
+
         // Unlock File
         historyManager.FileLocked = false;
-        return entries.toArray(new historyEntry[0]);
-    }
-
-    @Override
-    protected void onPostExecute(historyEntry[] h) {
+        historyEntry[] res =  entries.toArray(new historyEntry[0]);
         if(Callback != null)
-            Callback.onFinished(h);
+            Callback.onFinished(res);
+        return res;
     }
 }
