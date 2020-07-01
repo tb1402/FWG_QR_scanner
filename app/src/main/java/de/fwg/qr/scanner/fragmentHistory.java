@@ -37,6 +37,8 @@ public class fragmentHistory extends fragmentWrapper {
         final historyManager manager = new historyManager(getContext());
         lockUI(true);
         //manager.clearHistory();
+        // DEBUG TEST: manager.addEntry(new historyEntry("Hallo Du Da"));
+
 
         manager.getAssociatedEntriesAsync(new taskResultCallback() {
             @Override

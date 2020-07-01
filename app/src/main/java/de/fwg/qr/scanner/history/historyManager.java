@@ -24,7 +24,7 @@ public class historyManager {
     public historyManager(Context c){
         AppContext = c;
         historyManager.FileLocked = false;
-        Entries = new ArrayList<historyEntry>(Arrays.asList(getEntries()));
+        //Entries = new ArrayList<historyEntry>(Arrays.asList(getEntries()));
     }
 
     /**
@@ -32,7 +32,13 @@ public class historyManager {
      * @param newEntry The Entry which should be inserted
      */
     public void addEntry(historyEntry newEntry){
-        Entries = new ArrayList<historyEntry>(Arrays.asList(getEntries()));
+
+        historyEntry[] entries = getEntries();
+        if(entries.length == 0)
+            Entries = new ArrayList<historyEntry>();
+        else
+            Entries = new ArrayList<historyEntry>(Arrays.asList(entries));
+
         Entries.add(newEntry);
         historyFileWriteTask writeTask = new historyFileWriteTask(getHistoryFile(), null);
         try {
@@ -53,8 +59,11 @@ public class historyManager {
         historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
-                historyEntry[] historyEntries = (historyEntry[]) result;
-                Entries = new ArrayList<historyEntry>(Arrays.asList(historyEntries));
+                historyEntry[] entries = getEntries();
+                if(entries.length == 0)
+                    Entries = new ArrayList<historyEntry>();
+                else
+                    Entries = new ArrayList<historyEntry>(Arrays.asList(entries));
                 Entries.add(newEntry);
 
                 historyFileWriteTask writeTask = new historyFileWriteTask(getHistoryFile(), new taskCallback() {
@@ -123,7 +132,8 @@ public class historyManager {
 
 
                             // Calling the callback method
-                            callback.onFinished(Entries.toArray(new historyEntry[0]));
+                            if callback != null
+                                callback.onFinished(Entries.toArray(new historyEntry[0]));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -135,7 +145,8 @@ public class historyManager {
                 net.makePostRequest(new WeakReference<networkCallbackInterface>(webCllb), "__stations__", ""); // TODO: Replace Placeholders
                 */
                 // Calling the callback method // TODO remove this later on:
-                callback.onFinished(Entries.toArray(new historyEntry[0]));
+                if (callback != null)
+                    callback.onFinished(Entries.toArray(new historyEntry[0]));
 
             }
         });
