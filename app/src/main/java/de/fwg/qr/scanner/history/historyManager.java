@@ -103,6 +103,10 @@ public class historyManager {
             @Override
             public void onFinished(Object result) {
                 historyEntry[] entries = (historyEntry[]) result;
+                if(entries.length == 0)
+                    Entries = new ArrayList<historyEntry>();
+                else
+                    Entries = new ArrayList<historyEntry>(Arrays.asList(entries));
                 /*
                 // Calling the HTTP-Request to get the Stations Names
                 network net = new network(AppContext);
