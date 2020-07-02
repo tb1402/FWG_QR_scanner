@@ -23,7 +23,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:backgroundTint="#B9DCDB"
-        android:src="@drawable/ic_outline_close_24" />
+        android:src="@drawable/ic_fab_close" />
 
     <ProgressBar
         android:id="@+id/progressBar"

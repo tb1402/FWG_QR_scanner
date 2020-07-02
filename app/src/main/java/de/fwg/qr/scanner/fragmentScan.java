@@ -29,6 +29,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import de.fwg.qr.scanner.history.historyEntry;
+import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {

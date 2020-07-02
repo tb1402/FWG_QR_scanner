@@ -108,7 +108,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         else {
             pb.setVisibility(View.VISIBLE);
             lockUI(true);
-            String id = i.getStringExtra("ID"); //Hab den namen von "id" zu "ID" geändert, ansonsten hätte es nichts bekommen und ich wollte es bei mir nicht wegen consistency ändern
+            String id = i.getStringExtra("id"); //Hab den namen von "ID" zu "id" geändert, weil ich einfach die kleine Schreibweise gewohnt bin
             if(id!=null) {
                 if (id.length() != 4) {
                     Toast.makeText(getApplicationContext(), getString(R.string.video_url_error), Toast.LENGTH_SHORT).show();

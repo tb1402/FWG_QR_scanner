@@ -97,11 +97,15 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { //TODO: Start Mapdesign
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.tb_item_settings) {
             Intent i = new Intent(getApplicationContext(), activitySettings.class);
             startActivity(i);
+            return true;
+        }
+        else if(id==R.id.tb_item_map){
+            //TODO start map activity
             return true;
         }
 

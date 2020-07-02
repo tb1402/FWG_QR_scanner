@@ -26,7 +26,6 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private ImageSwitcher imageSwitcher;
     private Button buttonPre;
     private Button buttonNext;
-    private TextView textView;
     private FloatingActionButton videoButton;
     private ProgressBar progressBar;
 
@@ -34,18 +33,12 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private network net;
 
     private String ID = "";
-    private String name = "";
-    private String text = "";
     private String bild = "";
-    private String video = "";
-
-    private static final int VIDEO_CALL = 0;
-    private static final int IMAGE_CALL = 1;
+    private int video = -1;
 
     private int imagePosition = 0;
     private int i = 0;
     private ArrayList<Bitmap> images;
-    private Intent intent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +48,16 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         ref = new WeakReference<>((networkCallbackInterface) this);
         Intent receivedIntent = getIntent();
         ID = receivedIntent.getStringExtra("ID");
-        name = receivedIntent.getStringExtra("Name");
-        text = receivedIntent.getStringExtra("Text");
+        String name = receivedIntent.getStringExtra("Name");
+        String text = receivedIntent.getStringExtra("Text");
         bild = receivedIntent.getStringExtra("Bild");
-        video = receivedIntent.getStringExtra("Video");
+        String videoIntentExtra=receivedIntent.getStringExtra("Video");
+        video = Integer.parseInt(videoIntentExtra == null ? "-1" : videoIntentExtra);
         setToolbarTitle(name);
         setupAbHome();
-        images = new ArrayList<Bitmap>();
+        images = new ArrayList<>();
         imageView = new ImageView(this);
-        textView = findViewById(R.id.textView);
+        TextView textView = findViewById(R.id.textView);
         textView.setText(text);
         textView.setMovementMethod(new ScrollingMovementMethod());
         progressBar = findViewById(R.id.progressBar);
@@ -72,7 +66,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         buttonPre = findViewById(R.id.buttonPrevious);
         buttonNext = findViewById(R.id.buttonNext);
         videoButton = findViewById(R.id.videoButton);
-        if (Integer.parseInt(video) > 0) {
+        if (video > 0) {
             videoButton.setVisibility(View.VISIBLE);
         } else {
             videoButton.setVisibility(View.INVISIBLE);
@@ -81,13 +75,6 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         clickableImageSwitcher();
         getImages();
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        intent = null;
-    }
-
 
     @Override
     public void onPostCallback(String operation, String response) {
@@ -131,15 +118,17 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
                     imageView.setImageBitmap(images.get(imagePosition));
                 }
             });
-        } else { //TODO: Problem with .setVisibility(View.GONE): Text alignment won't match anymore
-            buttonNext.setVisibility(View.INVISIBLE);
-            buttonPre.setVisibility(View.INVISIBLE);
+        } else {
+            buttonNext.setVisibility(View.GONE);
+            buttonPre.setVisibility(View.GONE);
         }
-        if (Integer.parseInt(video) > 0) {
+        if (video> 0) {
             videoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    newIntent(VIDEO_CALL);
+                    Intent intent = new Intent(getApplicationContext(), activityFullscreenVideoPlayback.class);
+                    intent.putExtra("ID".toLowerCase(), ID);
+                    startActivity(intent);
                 }
             });
         }
@@ -173,25 +162,22 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     }
 
-    public void newIntent(int operation) {
-        if (intent == null && Integer.parseInt(video) > 0 && operation == VIDEO_CALL) { //Check for video number unnecessary, getting checked before; just for safety purposes
-            intent = new Intent(this, activityFullscreenVideoPlayback.class);
-            intent.putExtra("ID", ID);
-            startActivity(intent);
-        }
-        if (intent == null && operation == IMAGE_CALL) {
-            intent = new Intent(this, activityPictureFullscreen.class);
-            intent.putExtra("ID", ID);
-            intent.putExtra("Position", imagePosition);
-            startActivity(intent);
-        }
-    }
+    /*
+    Hab die Methode newIntent() entfernt, da sie nicht nötig ist.
+    Dieser check mit null ist nur beim Scanner sinnvoll, da die Detections Methode mehrere Male pro Sekunde
+    aufgerufen werden könnte (siehe die Issues am Anfang, als es mehrmals gestartet wurde).
+    Sonst kann man den intent direkt starten.
+    Sorry, falls ich dass etwas unverstädnlich erklärt hab.
+     */
 
     public void clickableImageSwitcher() {
         imageSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newIntent(IMAGE_CALL);
+                Intent intent = new Intent(getApplicationContext(), activityPictureFullscreen.class);
+                intent.putExtra("ID", ID);
+                intent.putExtra("Position", imagePosition);
+                startActivity(intent);
             }
         });
     }
