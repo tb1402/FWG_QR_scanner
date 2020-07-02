@@ -31,7 +31,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private ProgressBar progressBar;
 
     private WeakReference<networkCallbackInterface> ref;
-    network net;
+    private network net;
 
     private String ID = "";
     private String name = "";
@@ -106,30 +106,35 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     }
 
     public void assignButtons() {
-        buttonPre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imagePosition <= 0) {
-                    imagePosition = (Integer.parseInt(bild) - 1);
-                } else {
-                    imagePosition--;
+        if (Integer.parseInt(bild) > 1) {
+            buttonPre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (imagePosition <= 0) {
+                        imagePosition = (Integer.parseInt(bild) - 1);
+                    } else {
+                        imagePosition--;
+                    }
+                    imageView.setImageBitmap(images.get(imagePosition));
                 }
-                imageView.setImageBitmap(images.get(imagePosition));
-            }
 
-        });
+            });
 
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imagePosition >= (Integer.parseInt(bild) - 1)) {
-                    imagePosition = 0;
-                } else {
-                    imagePosition++;
+            buttonNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (imagePosition >= (Integer.parseInt(bild) - 1)) {
+                        imagePosition = 0;
+                    } else {
+                        imagePosition++;
+                    }
+                    imageView.setImageBitmap(images.get(imagePosition));
                 }
-                imageView.setImageBitmap(images.get(imagePosition));
-            }
-        });
+            });
+        } else { //TODO: Problem with .setVisibility(View.GONE): Text alignment won't match anymore
+            buttonNext.setVisibility(View.INVISIBLE);
+            buttonPre.setVisibility(View.INVISIBLE);
+        }
         if (Integer.parseInt(video) > 0) {
             videoButton.setOnClickListener(new View.OnClickListener() {
                 @Override

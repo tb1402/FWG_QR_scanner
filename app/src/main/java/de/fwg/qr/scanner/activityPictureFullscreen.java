@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,7 +38,7 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//hide status bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//set fullscreen mode
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//set fullscreen mode
         setContentView(R.layout.activity_picture_fullscreen);
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);
@@ -46,8 +47,8 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
             ID = receivedIntent.getStringExtra("ID");
             imagePosition = receivedIntent.getIntExtra("Position", 0);
         }
-        imageView = (ImageView) findViewById(R.id.imageView);
-        button = (FloatingActionButton) findViewById(R.id.fab);
+        imageView = findViewById(R.id.imageView);
+        button = findViewById(R.id.fab);
         button.setVisibility(View.INVISIBLE);
         textView = findViewById(R.id.textView);
         progressBar = findViewById(R.id.progressBar);
@@ -74,9 +75,12 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
             textView.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             button.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(this, getText(R.string.image_not_found_with_current_resolution), Toast.LENGTH_SHORT).show();
+            onBackPressed();
         }
-
     }
+
 
     public void assignButton() {
         button.setOnClickListener(new View.OnClickListener() {

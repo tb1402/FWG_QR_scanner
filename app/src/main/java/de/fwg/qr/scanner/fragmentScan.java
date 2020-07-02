@@ -33,7 +33,7 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {
 
-    WeakReference<networkCallbackInterface> ref;
+    private WeakReference<networkCallbackInterface> ref;
 
     private CameraSource source;
     private BarcodeDetector barcodeDetector;

@@ -59,5 +59,4 @@
         android:scaleType="center"
         android:src="@drawable/ic_video_play" />
 
-
 </RelativeLayout>
