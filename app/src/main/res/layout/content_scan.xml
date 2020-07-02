@@ -10,54 +10,58 @@
     tools:showIn="@layout/toolbar_scan">
 
 
-    <ImageSwitcher
-        android:id="@+id/imageSwitcher"
+    <RelativeLayout
+        android:id="@+id/relLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true" />
+        android:layout_below="@+id/appbar">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/lin"
-        android:layout_centerHorizontal="true" />
 
-    <LinearLayout
-        android:id="@+id/lin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/imageSwitcher">
+        <ImageSwitcher
+            android:id="@+id/imageSwitcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true" />
 
-        <TableRow
-            android:id="@+id/buttons"
+        <ProgressBar
+            android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_centerHorizontal="true" />
 
-            <Button
-                android:id="@+id/buttonPrevious"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/previous" />
+    </RelativeLayout>
 
-            <Button
-                android:id="@+id/buttonNext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/next" />
-        </TableRow>
-        <TextView
-            android:id="@+id/textView"
+
+    <RelativeLayout
+        android:id="@+id/relLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relLayout1">
+
+
+        <Button
+            android:id="@+id/buttonPrevious"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
+            android:layout_marginStart="100dp"
+            android:text="@string/previous" />
 
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/buttonPrevious"
+            android:layout_toEndOf="@+id/buttonPrevious"
+            android:text="@string/next" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relLayout2"
+        android:scrollbars="vertical"
+        android:textColor="#FFFFFF" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/videoButton"
@@ -70,5 +74,4 @@
         android:backgroundTint="#B9DCDB"
         android:scaleType="center"
         android:src="@drawable/ic_video_play" />
-
 </RelativeLayout>
