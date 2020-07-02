@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -66,7 +67,14 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         //Toolbar and Drawer toggle setup
         tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
         setSupportActionBar(tb);//set the toolbar as Action bar
-        abdt = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close);
+        abdt = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) { //Bugfix: Drawer otherwise hidden when starting App for first time
+                super.onDrawerSlide(drawerView, slideOffset);
+                drawer.bringChildToFront(drawerView);
+                drawer.requestLayout();
+            }
+        };
         drawer.addDrawerListener(abdt);
         abdt.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
 

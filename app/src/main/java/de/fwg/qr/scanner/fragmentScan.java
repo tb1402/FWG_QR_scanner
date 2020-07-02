@@ -29,8 +29,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import de.fwg.qr.scanner.history.historyEntry;
-import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {
@@ -63,12 +61,12 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     @Override
     public void onViewCreated(View v, @Nullable Bundle sis) {
-        surface = v.findViewById(R.id.surfaceView);
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 201);
         }
+        surface = v.findViewById(R.id.surfaceView);
         textView = v.findViewById(R.id.textView);
         initialize();
         startCamera();
