@@ -10,24 +10,34 @@
     tools:showIn="@layout/toolbar_scan">
 
 
-    <ImageSwitcher
-        android:id="@+id/imageSwitcher"
+    <RelativeLayout
+        android:id="@+id/relLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true" />
+        android:layout_below="@+id/appbar">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/relLayout2"
-        android:layout_centerHorizontal="true" />
+
+        <ImageSwitcher
+            android:id="@+id/imageSwitcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/relLayout2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageSwitcher">
+        android:layout_below="@+id/relLayout1">
+
 
         <Button
             android:id="@+id/buttonPrevious"
