@@ -3,33 +3,78 @@ package de.fwg.qr.scanner;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.VideoView;
+import android.widget.ViewSwitcher;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
+import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class activityScan extends toolbarWrapper implements networkCallbackInterface {
 
-    private ImageView image;
-    private VideoView video;
-    private TextView text;
+    private ImageView imageView;
+    private ImageSwitcher imageSwitcher;
+    private Button buttonPre;
+    private Button buttonNext;
+    private FloatingActionButton videoButton;
+    private ProgressBar progressBar;
+
     private WeakReference<networkCallbackInterface> ref;
+    private network net;
 
-    private String barcodeValue = "";
+    private String ID = "";
+    private String bild = "";
+    private int video = -1;
 
+    private int imagePosition = 0;
+    private int i = 0;
+    private ArrayList<Bitmap> images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(R.layout.toolbar_scan,this,getString(R.string.title_scanned));
+        super.onCreate(R.layout.toolbar_scan, this, getString(R.string.title_scanned));
         super.onCreate(savedInstanceState);
-        Intent recievedIntent = getIntent();//global attribute not needed (my hint to check for null was only meant for scanning the code
-        barcodeValue = recievedIntent.getStringExtra(Intent.EXTRA_TEXT);
-
+        net = new network(this);
+        ref = new WeakReference<>((networkCallbackInterface) this);
+        Intent receivedIntent = getIntent();
+        ID = receivedIntent.getStringExtra("ID");
+        String name = receivedIntent.getStringExtra("Name");
+        String text = receivedIntent.getStringExtra("Text");
+        bild = receivedIntent.getStringExtra("Bild");
+        String videoIntentExtra=receivedIntent.getStringExtra("Video");
+        video = Integer.parseInt(videoIntentExtra == null ? "-1" : videoIntentExtra);
+        setToolbarTitle(name);
+        setupAbHome();
+        images = new ArrayList<>();
+        imageView = new ImageView(this);
+        TextView textView = findViewById(R.id.textView);
+        textView.setText(text);
+        textView.setMovementMethod(new ScrollingMovementMethod());
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        imageSwitcher = findViewById(R.id.imageSwitcher);
+        buttonPre = findViewById(R.id.buttonPrevious);
+        buttonNext = findViewById(R.id.buttonNext);
+        videoButton = findViewById(R.id.videoButton);
+        if (video > 0) {
+            videoButton.setVisibility(View.VISIBLE);
+        } else {
+            videoButton.setVisibility(View.INVISIBLE);
+        }
+        assignButtons();
+        clickableImageSwitcher();
+        getImages();
     }
-
 
     @Override
     public void onPostCallback(String operation, String response) {
@@ -38,6 +83,101 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     @Override
     public void onImageCallback(String name, Bitmap image) {
+        lockUI(false);
+        if (name.contentEquals("ImagePreview")) {
+            images.add(image);
+            if (i >= Integer.parseInt(bild)) {
+                setImageSwitcher();
+            }
+        }
+    }
+
+    public void assignButtons() {
+        if (Integer.parseInt(bild) > 1) {
+            buttonPre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (imagePosition <= 0) {
+                        imagePosition = (Integer.parseInt(bild) - 1);
+                    } else {
+                        imagePosition--;
+                    }
+                    imageView.setImageBitmap(images.get(imagePosition));
+                }
+
+            });
+
+            buttonNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (imagePosition >= (Integer.parseInt(bild) - 1)) {
+                        imagePosition = 0;
+                    } else {
+                        imagePosition++;
+                    }
+                    imageView.setImageBitmap(images.get(imagePosition));
+                }
+            });
+        } else {
+            buttonNext.setVisibility(View.GONE);
+            buttonPre.setVisibility(View.GONE);
+        }
+        if (video> 0) {
+            videoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), activityFullscreenVideoPlayback.class);
+                    intent.putExtra("ID".toLowerCase(), ID);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    public void setImageSwitcher() {
+        imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                if (progressBar.getVisibility() == View.VISIBLE) {
+                    progressBar.setVisibility(View.GONE);
+                }
+                if (imageView.getDrawable() != null) {
+                    imageSwitcher.removeView(imageView);
+                }
+                imageView.setImageBitmap(images.get(imagePosition));
+                return imageView;
+            }
+        });
 
     }
+
+    public void getImages() {
+        lockUI(true);
+        for (i = 0; i < Integer.parseInt(bild); i++) {
+            net.makeImageRequest(ref, "ImagePreview", ID, i, true);
+        }
+
+    }
+
+    /*
+    Hab die Methode newIntent() entfernt, da sie nicht nötig ist.
+    Dieser check mit null ist nur beim Scanner sinnvoll, da die Detections Methode mehrere Male pro Sekunde
+    aufgerufen werden könnte (siehe die Issues am Anfang, als es mehrmals gestartet wurde).
+    Sonst kann man den intent direkt starten.
+    Sorry, falls ich dass etwas unverstädnlich erklärt hab.
+     */
+
+    public void clickableImageSwitcher() {
+        imageSwitcher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), activityPictureFullscreen.class);
+                intent.putExtra("ID", ID);
+                intent.putExtra("Position", imagePosition);
+                startActivity(intent);
+            }
+        });
+    }
+
+
 }

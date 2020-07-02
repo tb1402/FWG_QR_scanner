@@ -3,14 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Allgemein"
+        android:id="@+id/pref_category_general"
+        android:title="@string/pref_category_general"
         app:iconSpaceReserved="false">
 
         <ListPreference
+            android:id="@+id/pref_mode"
             android:defaultValue="0"
             android:entries="@array/settings_mode_string_values"
             android:entryValues="@array/settings_mode_int_values"
             android:key="mode"
-            android:title="Modus" />
+            android:title="@string/mode" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:id="@+id/pref_category_quality"
+        android:title="@string/pref_category_quality"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:id="@+id/pref_video_quality"
+            android:defaultValue="true"
+            android:entries="@array/settings_video_quality_names"
+            android:entryValues="@array/settings_video_quality_values"
+            android:key="video_quality"
+            android:title="@string/video_quality" />
+        <ListPreference
+            android:id="@+id/pref_image_quality"
+            android:defaultValue="1"
+            android:entries="@array/settings_image_quality_names"
+            android:entryValues="@array/settings_image_quality_values"
+            android:key="image_quality"
+            android:title="@string/image_quality" />
     </PreferenceCategory>
 </PreferenceScreen>

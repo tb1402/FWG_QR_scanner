@@ -26,16 +26,46 @@
     <string name="title_settings">Einstellungen</string>
     <string name="title_activity_start">Einführung</string>
     <string name="title_scanned">Eingescannt</string><!--todo change string value, just a placeholder-->
+    <string name="welcome_start">Willkommen zum FWG QR Scanner</string>
+    <string name="quick_guide">Quick Guide</string>
+    <string name="agb">Allgemeine Geschäftsbedingungen</string>
+    <string name="title_activity_fullscreen_video_playback">Video Player</string>
 
     <!-- button strings -->
     <string name="next">Weiter</string>
+    <string name="previous">Zurück</string>
     <string name="agb_accept">AGB Akzeptieren</string>
     <string name="agb_decline">AGB Ablehnen</string>
+    <string name="start_using">Jetzt starten</string>
 
-    <!--settings strings-->
+    <!--preferences strings-->
     <string name="mode_info">Info</string>
     <string name="mode_rallye">Rallye</string>
+    <string name="mode">Modus</string>
+    <string name="pref_category_general">Allgemein</string>
+    <string name="pref_category_quality">Qualität</string>
+    <string name="image_quality">Bild-Qualität</string>
+    <string name="image_quality_orig">Original (6000x4000px)</string>
+    <string name="image_quality_high">Hoch (1920x1080px)</string>
+    <string name="image_quality_low">Niedrig (640x360px)</string>
+
+    <!-- content strings-->
+    <string name="welcome_message">Der FWG QR Scanner ist eine App, mit der Sie Informationen zu wichtigen Orten im Frankenwald-Gymnasiums Kronach mit Hilfe eines QR Codes, welcher an den Orten selbst auffindbar ist, abrufen können. Die Entwicklung erfolgt in Form eines Open-Source-Projektes, sodass Sie jederzeit den Quellcode der App auf Github anschauen können.</string>
+    <string name="dev_team">Entwicklerteam:\n Q11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth, und Ben Welsch</string>
+    <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a></string>
+
+    <!--Video Strings-->
+    <string name="video_url_error">Fehler: Problem mit der Video-URL</string>
+    <string name="video_quality_high">Hoch (1920x1080p)</string>
+    <string name="video_quality_medium">Mittel (1270x720p)</string>
+    <string name="video_quality_low">Niedrig (640x480p)</string>
+    <string name="video_quality">Video Qualität</string>
+
+    <!--Image Strings-->
+    <string name="image_loading">Bild wird geladen</string>
+    <string name="image_not_found_with_current_resolution">Das Bild ist in dieser Auflösung nicht vorhanden! Bitte versuchen sie es mit einer anderen Auflösung</string>
 
     <!--other strings-->
+    <string name="network_no_connection">Keine Netzwerkverbindung!</string>
     <string name="network_buffering">Laden…</string>
 </resources>

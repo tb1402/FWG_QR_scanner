@@ -5,15 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".fragmentStart">
+    tools:context=".fragmentQuickGuide">
+
+    <!--
+    ToDo:
+        - add QuickGuide content
+    -->
 
     <TextView
-        android:id="@+id/textViewStartTitle"
+        android:id="@+id/textViewQuickGuideTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
+        android:layout_margin="16dp"
         android:padding="5dp"
-        android:text="@string/welcome_start"
+        android:text="@string/quick_guide"
         android:textColor="@color/textColor"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -22,50 +27,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewStartBody"
+        android:id="@+id/textViewQuickGuideBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
-        android:gravity="start"
+        android:layout_margin="16dp"
         android:padding="5dp"
-        android:text="@string/welcome_message"
+        android:text="@string/lorem_ipsum"
         android:textColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewStartTitle" />
-
-    <TextView
-        android:id="@+id/textViewStartGithub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
-        android:gravity="start"
-        android:padding="5dp"
-        android:text="@string/github_link"
-        android:textColor="@color/textColor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewStartBody" />
-
-    <TextView
-        android:id="@+id/textViewStartTeam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
-        android:gravity="start"
-        android:padding="5dp"
-        android:text="@string/dev_team"
-        android:textColor="@color/textColor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewStartGithub" />
+        app:layout_constraintTop_toBottomOf="@id/textViewQuickGuideTitle" />
 
     <Button
-        android:id="@+id/btnStart"
+        android:id="@+id/btnQuickGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="24dp"
+        android:layout_margin="24dp"
         android:background="@color/buttonColor"
         android:padding="5dp"
-        android:text="@string/next"
+        android:text="@string/start_using"
         android:textColor="@color/textColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

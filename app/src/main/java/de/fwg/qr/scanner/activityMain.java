@@ -43,6 +43,13 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // set dark mode on android 9 and earlier as default, else follow system default
+        /*if (Build.VERSION.SDK_INT < 29) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }*/
+
         //check if first run
         preferencesManager pm = new preferencesManager(getApplicationContext());
         if (pm.isFirstRun()) {
@@ -97,6 +104,10 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
             startActivity(i);
             return true;
         }
+        else if(id==R.id.tb_item_map){
+            //TODO start map activity
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -137,6 +148,10 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 show(f);
             case R.id.item_frgm_scan:
                 f = new fragmentScan();
+                show(f);
+                break;
+            case R.id.item_frgm_escape_routes:
+                f=new fragmentEscapeRoutes();
                 show(f);
                 break;
             default:

@@ -44,4 +44,10 @@ public class preferencesManager {
     public int getMode() {
         return Integer.parseInt(preferences.getString("mode", "1"));
     }
+    public String getVideoResolution(){
+        return preferences.getString("video_quality","medium");
+    }
+    public String getImageResolution(){
+        return preferences.getString("image_quality","high");
+    }
 }

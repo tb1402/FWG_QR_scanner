@@ -33,9 +33,9 @@ public class network {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data, String requestURL) {
+    private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data) {
         final networkCallbackInterface nci = w.get();
-        StringRequest r = new StringRequest(Request.Method.POST, baseURL + requestURL, new Response.Listener<String>() {
+        StringRequest r = new StringRequest(Request.Method.POST, baseURL +"/api/"+ operation, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 nci.onPostCallback(operation, response);
@@ -56,9 +56,17 @@ public class network {
         return r;
     }
 
-    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, String imageURL) {
+    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, String id, int number, boolean preview) {
         final networkCallbackInterface nci = w.get();
-        return new ImageRequest(baseURL + imageURL,
+        String url;
+        if(preview){
+            url=baseURL+"/images/low/"+id+"/"+number+".png";
+        }
+        else{
+            preferencesManager p=new preferencesManager(c);
+            url=baseURL+"/images/"+p.getImageResolution()+"/"+id+"/"+number+".png";
+        }
+        return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
@@ -73,11 +81,25 @@ public class network {
                 });
     }
 
-    public void makePostRequest(WeakReference<networkCallbackInterface> nci, String operation, String data, String requestURL) {
-        requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci, operation, data, requestURL));
+    /**
+     * Method to make a request and send post data with it
+     * @param nci reference to networkCallbackInterface for callback
+     * @param operation name of requested api file, this value will also be given back in callback method, along with the response from the server
+     * @param data post data to be send to the server
+     */
+    public void makePostRequest(WeakReference<networkCallbackInterface> nci, String operation, String data) {
+        requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci, operation, data));
     }
 
-    public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String imageURL) {
-        requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, imageURL));
+    /**
+     * Method to make a request for an image
+     * @param nci reference to networkCallbackInterface for callback
+     * @param name name of the request, to differentiate the request in callback
+     * @param id the id of the station
+     * @param number the number of the image being requested
+     * @param preview is image needed for preview only? if so, only low resolution image will be given back
+     */
+    public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String id, int number, boolean preview) {
+        requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, id,number,preview));
     }
 }

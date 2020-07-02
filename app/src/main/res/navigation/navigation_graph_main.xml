@@ -156,7 +156,7 @@
         android:id="@+id/item_frgm_escape_routes"
         android:name="de.fwg.qr.scanner.fragmentEscapeRoutes"
         android:label="@string/item_frgm_escape_routes"
-        tools:layout="@layout/fragment_escape_routes" >
+        tools:layout="@layout/fragment_escape_routes">
         <action
             android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_about"
             app:destination="@id/item_frgm_about" />

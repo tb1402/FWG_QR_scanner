@@ -6,31 +6,49 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-feature android:name="android.hardware.camera2" />
+
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".activityFullscreenVideoPlayback"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_video_playback"
+            android:theme="@style/FullscreenTheme"/>
         <activity
             android:name=".activityStart"
+            android:configChanges="uiMode"
             android:label="@string/title_activity_start"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitySettings"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="uiMode"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activityScan"
+            android:configChanges="uiMode"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activityPictureFullscreen"
+            android:configChanges="uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activityMain"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:configChanges="uiMode"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
