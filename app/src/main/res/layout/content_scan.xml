@@ -20,32 +20,40 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/buttonPrevious" />
+        android:layout_above="@+id/relLayout2"
+        android:layout_centerHorizontal="true" />
 
-    <Button
-        android:id="@+id/buttonPrevious"
-        android:layout_below="@+id/imageSwitcher"
+    <RelativeLayout
+        android:id="@+id/relLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/previous"
-        android:layout_marginStart="100dp" />
+        android:layout_below="@+id/imageSwitcher">
 
-    <Button
-        android:id="@+id/buttonNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonPrevious"
-        android:layout_toEndOf="@+id/buttonPrevious"
-        android:text="@string/next" />
+        <Button
+            android:id="@+id/buttonPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:text="@string/previous" />
+
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/buttonPrevious"
+            android:layout_toEndOf="@+id/buttonPrevious"
+            android:text="@string/next" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonNext"
+        android:layout_below="@+id/relLayout2"
         android:scrollbars="vertical"
         android:textColor="#FFFFFF" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/videoButton"

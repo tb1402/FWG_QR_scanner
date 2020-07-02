@@ -131,9 +131,10 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
                     imageView.setImageBitmap(images.get(imagePosition));
                 }
             });
-        } else { //TODO: Problem with .setVisibility(View.GONE): Text alignment won't match anymore
-            buttonNext.setVisibility(View.INVISIBLE);
-            buttonPre.setVisibility(View.INVISIBLE);
+        } else {
+            buttonNext.setVisibility(View.GONE);
+            buttonPre.setVisibility(View.GONE);
+
         }
         if (Integer.parseInt(video) > 0) {
             videoButton.setOnClickListener(new View.OnClickListener() {
@@ -152,14 +153,11 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
                 if (progressBar.getVisibility() == View.VISIBLE) {
                     progressBar.setVisibility(View.GONE);
                 }
-                if (imageView.getDrawable() == null) {
-                    imageView.setImageBitmap(images.get(imagePosition));
-                    return imageView;
-                } else {
+                if (imageView.getDrawable() != null) {
                     imageSwitcher.removeView(imageView);
-                    imageView.setImageBitmap(images.get(imagePosition));
-                    return imageView;
                 }
+                imageView.setImageBitmap(images.get(imagePosition));
+                return imageView;
             }
         });
 
