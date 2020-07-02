@@ -31,6 +31,7 @@ public class fragmentAGB extends fragmentWrapper {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        /* create button onClick listeners only if first run */
         Button btnAccept = view.findViewById(R.id.btnAccept);
         Button btnDecline = view.findViewById(R.id.btnDecline);
         if (p.isFirstRun()) {

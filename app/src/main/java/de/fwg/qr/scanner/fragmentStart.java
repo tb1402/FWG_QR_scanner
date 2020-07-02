@@ -30,6 +30,7 @@ public class fragmentStart extends fragmentWrapper {
         @ColorInt int color = typedValue.data;
         Log.i("COLOR", Integer.toHexString(color));*/
 
+        /* create button onClick listener */
         view.findViewById(R.id.btnStart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

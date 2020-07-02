@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
@@ -23,11 +22,10 @@ public class fragmentQuickGuide extends fragmentWrapper {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button btnQuickGuide = view.findViewById(R.id.btnQuickGuide);
-        btnQuickGuide.setOnClickListener(new View.OnClickListener() {
+        /* create button onClick listener */
+        view.findViewById(R.id.btnQuickGuide).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 requireActivity().finish();
             }
         });
