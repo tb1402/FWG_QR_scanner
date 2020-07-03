@@ -10,58 +10,57 @@
     tools:showIn="@layout/toolbar_scan">
 
 
-    <RelativeLayout
-        android:id="@+id/relLayout1"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/appbar">
+        android:backgroundTint="#FFFFFF"
+        android:indeterminate="true"
+        android:max="100" />
 
-
-        <ImageSwitcher
-            android:id="@+id/imageSwitcher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/relLayout2"
+    <ImageSwitcher
+        android:id="@+id/imageSwitcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relLayout1">
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_below="@id/progressBar"/>
 
-
-        <Button
-            android:id="@+id/buttonPrevious"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:text="@string/previous" />
-
-        <Button
-            android:id="@+id/buttonNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/buttonPrevious"
-            android:layout_toEndOf="@+id/buttonPrevious"
-            android:text="@string/next" />
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/lin"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relLayout2"
-        android:scrollbars="vertical"
-        android:textColor="#FFFFFF" />
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/imageSwitcher">
+
+        <TableRow
+            android:id="@+id/buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/buttonPrevious"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/previous" />
+
+            <Button
+                android:id="@+id/buttonNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next" />
+        </TableRow>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/videoButton"
@@ -74,4 +73,5 @@
         android:backgroundTint="#B9DCDB"
         android:scaleType="center"
         android:src="@drawable/ic_video_play" />
+
 </RelativeLayout>
