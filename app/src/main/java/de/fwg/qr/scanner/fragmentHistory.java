@@ -34,12 +34,9 @@ public class fragmentHistory extends fragmentWrapper {
         listHistory = v.findViewById(R.id.history_list_view);
 
         // historyManager instance
-        final historyManager manager = new historyManager(getContext());
+        final historyManager manager = new historyManager(c);
         //lockUI(true);
         //manager.clearHistory();
-
-        // DEBUG TEST:
-        manager.addEntry(new historyEntry("Hallo Du Da"));
 
 
         manager.getAssociatedEntriesAsync(new taskResultCallback() {

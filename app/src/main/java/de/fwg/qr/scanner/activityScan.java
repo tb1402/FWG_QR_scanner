@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
@@ -17,10 +18,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import de.fwg.qr.scanner.history.historyEntry;
+import de.fwg.qr.scanner.history.historyManager;
+import de.fwg.qr.scanner.tools.cache.cacheManager;
+import de.fwg.qr.scanner.tools.cache.readCacheCallback;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
-public class activityScan extends toolbarWrapper implements networkCallbackInterface {
+public class activityScan extends toolbarWrapper implements networkCallbackInterface, readCacheCallback {
 
     private ImageView imageView;
     private ImageSwitcher imageSwitcher;
@@ -30,6 +35,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private ProgressBar progressBar;
 
     private WeakReference<networkCallbackInterface> ref;
+    private WeakReference<readCacheCallback> cacheRef;
     private network net;
 
     private String ID = "";
@@ -38,7 +44,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     private int imagePosition = 0;
     private int i = 0;
+    private int imageRequestCount=0;
     private ArrayList<Bitmap> images;
+    private cacheManager cm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,8 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         super.onCreate(savedInstanceState);
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);
+        cacheRef=new WeakReference<>((readCacheCallback)this);
+        cm=new cacheManager(getApplicationContext());
         Intent receivedIntent = getIntent();
         ID = receivedIntent.getStringExtra("ID");
         String name = receivedIntent.getStringExtra("Name");
@@ -74,6 +84,10 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         assignButtons();
         clickableImageSwitcher();
         getImages();
+
+        //add to history
+        final historyManager manager = new historyManager(getApplicationContext());
+        manager.addEntry(new historyEntry(ID));
     }
 
     @Override
@@ -83,12 +97,25 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     @Override
     public void onImageCallback(String name, Bitmap image) {
-        lockUI(false);
         if (name.contentEquals("ImagePreview")) {
             images.add(image);
+            cm.cacheImage(ID,cm.cacheSaveIndex,image,true);
+            cm.cacheSaveIndex++;
             if (i >= Integer.parseInt(bild)) {
+                lockUI(false);
                 setImageSwitcher();
             }
+        }
+    }
+    @Override
+    public void cacheCallback(boolean error, Bitmap image){
+        if(!error){
+            images.add(image);
+            if (i >= Integer.parseInt(bild)||imageRequestCount==Integer.parseInt(bild)-1) {
+                lockUI(false);
+                setImageSwitcher();
+            }
+            imageRequestCount++;
         }
     }
 
@@ -154,7 +181,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     public void getImages() {
         lockUI(true);
         for (i = 0; i < Integer.parseInt(bild); i++) {
-            net.makeImageRequest(ref, "ImagePreview", ID, i, true);
+            if(!cm.loadCachedImage(cacheRef,ID,i,true)){
+                net.makeImageRequest(ref, "ImagePreview", ID, i, true);
+            }
         }
 
     }
