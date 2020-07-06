@@ -18,6 +18,11 @@ public class historyManager {
     public ArrayList<historyEntry> Entries;
 
     /**
+     * Constant that defines the amount of Entries after which the oldest entry gets deleted on insertion of a new one
+     */
+    public static final int MaxEntries = 50;
+
+    /**
      * Minimalistic HistoryManager Constructor
      * @param c ApplicationContext needed for the Apps' File Directory
      */
@@ -54,6 +59,11 @@ public class historyManager {
         else
             Entries = new ArrayList<historyEntry>(Arrays.asList(entries));
 
+        // Delete the first if the size exceeds the maximum define in the constant
+        if(Entries.size() + 1 >= historyManager.MaxEntries){
+            Entries.remove(0);
+        }
+
         Entries.add(newEntry);
         historyFileWriteTask writeTask = new historyFileWriteTask(getHistoryFile(), null);
         try {
@@ -74,13 +84,18 @@ public class historyManager {
         historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
-                historyEntry[] entries = getEntries();
+                historyEntry[] entries = (historyEntry[])result;
                 if(entries.length == 0)
                     Entries = new ArrayList<historyEntry>();
                 else
                     Entries = new ArrayList<historyEntry>(Arrays.asList(entries));
-                Entries.add(newEntry);
 
+                // Delete the first if the size exceeds the maximum define in the constant
+                if(Entries.size() + 1 >= historyManager.MaxEntries){
+                    Entries.remove(0);
+                }
+
+                Entries.add(newEntry);
                 historyFileWriteTask writeTask = new historyFileWriteTask(getHistoryFile(), new taskCallback() {
                     @Override
                     public void onFinished() {

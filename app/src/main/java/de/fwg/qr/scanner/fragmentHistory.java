@@ -37,13 +37,20 @@ public class fragmentHistory extends fragmentWrapper {
         final historyManager manager = new historyManager(c);
         //lockUI(true);
         //manager.clearHistory();
-
+        for(int i = 0; i < 10; i++){
+            manager.addEntry(new historyEntry(i + ""));
+        }
 
         manager.getAssociatedEntriesAsync(new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
                 historyEntry[] entries = (historyEntry[])result;
-                historyListAdapter adapter = new historyListAdapter(getContext(), entries);
+                // Rearrange the Array to list the entries descending;
+                historyEntry[] hstBuff = new historyEntry[entries.length];
+                for(int i = 0, j = entries.length - 1; i < entries.length; i++, j--){
+                    hstBuff[i] = entries[j];
+                }
+                historyListAdapter adapter = new historyListAdapter(c, hstBuff);
                 listHistory.setAdapter(adapter);
                 //lockUI(false);
             }
