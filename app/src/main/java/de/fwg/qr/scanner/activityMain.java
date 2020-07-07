@@ -113,7 +113,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
             return true;
         }
         else if(id==R.id.tb_item_map){
-            //TODO start map activity
+            Intent i = new Intent(getApplicationContext(), activityMap.class);
+            startActivity(i);
             return true;
         }
 
