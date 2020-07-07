@@ -34,15 +34,17 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
 public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {
 
     private WeakReference<networkCallbackInterface> ref;
-
     private CameraSource source;
     private BarcodeDetector barcodeDetector;
     private SurfaceView surface;
     private TextView textView;
+    private TextView textView2;
 
     private Intent i = null;
     private String barcodeValue = "";
     private JSONObject object = null;
+    private boolean check = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,12 +64,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onViewCreated(View v, @Nullable Bundle sis) {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-
+            check = true;
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 201);
+            check = true;
         }
         surface = v.findViewById(R.id.surfaceView);
         textView = v.findViewById(R.id.textView);
+        textView2 = v.findViewById(R.id.textView2);
         initialize();
         startCamera();
         detection();
@@ -75,8 +79,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     @Override
     public void onPostCallback(String operation, String response) {
-        Log.i("fwg",response);
-        if(operation.contentEquals("getInfo")) {
+        Log.i("fwg", response);
+        if (operation.contentEquals("getInfo")) {
             try {
                 object = new JSONObject(response);
                 i.putExtra("ID", barcodeValue);
@@ -110,17 +114,33 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onPause() {
         super.onPause();
         source.release();
+
+
     }
+
+    public void onStop() {
+        super.onStop();
+        check = false;
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
+        if (!check) {
+            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                check = true;
+            } else {
+                check = true;
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 201);
+            }
+        }
         initialize();
         startCamera();
         detection();
     }
 
-    private void startCamera() {
+    private void startCamera() { //TODO: Problem with camera not working after resuming app
 
         surface.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -130,6 +150,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
                         return;
                     }
+                    textView2.setVisibility(View.GONE);
                     source.start(surface.getHolder());
 
                 } catch (IOException e) {
@@ -171,8 +192,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private void newIntent() {
         if (i == null && !barcodeValue.contentEquals("")) {
             i = new Intent(getActivity(), activityScan.class);
-            Log.i("fwg","scanned");
-            net.makePostRequest(ref,"getInfo",barcodeValue);
+            Log.i("fwg", "scanned");
+            net.makePostRequest(ref, "getInfo", barcodeValue);
         }
 
     }

@@ -7,18 +7,37 @@
     android:orientation="vertical"
     tools:context=".fragmentScan">
 
+    <!-- TODO: Add button for activation back-light -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hier bitte den QR-Code \n einscannen lassen"
+        android:text="Hier bitte den QR-Code\neinscannen lassen"
         android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="23sp" />
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
+    <RelativeLayout
+        android:id="@+id/relLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
+
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Bitte erteilen sie die Rechte zum\nBenutzen der Kamera! Anschließend\nsoll die Seite neu geladen werden. "
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
 
 </LinearLayout>

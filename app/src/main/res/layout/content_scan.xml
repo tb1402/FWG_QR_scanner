@@ -23,17 +23,17 @@
         android:id="@+id/imageSwitcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/progressBar"
         android:clickable="true"
-        android:focusable="true"
-        android:layout_below="@id/progressBar"/>
+        android:focusable="true" />
 
     <LinearLayout
         android:id="@+id/lin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_below="@id/imageSwitcher"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/imageSwitcher">
+        android:orientation="vertical">
 
         <TableRow
             android:id="@+id/buttons"
@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/next" />
         </TableRow>
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -60,7 +61,6 @@
             android:scrollbars="vertical"
             android:textColor="#FFFFFF" />
     </LinearLayout>
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/videoButton"
@@ -73,5 +73,4 @@
         android:backgroundTint="#B9DCDB"
         android:scaleType="center"
         android:src="@drawable/ic_video_play" />
-
 </RelativeLayout>
