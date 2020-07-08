@@ -3,7 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activityMap"
-    tools:showIn="@layout/toolbar_map">
+    tools:context=".activityMap">
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/activity_map" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

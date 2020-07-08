@@ -2,13 +2,13 @@ package de.fwg.qr.scanner;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 
-public class activityMap extends AppCompatActivity {
+public class activityMap extends toolbarWrapper {
 
     @Override
     public void onCreate(Bundle savedInstanceBundle) {
+        super.onCreate(R.layout.toolbar_map, this, getString(R.string.item_map));
         super.onCreate(savedInstanceBundle);
-        setContentView(R.layout.activity_map);
+        setupAbHome();
     }
 }
