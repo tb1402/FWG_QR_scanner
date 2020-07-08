@@ -42,7 +42,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     private Intent i = null;
     private String barcodeValue = "";
-    private JSONObject object = null;
     private boolean check = false;
 
 
@@ -82,7 +81,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         Log.i("fwg", response);
         if (operation.contentEquals("getInfo")) {
             try {
-                object = new JSONObject(response);
+                JSONObject object = new JSONObject(response);
                 i.putExtra("ID", barcodeValue);
                 i.putExtra("Name", object.getString("Name"));
                 i.putExtra("Text", object.getString("Text"));

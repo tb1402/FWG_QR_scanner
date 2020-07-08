@@ -95,4 +95,10 @@ public class cacheManager implements addToMemCacheWhileReadInterface{
     public void addToCache(String key,Bitmap data) {
         memoryCache.put(key,data);
     }
+    public void invalidateCache(){
+        memoryCacheSingleton.invalidate();
+        memoryCache=memoryCacheSingleton.getInstance(c);
+        File f=new File(c.getExternalCacheDir(),"/");
+        new deleteCacheTask().execute(f);
+    }
 }

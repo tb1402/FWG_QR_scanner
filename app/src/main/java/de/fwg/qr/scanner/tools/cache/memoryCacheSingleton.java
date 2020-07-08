@@ -16,6 +16,9 @@ class memoryCacheSingleton {
         }
         return memoryCacheSingleton;
     }
+    static void invalidate(){
+        memoryCacheSingleton=null;
+    }
 
     private memoryCacheSingleton(Context c) {
         memoryCache=new LruCache<String, Bitmap>(memCacheSize){
