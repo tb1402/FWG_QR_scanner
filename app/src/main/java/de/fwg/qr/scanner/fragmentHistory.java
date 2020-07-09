@@ -37,9 +37,9 @@ public class fragmentHistory extends fragmentWrapper {
         final historyManager manager = new historyManager(c);
         //lockUI(true);
         //manager.clearHistory();
-        for(int i = 0; i < 10; i++){
-            manager.addEntry(new historyEntry(i + ""));
-        }
+        //for(int i = 0; i < 10; i++){
+        //    manager.addEntry(new historyEntry(i + ". Station"));
+        //}
 
         manager.getAssociatedEntriesAsync(new taskResultCallback() {
             @Override
@@ -54,6 +54,7 @@ public class fragmentHistory extends fragmentWrapper {
                 listHistory.setAdapter(adapter);
                 //lockUI(false);
             }
-        });
+        }, historyManager.MaxEntries);
+
     }
 }
