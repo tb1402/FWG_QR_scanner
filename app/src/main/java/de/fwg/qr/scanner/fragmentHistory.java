@@ -30,26 +30,31 @@ public class fragmentHistory extends fragmentWrapper {
 
     @Override
     public void onViewCreated(View v, @Nullable Bundle sis) {
-        // Visuelle Elemente
+        //Visuelle Elemente
         listHistory = v.findViewById(R.id.history_list_view);
 
         // historyManager instance
-        final historyManager manager = new historyManager(getContext());
+        final historyManager manager = new historyManager(c);
         //lockUI(true);
         //manager.clearHistory();
-
-        // DEBUG TEST:
-        manager.addEntry(new historyEntry("Hallo Du Da"));
-
+        //for(int i = 0; i < 10; i++){
+        //    manager.addEntry(new historyEntry(i + ". Station"));
+        //}
 
         manager.getAssociatedEntriesAsync(new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
                 historyEntry[] entries = (historyEntry[])result;
-                historyListAdapter adapter = new historyListAdapter(getContext(), entries);
+                // Rearrange the Array to list the entries descending;
+                historyEntry[] hstBuff = new historyEntry[entries.length];
+                for(int i = 0, j = entries.length - 1; i < entries.length; i++, j--){
+                    hstBuff[i] = entries[j];
+                }
+                historyListAdapter adapter = new historyListAdapter(c, hstBuff);
                 listHistory.setAdapter(adapter);
                 //lockUI(false);
             }
-        });
+        }, historyManager.MaxEntries);
+
     }
 }

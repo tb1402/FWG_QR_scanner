@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Manager Class to get & add Entries of the Users History in an asynchronous as well as synchronous manner
@@ -16,6 +17,11 @@ public class historyManager {
     private Context AppContext;
     public static boolean FileLocked;
     public ArrayList<historyEntry> Entries;
+
+    /**
+     * Constant that defines the amount of Entries after which the oldest entry gets deleted on insertion of a new one
+     */
+    public static final int MaxEntries = 50;
 
     /**
      * Minimalistic HistoryManager Constructor
@@ -32,7 +38,7 @@ public class historyManager {
      * @return All Entries saved in the Users History
      */
     public historyEntry[] getEntries(){
-        historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), null);
+        historyFileReadTask readTask = new historyFileReadTask(AppContext,getHistoryFile(), null);
         try {
             return readTask.execute().get();
         } catch (Exception e) {
@@ -54,8 +60,14 @@ public class historyManager {
         else
             Entries = new ArrayList<historyEntry>(Arrays.asList(entries));
 
+        /*
+        // Delete the first if the size exceeds the maximum define in the constant
+        if(Entries.size() + 1 >= historyManager.MaxEntries){
+            Entries.remove(0);
+        }*/
+
         Entries.add(newEntry);
-        historyFileWriteTask writeTask = new historyFileWriteTask(getHistoryFile(), null);
+        historyFileWriteTask writeTask = new historyFileWriteTask(AppContext,getHistoryFile(), null);
         try {
             writeTask.execute(Entries.toArray(new historyEntry[0])).get();
         } catch (Exception e) {
@@ -71,17 +83,25 @@ public class historyManager {
      */
     public void addEntryAsync(final historyEntry newEntry, final taskCallback callback){
 
-        historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), new taskResultCallback() {
+        historyFileReadTask readTask = new historyFileReadTask(AppContext,getHistoryFile(), new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
-                historyEntry[] entries = getEntries();
+                historyEntry[] entries = (historyEntry[])result;
                 if(entries.length == 0)
                     Entries = new ArrayList<historyEntry>();
                 else
                     Entries = new ArrayList<historyEntry>(Arrays.asList(entries));
-                Entries.add(newEntry);
 
-                historyFileWriteTask writeTask = new historyFileWriteTask(getHistoryFile(), new taskCallback() {
+                /*
+                // Delete the first if the size exceeds the maximum define in the constant
+                if(Entries.size() + 1 >= historyManager.MaxEntries){
+                    Entries.remove(0);
+                }
+                */
+
+
+                Entries.add(newEntry);
+                historyFileWriteTask writeTask = new historyFileWriteTask(AppContext,getHistoryFile(), new taskCallback() {
                     @Override
                     public void onFinished() {
                         if(callback != null)
@@ -100,7 +120,7 @@ public class historyManager {
      */
     public void getAssociatedEntriesAsync(final taskResultCallback callback){
 
-        historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), new taskResultCallback() {
+        historyFileReadTask readTask = new historyFileReadTask(AppContext,getHistoryFile(), new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
                 historyEntry[] entries = (historyEntry[]) result;
@@ -157,6 +177,44 @@ public class historyManager {
         });
         readTask.execute();
     }
+
+
+    public void getAssociatedEntriesAsync(final taskResultCallback callback, final int limit){
+
+        getAssociatedEntriesAsync(new taskResultCallback() {
+            @Override
+            public void onFinished(Object result) {
+                historyEntry[] allEntries = (historyEntry[])result;
+
+                if(limit > 0 && limit <= allEntries.length){
+                    // only return the last #limit entries
+                    historyEntry[] latest = Arrays.copyOfRange(allEntries, (allEntries.length - limit), allEntries.length);
+                    callback.onFinished(latest);
+                }
+                else{
+                    // just return everything
+                    callback.onFinished(allEntries);
+                }
+            }
+        });
+
+    }
+
+    /**
+     * Synchronously gets a list of all StationIds by using the history
+     * @return An Array of all StationIds which had been in the history at one point
+     */
+    public String[] getVisitedStations(){
+        historyEntry[] allEntries = getEntries();
+        // filtering out the stations visited multiple times
+        HashSet<String> visitedIds = new HashSet<String>();
+        for(int i = 0; i < allEntries.length; i++){
+            visitedIds.add(allEntries[i].StationId); // The HashSet prevents multiple Entries of the same type so each station,
+            // if visited twice only shows up once
+        }
+        return visitedIds.toArray(new String[0]);
+    }
+
 
     /**
      * Synchronous Function to wipe all recorded History

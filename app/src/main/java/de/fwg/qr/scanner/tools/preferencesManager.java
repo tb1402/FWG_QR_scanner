@@ -3,6 +3,9 @@ package de.fwg.qr.scanner.tools;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * Class to interact with the sharedPreferences
+ */
 public class preferencesManager {
 
     private SharedPreferences preferences;
@@ -39,6 +42,17 @@ public class preferencesManager {
 
     public int getInt(String name, int default_value) {
         return preferences.getInt(name, default_value);
+    }
+    public String getString(String name,String defaultValue){
+        return preferences.getString(name, defaultValue);
+    }
+    public void saveString(String name, String data){
+        editor=preferences.edit();
+        editor.putString(name,data);
+        editor.apply();
+    }
+    public boolean contains(String name){
+        return preferences.contains(name);
     }
 
     public int getMode() {

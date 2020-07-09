@@ -3,6 +3,9 @@
 
     <!--Error messages-->
     <string name="error_undefined">undefined</string>
+    <string name="error_header">Ein Fehler ist aufgetreten…</string>
+    <string name="error_send">Fehlermeldung wurde gesendet! Vielen Dank für die Mitarbeit. Die App wird nun neugestartet!</string>
+
     <!--Required by Android Studio-->
     <string name="msg_navigation_drawer_open">Open Navigation Drawer</string>
     <string name="msg_navigation_drawer_close">Close Navigation Drawer</string>
@@ -30,6 +33,7 @@
     <string name="quick_guide">Quick Guide</string>
     <string name="agb">Allgemeine Geschäftsbedingungen</string>
     <string name="title_activity_fullscreen_video_playback">Video Player</string>
+    <string name="title_activty_error">Fehler</string>
 
     <!-- button strings -->
     <string name="next">Weiter</string>
@@ -37,6 +41,8 @@
     <string name="agb_accept">AGB Akzeptieren</string>
     <string name="agb_decline">AGB Ablehnen</string>
     <string name="start_using">Jetzt starten</string>
+    <string name="button_error_report">Fehlermeldung senden</string>
+    <string name="button_error_close_app">App schließen</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>
@@ -68,4 +74,6 @@
     <!--other strings-->
     <string name="network_no_connection">Keine Netzwerkverbindung!</string>
     <string name="network_buffering">Laden…</string>
+    <string name="permission_needed">Bitte die Berechtingung zum nutzen der Kamera akzeptieren</string>
+    <string name="scan_qr_code">Biite den QR-Code einscannen</string>
 </resources>

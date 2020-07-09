@@ -1,7 +1,8 @@
 package de.fwg.qr.scanner.history;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -10,14 +11,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.fwg.qr.scanner.activityErrorHandling;
+
 public class historyFileReadTask extends AsyncTask<Object, Object, historyEntry[]> {
 
     private File HistoryFile;
     private taskResultCallback Callback;
+    private Context c;
 
-    public historyFileReadTask(File file, taskResultCallback callback){
+    public historyFileReadTask(Context c,File file, taskResultCallback callback){
         HistoryFile = file;
         Callback = callback;
+        this.c=c;
     }
 
     @Override
@@ -60,8 +65,10 @@ public class historyFileReadTask extends AsyncTask<Object, Object, historyEntry[
                 dataStream.close();
                 fileStream.close();
 
-            } catch (Exception ex) {
-                Log.d("History Manager", "Reading:" + ex.toString());
+            } catch (Exception e) {
+                Intent i=new Intent(c, activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+                c.startActivity(i);
             } // catch is not important, just required, we already checked
             // if the file exists so this should NEVER lead to any kind of exception
         }

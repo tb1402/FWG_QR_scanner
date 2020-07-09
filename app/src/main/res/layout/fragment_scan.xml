@@ -7,18 +7,44 @@
     android:orientation="vertical"
     tools:context=".fragmentScan">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:indeterminate="true"
+        android:max="100"/>
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hier bitte den QR-Code \n einscannen lassen"
+        android:text="@string/scan_qr_code"
         android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="23sp" />
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
+    <RelativeLayout
+        android:id="@+id/relLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
+
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/permission_needed"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
 
 </LinearLayout>
