@@ -30,7 +30,7 @@ public class fragmentHistory extends fragmentWrapper {
 
     @Override
     public void onViewCreated(View v, @Nullable Bundle sis) {
-        // Visuelle Elemente
+        //Visuelle Elemente
         listHistory = v.findViewById(R.id.history_list_view);
 
         // historyManager instance

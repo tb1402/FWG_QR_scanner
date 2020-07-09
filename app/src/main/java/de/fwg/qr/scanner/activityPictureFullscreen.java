@@ -79,7 +79,7 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
             button.setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(this, getText(R.string.image_not_found_with_current_resolution), Toast.LENGTH_SHORT).show();
-            onBackPressed();
+            finish();
         }
     }
     @Override

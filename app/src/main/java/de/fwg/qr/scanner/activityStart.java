@@ -4,17 +4,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
-
 public class activityStart extends toolbarWrapper {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.toolbar_start);
-        Toolbar tb = findViewById(R.id.toolbar);
-        tb.setTitle(getString(R.string.app_name));
-        setSupportActionBar(tb);
+        super.onCreate(R.layout.toolbar_start,this,getString(R.string.app_name));
         getSupportFragmentManager().beginTransaction().replace(R.id.start_fragment, new fragmentStart()).commit();
     }
 

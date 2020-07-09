@@ -153,7 +153,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         // Hide UI first
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            //actionBar.hide();
+            actionBar.hide();
         }
         //mControlsView.setVisibility(View.GONE);
         mVisible = false;
@@ -262,7 +262,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
     }
     private void lockUI(boolean state) {
         if (state) {
-            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }

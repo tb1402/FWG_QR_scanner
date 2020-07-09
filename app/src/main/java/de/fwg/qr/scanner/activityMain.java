@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,9 +36,9 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
      * Diese Klasse bleibt unverändert, hier wird nur Code eingefügt, der zur Navigation dient!!!
      */
 
-    private DrawerLayout drawer;//variable for drawer layout, used for navigation drawer
-    private NavController navCon;//navigation controller for fragments
-    private ActionBarDrawerToggle abdt;//used to change the drawer toggle to hamburger menu or back icon, when needed
+    private DrawerLayout drawer;
+    private NavController navCon;
+    private ActionBarDrawerToggle abdt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +83,9 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupActionBarWithNavController(this, navCon, drawer);
         NavigationUI.setupWithNavController(navView, navCon);
 
-        //initialize textview in navigation header with version and build date
+        //initialize textView in navigation header with version and build date
         TextView tv = navView.getHeaderView(0).findViewById(R.id.nav_header_tv_ver);
         tv.setText(getNavigationHeaderText());
-        Log.i("fwg",activityErrorHandling.getDeviceInfo());
     }
 
     @Override
@@ -109,18 +108,19 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.tb_item_settings) {
-            Intent i = new Intent(getApplicationContext(), activitySettings.class);
-            startActivity(i);
-            return true;
+        Intent i;
+        switch(id){
+            case R.id.tb_item_settings:
+                i = new Intent(getApplicationContext(), activitySettings.class);
+                startActivity(i);
+                return true;
+            case R.id.tb_item_map:
+                i = new Intent(getApplicationContext(), activityMap.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        else if(id==R.id.tb_item_map){
-            Intent i = new Intent(getApplicationContext(), activityMap.class);
-            startActivity(i);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -195,9 +195,12 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void showHamburgerIcon() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        abdt.setDrawerIndicatorEnabled(true);
-        abdt.syncState();
+        ActionBar a=getSupportActionBar();
+        if(a!=null) {
+            a.setDisplayHomeAsUpEnabled(false);
+            abdt.setDrawerIndicatorEnabled(true);
+            abdt.syncState();
+        }
     }
 
     /**
@@ -207,9 +210,12 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void showBackIcon() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        abdt.setDrawerIndicatorEnabled(false);
-        abdt.syncState();
+        ActionBar a=getSupportActionBar();
+        if(a!=null) {
+            a.setDisplayHomeAsUpEnabled(true);
+            abdt.setDrawerIndicatorEnabled(false);
+            abdt.syncState();
+        }
     }
 
     /**

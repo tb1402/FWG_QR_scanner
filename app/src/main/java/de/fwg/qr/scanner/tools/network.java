@@ -20,19 +20,31 @@ import java.util.Map;
 import de.fwg.qr.scanner.R;
 
 public class network {
-    public static String baseURL = "https://srv.cloud-tb.de";
+    public static String baseURL = "https://srv.cloud-tb.de";//server url
     private Context c;
 
     public network(Context c) {
         this.c = c;
     }
 
+    /**
+     * Method to check if network connectivity is available,
+     * despite the warnings in this method there is no alternative, even google uses it until now in their docs
+     * @return network available?
+     */
     public boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
+    /**
+     * Method to craft a post request
+     * @param w reference to callback interface
+     * @param operation name of file that is requested
+     * @param data data that will be sent via post
+     * @return StringRequest to be added to requestQueue
+     */
     private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data) {
         final networkCallbackInterface nci = w.get();
         StringRequest r = new StringRequest(Request.Method.POST, baseURL +"/api/"+ operation, new Response.Listener<String>() {
@@ -56,23 +68,25 @@ public class network {
         return r;
     }
 
+    /**
+     * Method to craft an image request
+     * @param w reference to callback interface
+     * @param name name of the request to identify it in the callback method
+     * @param id id of the image
+     * @param number number of the image
+     * @param preview if true only low quality will be used
+     * @return ImageRequest that can be added to the requestQueue
+     */
     private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, String id, int number, boolean preview) {
         final networkCallbackInterface nci = w.get();
-        String url;
-        if(preview){
-            url=baseURL+"/images/low/"+id+"/"+number+".png";
-        }
-        else{
-            preferencesManager p=new preferencesManager(c);
-            url=baseURL+"/images/"+p.getImageResolution()+"/"+id+"/"+number+".png";
-        }
+        String url=baseURL+(preview?"/images/low/"+id+"/"+number+".png":"/images/"+new preferencesManager(c).getImageResolution()+"/"+id+"/"+number+".png");
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
                         nci.onImageCallback(name, response);
                     }
-                }, 0, 0, null, Bitmap.Config.RGB_565,
+                }, 0, 0, null, Bitmap.Config.ARGB_8888,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {

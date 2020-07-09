@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
@@ -76,18 +75,13 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         buttonPre = findViewById(R.id.buttonPrevious);
         buttonNext = findViewById(R.id.buttonNext);
         videoButton = findViewById(R.id.videoButton);
-        if (video > 0) {
-            videoButton.setVisibility(View.VISIBLE);
-        } else {
-            videoButton.setVisibility(View.INVISIBLE);
-        }
+        videoButton.setVisibility(video>0?View.VISIBLE:View.INVISIBLE);
         assignButtons();
         clickableImageSwitcher();
         getImages();
 
         //add to history
-        final historyManager manager = new historyManager(getApplicationContext());
-        manager.addEntry(new historyEntry(ID));
+        new historyManager(getApplicationContext()).addEntry(new historyEntry(ID));
     }
 
     @Override
@@ -187,14 +181,6 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         }
 
     }
-
-    /*
-    Hab die Methode newIntent() entfernt, da sie nicht nötig ist.
-    Dieser check mit null ist nur beim Scanner sinnvoll, da die Detections Methode mehrere Male pro Sekunde
-    aufgerufen werden könnte (siehe die Issues am Anfang, als es mehrmals gestartet wurde).
-    Sonst kann man den intent direkt starten.
-    Sorry, falls ich dass etwas unverstädnlich erklärt hab.
-     */
 
     public void clickableImageSwitcher() {
         imageSwitcher.setOnClickListener(new View.OnClickListener() {

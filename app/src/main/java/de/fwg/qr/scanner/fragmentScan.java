@@ -1,9 +1,14 @@
 package de.fwg.qr.scanner;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -12,6 +17,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +29,18 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
+import de.fwg.qr.scanner.tools.cache.cacheManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
+import de.fwg.qr.scanner.tools.preferencesManager;
 
 public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {
 
@@ -37,8 +48,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private CameraSource source;
     private BarcodeDetector barcodeDetector;
     private SurfaceView surface;
-    private TextView textView;
     private TextView textView2;
+    private ProgressBar pb;
 
     private Intent i = null;
     private String barcodeValue = "";
@@ -61,24 +72,23 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     }
 
     @Override
-    public void onViewCreated(View v, @Nullable Bundle sis) {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            check = true;
-        } else {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 201);
-            check = true;
+    public void onViewCreated(@NotNull View v, @Nullable Bundle sis) {
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.CAMERA}, 201);
         }
+        check = true;
         surface = v.findViewById(R.id.surfaceView);
-        textView = v.findViewById(R.id.textView);
         textView2 = v.findViewById(R.id.textView2);
-        initialize();
-        startCamera();
-        detection();
+        pb=v.findViewById(R.id.progressBar);
+        lockUI(true);
+        pb.setVisibility(View.VISIBLE);
+        net.makePostRequest(ref,"getVersion","");
     }
 
     @Override
     public void onPostCallback(String operation, String response) {
-        Log.i("fwg", response);
+        pb.setVisibility(View.GONE);
+        lockUI(false);
         if (operation.contentEquals("getInfo")) {
             try {
                 JSONObject object = new JSONObject(response);
@@ -89,9 +99,41 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 i.putExtra("Video", object.getString("Video"));
                 startActivity(i);
             } catch (JSONException e) {
-                i = null;
-                Toast.makeText(c, "json_err" + e.toString(), Toast.LENGTH_SHORT).show();
+                i = new Intent();
+                Intent i=new Intent(c,activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+                startActivity(i);
             }
+        }
+        else if(operation.contentEquals("getVersion")){
+            try{
+                preferencesManager pref=new preferencesManager(c);
+                JSONObject j=new JSONObject(response);
+                String date=j.getString("date");
+                String version=j.getString("version");
+                SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
+                if(!pref.contains("cache_date")){
+                    pref.saveString("cache_date",date);
+                }
+                String savedDateString=pref.getString("cache_date","2020-01-01");
+                if (df.parse(date).getTime() >= df.parse(savedDateString).getTime()) {
+                    new cacheManager(c).invalidateCache();
+                    pref.saveString("cache_date", date);
+                }
+                if(checkUpdate(version)){
+                    updateAlert();
+                    return;
+                }
+            }
+            catch(Exception e){
+                Intent i=new Intent(c,activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+                startActivity(i);
+                return;
+            }
+            initialize();
+            startCamera();
+            detection();
         }
     }
 
@@ -127,33 +169,33 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onResume() {
         super.onResume();
         if (!check) {
-            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                check = true;
-            } else {
-                check = true;
-                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 201);
+            if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.CAMERA}, 201);//todo use request code
             }
+            check = true;
         }
+        pb.setVisibility(View.GONE);
+        lockUI(false);
         initialize();
         startCamera();
         detection();
     }
 
-    private void startCamera() { //TODO: Problem with camera not working after resuming app
-
+    private void startCamera() {
         surface.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 try {
                     if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-
                         return;
                     }
                     textView2.setVisibility(View.GONE);
                     source.start(surface.getHolder());
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Intent i=new Intent(c,activityErrorHandling.class);
+                    i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+                    startActivity(i);
                 }
             }
 
@@ -163,16 +205,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-
                 source.stop();
             }
         });
     }
 
     private void detection() {
-
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-
             @Override
             public void release() {
             }
@@ -191,9 +230,67 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private void newIntent() {
         if (i == null && !barcodeValue.contentEquals("")) {
             i = new Intent(getActivity(), activityScan.class);
-            Log.i("fwg", "scanned");
+            a.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.VISIBLE);
+                    lockUI(true);
+                }
+            });
             net.makePostRequest(ref, "getInfo", barcodeValue);
         }
 
+    }
+    private boolean checkUpdate(String ver) {
+        try {
+            ContextWrapper cw=new ContextWrapper(c);
+            PackageInfo pInfo = c.getPackageManager().getPackageInfo(cw.getPackageName(), 0);
+            preferencesManager pref=new preferencesManager(c);
+            int vc = pInfo.versionCode;
+            if (vc < Integer.parseInt(ver.replace("\n", ""))) {
+                if (!pref.getBoolean("update",true)) {
+                    pref.saveBoolean("update", true);
+                }
+                return true;
+            } else {
+                if(pref.getBoolean("update",false)){
+                    pref.saveBoolean("update",false);
+                }
+                return false;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Intent i=new Intent(c,activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+            startActivity(i);
+            return true;
+        }
+    }
+    private void updateAlert() {
+        final String appPackageName = c.getPackageName();
+        AlertDialog.Builder alert;
+        alert = new AlertDialog.Builder(c);
+        alert.setCancelable(false);
+        alert.setTitle("Alte Version!");
+        alert.setMessage("Bitte aktualisiere die App!");
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                a.finishAffinity();
+            }
+        });
+        alert.setNegativeButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                } catch (android.content.ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+                a.finishAffinity();
+            }
+        });
+        AlertDialog alertDialog = alert.create();
+        alertDialog.show();
     }
 }

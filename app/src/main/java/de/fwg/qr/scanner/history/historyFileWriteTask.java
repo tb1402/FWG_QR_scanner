@@ -1,21 +1,26 @@
 package de.fwg.qr.scanner.history;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 
+import de.fwg.qr.scanner.activityErrorHandling;
+
 public class historyFileWriteTask extends AsyncTask<historyEntry, Object, Object> {
 
     public File HistoryFile;
     public taskCallback Callback;
+    private Context c;
 
-    public historyFileWriteTask(File file, taskCallback callback){
+    public historyFileWriteTask(Context c, File file, taskCallback callback){
         HistoryFile = file;
         Callback = callback;
+        this.c=c;
     }
 
     @Override
@@ -33,9 +38,7 @@ public class historyFileWriteTask extends AsyncTask<historyEntry, Object, Object
             DataOutputStream dataStream = new DataOutputStream(fileStream);
             dataStream.writeInt(Entries.length); // write the amount of Entries first
 
-            for(int i = 0; i < Entries.length; i++){
-                historyEntry entry = Entries[i];
-
+            for (historyEntry entry : Entries) {
                 byte[] idBuff = entry.StationId.getBytes(StandardCharsets.UTF_8);
                 dataStream.writeShort(idBuff.length);
                 dataStream.write(idBuff);
@@ -46,9 +49,11 @@ public class historyFileWriteTask extends AsyncTask<historyEntry, Object, Object
 
             fileStream.close();
             dataStream.close();
-        } catch (Exception ex) {
-            Log.d("History Manager", "Writing:" + ex.toString());
-        } //TODO Exceptionhandling, File may be unable to create bcs. maybe someone with malificious intent created a folder with the same name in the directory or else...
+        } catch (Exception e) {
+            Intent i=new Intent(c, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+            c.startActivity(i);
+        }
 
         // Unlock File
         historyManager.FileLocked = false;

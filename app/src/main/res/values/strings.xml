@@ -4,6 +4,7 @@
     <!--Error messages-->
     <string name="error_undefined">undefined</string>
     <string name="error_header">Ein Fehler ist aufgetreten…</string>
+    <string name="error_send">Fehlermeldung wurde gesendet! Vielen Dank für die Mitarbeit. Die App wird nun neugestartet!</string>
 
     <!--Required by Android Studio-->
     <string name="msg_navigation_drawer_open">Open Navigation Drawer</string>
@@ -73,4 +74,6 @@
     <!--other strings-->
     <string name="network_no_connection">Keine Netzwerkverbindung!</string>
     <string name="network_buffering">Laden…</string>
+    <string name="permission_needed">Bitte die Berechtingung zum nutzen der Kamera akzeptieren</string>
+    <string name="scan_qr_code">Biite den QR-Code einscannen</string>
 </resources>

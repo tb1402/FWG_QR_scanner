@@ -38,7 +38,7 @@ public class historyManager {
      * @return All Entries saved in the Users History
      */
     public historyEntry[] getEntries(){
-        historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), null);
+        historyFileReadTask readTask = new historyFileReadTask(AppContext,getHistoryFile(), null);
         try {
             return readTask.execute().get();
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class historyManager {
         }*/
 
         Entries.add(newEntry);
-        historyFileWriteTask writeTask = new historyFileWriteTask(getHistoryFile(), null);
+        historyFileWriteTask writeTask = new historyFileWriteTask(AppContext,getHistoryFile(), null);
         try {
             writeTask.execute(Entries.toArray(new historyEntry[0])).get();
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class historyManager {
      */
     public void addEntryAsync(final historyEntry newEntry, final taskCallback callback){
 
-        historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), new taskResultCallback() {
+        historyFileReadTask readTask = new historyFileReadTask(AppContext,getHistoryFile(), new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
                 historyEntry[] entries = (historyEntry[])result;
@@ -101,7 +101,7 @@ public class historyManager {
 
 
                 Entries.add(newEntry);
-                historyFileWriteTask writeTask = new historyFileWriteTask(getHistoryFile(), new taskCallback() {
+                historyFileWriteTask writeTask = new historyFileWriteTask(AppContext,getHistoryFile(), new taskCallback() {
                     @Override
                     public void onFinished() {
                         if(callback != null)
@@ -120,7 +120,7 @@ public class historyManager {
      */
     public void getAssociatedEntriesAsync(final taskResultCallback callback){
 
-        historyFileReadTask readTask = new historyFileReadTask(getHistoryFile(), new taskResultCallback() {
+        historyFileReadTask readTask = new historyFileReadTask(AppContext,getHistoryFile(), new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
                 historyEntry[] entries = (historyEntry[]) result;
