@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,6 +86,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         //initialize textview in navigation header with version and build date
         TextView tv = navView.getHeaderView(0).findViewById(R.id.nav_header_tv_ver);
         tv.setText(getNavigationHeaderText());
+        Log.i("fwg",activityErrorHandling.getDeviceInfo());
     }
 
     @Override

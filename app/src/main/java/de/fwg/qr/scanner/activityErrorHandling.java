@@ -1,6 +1,7 @@
 package de.fwg.qr.scanner;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
+import java.util.Locale;
 
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
@@ -55,5 +57,24 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
     @Override
     public void onImageCallback(String name, Bitmap image) {
 
+    }
+    public static String getDeviceInfo(){
+        String osVersion=System.getProperty("os.version");
+        int apiLevel= Build.VERSION.SDK_INT;
+        String device= Build.DEVICE;
+        String model=Build.MODEL;
+        String product=Build.PRODUCT;
+        String man=Build.MANUFACTURER;
+        String version=Build.VERSION.RELEASE;
+        String type=Build.TYPE;
+        String hw= Build.HARDWARE;
+        String fp=Build.FINGERPRINT;
+        String display=Build.DEVICE;
+        String bl=Build.BOOTLOADER;
+        String board=Build.BOARD;
+        //String serial=Build.getSerial();
+        String radio=Build.getRadioVersion();
+        String patch=Build.VERSION.SECURITY_PATCH;
+        return String.format(Locale.GERMANY,"%s_%d_%s_%s_%s_%s_%s_%s_%s_%s_%s_%s_%s_%s_%s",device,apiLevel,osVersion,patch,model,product,man,version,type,hw,fp,display,bl,board,radio);
     }
 }
