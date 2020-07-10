@@ -31,7 +31,7 @@ public class historyListAdapter extends ArrayAdapter<historyEntry> {
         TextView txtStationName = (TextView) rowView.findViewById(R.id.history_list_item_txtstationname);
         TextView txtLastVisited = (TextView) rowView.findViewById(R.id.history_list_item_txttimevisited);
 
-        txtStationName.setText(Entries[position].StationId);
+        txtStationName.setText(Entries[position].StationName);
         String visitedDate = (String) DateFormat.format("dd.MM.yy HH:mm", Entries[position].TimeVisited);
 
         txtLastVisited.setText(visitedDate);

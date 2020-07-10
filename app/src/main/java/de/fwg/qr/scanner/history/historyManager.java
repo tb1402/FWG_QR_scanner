@@ -1,13 +1,23 @@
 package de.fwg.qr.scanner.history;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.HashSet;
+import java.util.Hashtable;
+
+import de.fwg.qr.scanner.tools.network;
+import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 /**
  * Manager Class to get & add Entries of the Users History in an asynchronous as well as synchronous manner
@@ -128,25 +138,27 @@ public class historyManager {
                     Entries = new ArrayList<historyEntry>();
                 else
                     Entries = new ArrayList<historyEntry>(Arrays.asList(entries));
-                /*
+
                 // Calling the HTTP-Request to get the Stations Names
                 network net = new network(AppContext);
 
                 networkCallbackInterface webCllb = new networkCallbackInterface() {
                     @Override
                     public void onPostCallback(String operation, String response) {
-                        JSONArray allStations;
+                        JSONArray datalists;
                         try {
-                            allStations = new JSONArray(response);
-                            JSONObject item;
+                            datalists = new JSONArray(response);
+                            JSONArray Ids, Names;
+
+                            Ids = datalists.getJSONArray(0);
+                            Names = datalists.getJSONArray(1);
 
                             // Convert the data into an Dictionary
                             Dictionary<String, String> stations = new Hashtable<String, String>();
-                            for(int i = 0; i < allStations.length(); i++){
-                                item = allStations.getJSONObject(i);
-                                stations.put(item.getString("__id__"), item.getString("__StationName__")); // TODO Replace Placeholders
-
+                            for(int i = 0; i < Ids.length(); i++){
+                                stations.put(Ids.getJSONArray(i).getString(0), Names.getJSONArray(i).getString(0));
                             }
+
                             // Iterate over all Entries and set their proper Station Names
                             historyEntry modified;
                             for(int i = 0; i < Entries.size(); i++){
@@ -155,9 +167,8 @@ public class historyManager {
                                 Entries.set(i, modified);
                             }
 
-
                             // Calling the callback method
-                            if callback != null
+                            if (callback != null)
                                 callback.onFinished(Entries.toArray(new historyEntry[0]));
 
                         } catch (JSONException e) {
@@ -167,11 +178,7 @@ public class historyManager {
                     @Override
                     public void onImageCallback(String name, Bitmap image) {}
                 };
-                net.makePostRequest(new WeakReference<networkCallbackInterface>(webCllb), "__stations__", ""); // TODO: Replace Placeholders
-                */
-                // Calling the callback method // TODO remove this later on:
-                if (callback != null)
-                    callback.onFinished(Entries.toArray(new historyEntry[0]));
+                net.makePostRequest(new WeakReference<networkCallbackInterface>(webCllb), "fetchIdAndName" , ""); // TODO: Replace Placeholders
 
             }
         });
