@@ -43,6 +43,7 @@
         <activity
             android:name=".activityMap"
             android:configChanges="uiMode"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activityPictureFullscreen"
