@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
 
     private ImageView imageView;
     private ArrayList<Bitmap> images;
+    private TextView textView;
+    private ProgressBar progressBar;
 
     private network net;
     private WeakReference<networkCallbackInterface> ref;
@@ -40,6 +44,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         images = new ArrayList<>();
         setupAbHome();
         imageView = findViewById(R.id.imageView);
+        textView = findViewById(R.id.textView);
+        progressBar = findViewById(R.id.progressBar);
         getImages();
 
 
@@ -53,24 +59,45 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
             case R.id.radioButton1:
                 if (checked) {
                     if (images.size() >= 1) {
-                        System.out.println("Button 1 pressed");
+                        if (textView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            textView.setVisibility(View.INVISIBLE);
+                        }
                         imageView.setImageBitmap(images.get(0));
+                    } else {
+                        imageView.setImageBitmap(null);
+                        progressBar.setVisibility(View.VISIBLE);
+                        textView.setVisibility(View.VISIBLE);
                     }
                 }
                 break;
             case R.id.radioButton2:
                 if (checked) {
                     if (images.size() >= 2) {
-                        System.out.println("Button 2 pressed");
+                        if (textView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            textView.setVisibility(View.INVISIBLE);
+                        }
                         imageView.setImageBitmap(images.get(1));
+                    } else {
+                        imageView.setImageBitmap(null);
+                        progressBar.setVisibility(View.VISIBLE);
+                        textView.setVisibility(View.VISIBLE);
                     }
                 }
                 break;
             case R.id.radioButton3:
                 if (checked) {
                     if (images.size() >= 3) {
-                        System.out.println("Button 3 pressed");
+                        if (textView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            textView.setVisibility(View.INVISIBLE);
+                        }
                         imageView.setImageBitmap(images.get(2));
+                    } else {
+                        imageView.setImageBitmap(null);
+                        progressBar.setVisibility(View.VISIBLE);
+                        textView.setVisibility(View.VISIBLE);
                     }
                 }
                 break;
@@ -87,6 +114,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         if (name.contentEquals("ImagePreview")) {
             images.add(image);
             if (images.size() >= 1) {
+                progressBar.setVisibility(View.INVISIBLE);
+                textView.setVisibility(View.INVISIBLE);
                 imageView.setImageBitmap(images.get(0));
             }
             i++;

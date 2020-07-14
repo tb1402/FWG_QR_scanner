@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="56dip"
+    android:background="@color/background"
     tools:showIn="@layout/activity_map">
 
     <RadioGroup
@@ -20,7 +21,9 @@
             android:layout_gravity="center"
             android:checked="true"
             android:onClick="onRadioButtonClicked"
-            android:text="@string/first_floor" />
+            android:buttonTint="#FFFFFF"
+            android:text="@string/first_floor"
+            android:textColor="#FFFFFF" />
 
         <RadioButton
             android:id="@+id/radioButton2"
@@ -30,7 +33,9 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:onClick="onRadioButtonClicked"
-            android:text="@string/second_floor" />
+            android:buttonTint="#FFFFFF"
+            android:text="@string/second_floor"
+            android:textColor="#FFFFFF" />
 
         <RadioButton
             android:id="@+id/radioButton3"
@@ -38,7 +43,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="onRadioButtonClicked"
-            android:text="@string/third_floor" />
+            android:buttonTint="#FFFFFF"
+            android:text="@string/third_floor"
+            android:textColor="#FFFFFF" />
     </RadioGroup>
 
     <ImageView
@@ -47,5 +54,23 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/radioGroup"
         android:layout_centerVertical="true" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:text="@string/image_loading"
+        android:textColor="@color/textColor"
+        android:textSize="25dp" />
 
 </RelativeLayout>
