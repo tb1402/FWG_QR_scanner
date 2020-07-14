@@ -89,6 +89,12 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onPostCallback(String operation, String response) {
         pb.setVisibility(View.GONE);
         lockUI(false);
+        if(operation.contains("error")||response.contains("Error")||response.contains("error")){
+            i = new Intent();
+            Intent i=new Intent(c,activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra,response);
+            startActivity(i);
+        }
         if (operation.contentEquals("getInfo")) {
             try {
                 JSONObject object = new JSONObject(response);

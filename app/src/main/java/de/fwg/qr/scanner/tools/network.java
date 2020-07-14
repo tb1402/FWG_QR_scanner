@@ -1,10 +1,15 @@
 package de.fwg.qr.scanner.tools;
 
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.util.Base64;
+import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -14,17 +19,34 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.fwg.qr.scanner.BuildConfig;
 import de.fwg.qr.scanner.R;
 
 public class network {
     public static String baseURL = "https://srv.cloud-tb.de";//server url
     private Context c;
+    private HashMap<String,String> headers;
 
     public network(Context c) {
         this.c = c;
+        String versionName;
+        try {
+            versionName = c.getPackageManager().getPackageInfo(new ContextWrapper(c).getPackageName(), 0).versionName;
+        }
+        catch (PackageManager.NameNotFoundException e){
+            versionName ="failed "+e.toString();
+        }
+        headers=new HashMap<>();
+        String credentials="fwgqr:"+ BuildConfig.HTTP_AUTH_PW;
+        Log.i("fwg",credentials);
+        String enc=Base64.encodeToString(credentials.getBytes(StandardCharsets.UTF_8),Base64.NO_WRAP);
+        headers.put("User-Agent","FWG QR Scanner version "+ versionName +" on "+ Build.DEVICE+" "+Build.VERSION.RELEASE);
+        //headers.put("Content-Type","text/plain; charset=utf-8");
+        headers.put("Authorization","Basic "+enc);
     }
 
     /**
@@ -58,10 +80,15 @@ public class network {
                 nci.onPostCallback("error", error.toString());
             }
         }) {
+            @Override
             protected Map<String, String> getParams() {
                 Map<String, String> d = new HashMap<>();
                 d.put("data", data);
                 return d;
+            }
+            @Override
+            public Map<String, String> getHeaders(){
+                return headers;
             }
         };
         r.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -92,7 +119,12 @@ public class network {
                     public void onErrorResponse(VolleyError error) {
                         nci.onImageCallback("error", BitmapFactory.decodeResource(c.getResources(), R.drawable.ic_error));
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders(){
+                return headers;
+            }
+        };
     }
 
     /**
