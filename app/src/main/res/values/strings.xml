@@ -61,7 +61,7 @@
 
     <!-- content strings-->
     <string name="welcome_message">Der FWG QR Scanner ist eine App, mit der Sie Informationen zu wichtigen Orten im Frankenwald-Gymnasiums Kronach mit Hilfe eines QR Codes, welcher an den Orten selbst auffindbar ist, abrufen können. Die Entwicklung erfolgt in Form eines Open-Source-Projektes, sodass Sie jederzeit den Quellcode der App auf Github anschauen können.</string>
-    <string name="dev_team">Entwicklerteam:\n Q11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth, und Ben Welsch</string>
+    <string name="dev_team">Entwicklerteam:\nQ11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth, und Ben Welsch</string>
     <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a></string>
     <string name="agb_content"></string>
 
