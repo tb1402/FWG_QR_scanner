@@ -86,6 +86,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     public void onImageCallback(String name, Bitmap image) {
         if (name.contentEquals("ImagePreview")) {
             images.add(image);
+            if (images.size() >= 1) {
+                imageView.setImageBitmap(images.get(0));
+            }
             i++;
             if (i < 3) {
                 getImages();
