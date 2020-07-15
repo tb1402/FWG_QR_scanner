@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -79,10 +78,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         check = true;
         surface = v.findViewById(R.id.surfaceView);
         textView2 = v.findViewById(R.id.textView2);
-        pb=v.findViewById(R.id.progressBar);
+        pb = v.findViewById(R.id.progressBar);
         lockUI(true);
         pb.setVisibility(View.VISIBLE);
-        net.makePostRequest(ref,"getVersion","");
+        net.makePostRequest(ref, "getVersion", "");
+        initialize();
+        startCamera();
+        detection();
     }
 
     @Override
@@ -130,16 +132,15 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     updateAlert();
                     return;
                 }
-            }
-            catch(Exception e){
-                Intent i=new Intent(c,activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+            } catch (Exception e) {
+                Intent i = new Intent(c, activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
                 return;
             }
-            initialize();
-            startCamera();
-            detection();
+            //initialize();
+            //startCamera();
+            //detection();
         }
     }
 
@@ -160,13 +161,21 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onPause() {
         super.onPause();
-        source.release();
+        source.stop();
+
+        System.out.println("Thread started");
 
 
     }
 
+    @Override
     public void onStop() {
         super.onStop();
+        try {
+            source.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         check = false;
     }
 
