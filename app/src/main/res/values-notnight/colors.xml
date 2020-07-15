@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- set light mode colors -->
-    <!--<color name="background">#FFFFFF</color>
+    <color name="background">#FFFFFF</color>
     <color name="buttonColor">#D7D7D7</color>
-    <color name="textColor">#212121</color>-->
+    <color name="textColor">#212121</color>
+    <!--
+        ToDo:
+            - add uiMode Method
+            - add light mode colors
+            - add responsive color values for static colors
+        -->
 </resources>
