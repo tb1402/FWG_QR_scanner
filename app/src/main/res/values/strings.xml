@@ -43,10 +43,9 @@
     <string name="start_using">Jetzt starten</string>
     <string name="button_error_report">Fehlermeldung senden</string>
     <string name="button_error_close_app">App schließen</string>
-    <!--TODO change strings for floors -->
     <string name="first_floor">Erdgeschoss/\nFachklassentrakt</string>
-    <string name="second_floor">1. Stockwerk</string>
-    <string name="third_floor">2. Stockwerk</string>
+    <string name="second_floor">1.\nStockwerk</string>
+    <string name="third_floor">2.\nStockwerk</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>

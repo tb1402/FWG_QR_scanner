@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="#000000"
     android:orientation="vertical"
     android:id="@+id/pictureFullscreen"
     tools:context=".activityPictureFullscreen">
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
         android:backgroundTint="#B9DCDB"
         android:src="@drawable/ic_fab_close" />
@@ -40,6 +40,6 @@
         android:id="@+id/textView"
         android:text="@string/image_loading"
         android:textColor="#FFFFFF"
-        android:textSize="25dp" />
+        android:textSize="25sp" />
 
 </RelativeLayout>
