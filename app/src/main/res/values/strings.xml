@@ -52,6 +52,9 @@
     <string name="mode_info">Info</string>
     <string name="mode_rallye">Rallye</string>
     <string name="mode">Modus</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="darkmode">Dark Mode</string>
     <string name="pref_category_general">Allgemein</string>
     <string name="pref_category_quality">Qualität</string>
     <string name="image_quality">Bild-Qualität</string>

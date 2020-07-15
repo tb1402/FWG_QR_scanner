@@ -24,6 +24,14 @@ public class preferencesManager {
         return true;
     }
 
+    public String getDarkMode() {
+        if (preferences.contains("darkmode")) {
+            return getString("darkmode", "0");
+        }
+        saveString("darkmode", "0");
+        return "0";
+    }
+
     public void saveBoolean(String name, boolean data) {
         editor = preferences.edit();
         editor.putBoolean(name, data);
@@ -43,25 +51,30 @@ public class preferencesManager {
     public int getInt(String name, int default_value) {
         return preferences.getInt(name, default_value);
     }
-    public String getString(String name,String defaultValue){
+
+    public String getString(String name, String defaultValue) {
         return preferences.getString(name, defaultValue);
     }
-    public void saveString(String name, String data){
-        editor=preferences.edit();
-        editor.putString(name,data);
+
+    public void saveString(String name, String data) {
+        editor = preferences.edit();
+        editor.putString(name, data);
         editor.apply();
     }
-    public boolean contains(String name){
+
+    public boolean contains(String name) {
         return preferences.contains(name);
     }
 
     public int getMode() {
         return Integer.parseInt(preferences.getString("mode", "1"));
     }
-    public String getVideoResolution(){
-        return preferences.getString("video_quality","medium");
+
+    public String getVideoResolution() {
+        return preferences.getString("video_quality", "medium");
     }
-    public String getImageResolution(){
-        return preferences.getString("image_quality","high");
+
+    public String getImageResolution() {
+        return preferences.getString("image_quality", "high");
     }
 }

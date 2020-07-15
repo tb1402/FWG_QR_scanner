@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:id="@+id/pref_category_general"
@@ -14,6 +14,13 @@
             android:entryValues="@array/settings_mode_int_values"
             android:key="mode"
             android:title="@string/mode" />
+        <ListPreference
+            android:id="@+id/pref_darkmode"
+            android:defaultValue="0"
+            android:entries="@array/settings_darkmode_str_val"
+            android:entryValues="@array/settings_darkmode_int_val"
+            android:key="darkmode"
+            android:title="@string/darkmode" />
     </PreferenceCategory>
     <PreferenceCategory
         android:id="@+id/pref_category_quality"

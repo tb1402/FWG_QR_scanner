@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -45,15 +46,17 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // set dark mode on android 9 and earlier as default, else follow system default
-        /*if (Build.VERSION.SDK_INT < 29) {
+        //set dark mode default
+        preferencesManager pm = new preferencesManager(getApplicationContext());
+        if (pm.getDarkMode().equals("0")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if (pm.getDarkMode().equals("1")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        }*/
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
 
         //check if first run
-        preferencesManager pm = new preferencesManager(getApplicationContext());
         if (pm.isFirstRun()) {
             Intent intent = new Intent(this, activityStart.class);
             startActivity(intent);
@@ -109,7 +112,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         Intent i;
-        switch(id){
+        switch (id) {
             case R.id.tb_item_settings:
                 i = new Intent(getApplicationContext(), activitySettings.class);
                 startActivity(i);
@@ -162,7 +165,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 show(f);
                 break;
             case R.id.item_frgm_escape_routes:
-                f=new fragmentEscapeRoutes();
+                f = new fragmentEscapeRoutes();
                 show(f);
                 break;
             default:
@@ -195,8 +198,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void showHamburgerIcon() {
-        ActionBar a=getSupportActionBar();
-        if(a!=null) {
+        ActionBar a = getSupportActionBar();
+        if (a != null) {
             a.setDisplayHomeAsUpEnabled(false);
             abdt.setDrawerIndicatorEnabled(true);
             abdt.syncState();
@@ -210,8 +213,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void showBackIcon() {
-        ActionBar a=getSupportActionBar();
-        if(a!=null) {
+        ActionBar a = getSupportActionBar();
+        if (a != null) {
             a.setDisplayHomeAsUpEnabled(true);
             abdt.setDrawerIndicatorEnabled(false);
             abdt.syncState();
