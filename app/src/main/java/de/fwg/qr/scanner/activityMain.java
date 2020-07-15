@@ -171,6 +171,10 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 f = new fragmentEscapeRoutes();
                 show(f);
                 break;
+            case R.id.item_frgm_progress:
+                f = new fragmentProgress();
+                show(f);
+                break;
             default:
                 return false;
         }

@@ -31,6 +31,12 @@
             android:icon="@drawable/ic_help"
             android:orderInCategory="20"
             android:title="@string/item_help_title" />
+        <!--placeholder texture-->
+        <item
+            android:id="@+id/item_frgm_progress"
+            android:icon="@drawable/abc_vector_test"
+            android:orderInCategory="22"
+            android:title="@string/item_progress"/>
         <item
             android:id="@+id/item_frgm_agb"
             android:icon="@drawable/ic_agb"

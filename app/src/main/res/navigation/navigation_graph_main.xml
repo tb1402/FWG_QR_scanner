@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_item_frgm_scan_to_item_frgm_escape_routes"
             app:destination="@id/item_frgm_escape_routes" />
+        <action
+            android:id="@+id/action_item_frgm_scan_to_item_frgm_progress"
+            app:destination="@id/item_frgm_progress"/>
     </fragment>
     <fragment
         android:id="@+id/item_frgm_agb"
@@ -52,6 +55,9 @@
         <action
             android:id="@+id/action_item_frgm_agb_to_item_frgm_escape_routes"
             app:destination="@id/item_frgm_escape_routes" />
+        <action
+            android:id="@+id/action_item_frgm_agb_to_item_frgm_progress"
+            app:destination="@id/item_frgm_progress"/>
     </fragment>
     <fragment
         android:id="@+id/item_frgm_about"
@@ -79,6 +85,9 @@
         <action
             android:id="@+id/action_item_frgm_about_to_fragmentEscapeRoutes"
             app:destination="@id/item_frgm_escape_routes" />
+        <action
+            android:id="@+id/action_item_frgm_about_to_item_frgm_progress"
+            app:destination="@id/item_frgm_progress"/>
     </fragment>
     <fragment
         android:id="@+id/item_frgm_help"
@@ -103,6 +112,9 @@
         <action
             android:id="@+id/action_item_frgm_help_to_item_frgm_escape_routes"
             app:destination="@id/item_frgm_escape_routes" />
+        <action
+            android:id="@+id/action_item_frgm_help_to_item_frgm_progress"
+            app:destination="@id/item_frgm_progress"/>
     </fragment>
     <fragment
         android:id="@+id/item_frgm_history"
@@ -127,6 +139,9 @@
         <action
             android:id="@+id/action_item_frgm_history_to_item_frgm_escape_routes"
             app:destination="@id/item_frgm_escape_routes" />
+        <action
+            android:id="@+id/action_item_frgm_history_to_item_frgm_progress"
+            app:destination="@id/item_frgm_progress"/>
     </fragment>
     <fragment
         android:id="@+id/item_frgm_information"
@@ -151,6 +166,9 @@
         <action
             android:id="@+id/action_item_frgm_information_to_item_frgm_escape_routes"
             app:destination="@id/item_frgm_escape_routes" />
+        <action
+            android:id="@+id/action_item_frgm_information_to_item_frgm_progress"
+            app:destination="@id/item_frgm_progress"/>
     </fragment>
     <fragment
         android:id="@+id/item_frgm_escape_routes"
@@ -175,5 +193,35 @@
         <action
             android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_help"
             app:destination="@id/item_frgm_help" />
+        <action
+            android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_progress"
+            app:destination="@id/item_frgm_progress"/>
+    </fragment>
+    <fragment
+        android:id="@+id/item_frgm_progress"
+        android:name="de.fwg.qr.scanner.fragmentProgress"
+        android:label="@string/item_progress"
+        tools:layout="@layout/fragment_progress">
+    <action
+        android:id="@+id/action_item_frgm_progress_to_item_frgm_about"
+        app:destination="@id/item_frgm_about" />
+    <action
+        android:id="@+id/action_item_frgm_progress_to_item_frgm_information"
+        app:destination="@id/item_frgm_information" />
+    <action
+        android:id="@+id/action_item_frgm_progress_to_item_frgm_agb"
+        app:destination="@id/item_frgm_agb" />
+    <action
+        android:id="@+id/action_item_frgm_progress_to_item_frgm_scan"
+        app:destination="@id/item_frgm_scan" />
+    <action
+        android:id="@+id/action_item_frgm_progress_to_item_frgm_history"
+        app:destination="@id/item_frgm_history" />
+    <action
+        android:id="@+id/action_item_frgm_progress_to_item_frgm_help"
+        app:destination="@id/item_frgm_help" />
+    <action
+        android:id="@+id/action_item_frgm_progress_to_item_frgm_escape_routes"
+        app:destination="@id/item_frgm_escape_routes" />
     </fragment>
 </navigation>

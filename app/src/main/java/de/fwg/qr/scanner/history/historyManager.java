@@ -208,7 +208,7 @@ public class historyManager {
     }
 
     /**
-     * Synchronously gets a list of all StationIds by using the history
+     * Synchronously gets a list of all visited StationIds by using the history
      * @return An Array of all StationIds which had been in the history at one point
      */
     public String[] getVisitedStations(){
@@ -220,6 +220,29 @@ public class historyManager {
             // if visited twice only shows up once
         }
         return visitedIds.toArray(new String[0]);
+    }
+
+    /**
+     * Asynchronously gets a list of all visited StationIds
+     * @param callback callback Interface gets called on exexutionFinish and provides a string[] result
+     */
+    public void getVisitedStationsAsync(final taskResultCallback callback){
+        historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback() {
+            @Override
+            public void onFinished(Object result) {
+
+                historyEntry[] entries = (historyEntry[]) result;
+                HashSet<String> visitedIds = new HashSet<String>();
+                for(int i = 0; i < entries.length; i++){
+                    visitedIds.add(entries[i].StationId); // The HashSet prevents multiple Entries of the same type so each station,
+                    // if visited twice only shows up once
+                }
+                callback.onFinished(visitedIds.toArray(new String[0]));
+                return;
+            }
+        });
+        readTask.execute();
+
     }
 
 
