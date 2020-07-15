@@ -95,21 +95,29 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             images.add(image);
             cm.cacheImage(ID,cm.cacheSaveIndex,image,true);
             cm.cacheSaveIndex++;
+            i++;
             if (i >= Integer.parseInt(bild)) {
                 lockUI(false);
                 setImageSwitcher();
+            } else {
+                getImages();
             }
         }
     }
     @Override
     public void cacheCallback(boolean error, Bitmap image){
-        if(!error){
+        if(!error) {
             images.add(image);
-            if (i >= Integer.parseInt(bild)||imageRequestCount==Integer.parseInt(bild)-1) {
+            i++;
+            if (i >= Integer.parseInt(bild) || imageRequestCount == Integer.parseInt(bild) - 1) {
                 lockUI(false);
                 setImageSwitcher();
             }
             imageRequestCount++;
+            if (i < Integer.parseInt(bild)) {
+                getImages();
+            }
+
         }
     }
 
@@ -174,12 +182,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     public void getImages() {
         lockUI(true);
-        for (i = 0; i < Integer.parseInt(bild); i++) {
             if(!cm.loadCachedImage(cacheRef,ID,i,true)){
                 net.makeImageRequest(ref, "ImagePreview", ID, i, true);
             }
-        }
-
     }
 
     public void clickableImageSwitcher() {
@@ -193,6 +198,4 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             }
         });
     }
-
-
 }

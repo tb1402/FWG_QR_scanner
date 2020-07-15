@@ -23,6 +23,7 @@
             android:onClick="onRadioButtonClicked"
             android:buttonTint="#FFFFFF"
             android:text="@string/first_floor"
+            android:textAlignment="center"
             android:textColor="#FFFFFF" />
 
         <RadioButton
@@ -35,6 +36,7 @@
             android:onClick="onRadioButtonClicked"
             android:buttonTint="#FFFFFF"
             android:text="@string/second_floor"
+            android:textAlignment="center"
             android:textColor="#FFFFFF" />
 
         <RadioButton
@@ -45,6 +47,7 @@
             android:onClick="onRadioButtonClicked"
             android:buttonTint="#FFFFFF"
             android:text="@string/third_floor"
+            android:textAlignment="center"
             android:textColor="#FFFFFF" />
     </RadioGroup>
 
@@ -60,8 +63,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/radioGroup"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerInParent="true"
+        android:layout_marginTop="271dp" />
 
     <TextView
         android:id="@+id/textView"
