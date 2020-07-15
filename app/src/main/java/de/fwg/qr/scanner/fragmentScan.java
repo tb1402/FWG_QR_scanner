@@ -82,9 +82,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         lockUI(true);
         pb.setVisibility(View.VISIBLE);
         net.makePostRequest(ref, "getVersion", "");
-        initialize();
+        /*
+        1. Don't waste resources, camera should only be initialized if no update is required
+        2. When the camera is set up here, the user can scan a code before the network request's callback is called, thus the update dialog has no chance to be displayed
+         */
+        /*initialize();
         startCamera();
-        detection();
+        detection();*/
     }
 
     @Override
@@ -97,8 +101,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             i.putExtra(activityErrorHandling.errorNameIntentExtra,response);
             startActivity(i);
         }
-        if (operation.contentEquals("getInfo")) {
-            try {
+        if (operation.contentEquals("getInfo")) { try {
                 JSONObject object = new JSONObject(response);
                 i.putExtra("ID", barcodeValue);
                 i.putExtra("Name", object.getString("Name"));
@@ -138,9 +141,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 startActivity(i);
                 return;
             }
-            //initialize();
-            //startCamera();
-            //detection();
+            initialize();
+            startCamera();
+            detection();
         }
     }
 
@@ -174,7 +177,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         try {
             source.stop();
         } catch (Exception e) {
-            e.printStackTrace();
+            Intent i = new Intent(c, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+            startActivity(i);
         }
         check = false;
     }
