@@ -21,8 +21,11 @@ class deleteCacheTask extends AsyncTask<File, Void,Void> {
     protected Void doInBackground(File... files) {
         try {
             if (files[0].isDirectory()) {
-                for (File f : files[0].listFiles()) {
-                    f.delete();
+                File[] fa=files[0].listFiles();
+                if(fa!=null) {
+                    for (File f : fa) {
+                        f.delete();
+                    }
                 }
             }
         }
