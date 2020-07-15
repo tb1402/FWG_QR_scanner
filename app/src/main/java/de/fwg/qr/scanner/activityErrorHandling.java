@@ -91,8 +91,9 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
 
     @Override
     public void onPostCallback(String operation, String response) {
-        Toast.makeText(getApplicationContext(),getString(R.string.error_send),Toast.LENGTH_SHORT).show();
-        finishAffinity();
+        Toast.makeText(getApplicationContext(), getString(R.string.error_send), Toast.LENGTH_SHORT).show();
+        //finishAffinity();
+        finish();
     }
 
     @Override

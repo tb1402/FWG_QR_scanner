@@ -43,7 +43,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     private int imagePosition = 0;
     private int i = 0;
-    private int imageRequestCount=0;
+    private int imageRequestCount = 0;
     private ArrayList<Bitmap> images;
     private cacheManager cm;
 
@@ -53,14 +53,14 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         super.onCreate(savedInstanceState);
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);
-        cacheRef=new WeakReference<>((readCacheCallback)this);
-        cm=new cacheManager(getApplicationContext());
+        cacheRef = new WeakReference<>((readCacheCallback) this);
+        cm = new cacheManager(getApplicationContext());
         Intent receivedIntent = getIntent();
         ID = receivedIntent.getStringExtra("ID");
         String name = receivedIntent.getStringExtra("Name");
         String text = receivedIntent.getStringExtra("Text");
         bild = receivedIntent.getStringExtra("Bild");
-        String videoIntentExtra=receivedIntent.getStringExtra("Video");
+        String videoIntentExtra = receivedIntent.getStringExtra("Video");
         video = Integer.parseInt(videoIntentExtra == null ? "-1" : videoIntentExtra);
         setToolbarTitle(name);
         setupAbHome();
@@ -75,7 +75,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         buttonPre = findViewById(R.id.buttonPrevious);
         buttonNext = findViewById(R.id.buttonNext);
         videoButton = findViewById(R.id.videoButton);
-        videoButton.setVisibility(video>0?View.VISIBLE:View.INVISIBLE);
+        videoButton.setVisibility(video > 0 ? View.VISIBLE : View.INVISIBLE);
         assignButtons();
         clickableImageSwitcher();
         getImages();
@@ -93,7 +93,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     public void onImageCallback(String name, Bitmap image) {
         if (name.contentEquals("ImagePreview")) {
             images.add(image);
-            cm.cacheImage(ID,cm.cacheSaveIndex,image,true);
+            cm.cacheImage(ID, cm.cacheSaveIndex, image, true);
             cm.cacheSaveIndex++;
             i++;
             if (i >= Integer.parseInt(bild)) {
@@ -104,9 +104,10 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             }
         }
     }
+
     @Override
-    public void cacheCallback(boolean error, Bitmap image){
-        if(!error) {
+    public void cacheCallback(boolean error, Bitmap image) {
+        if (!error) {
             images.add(image);
             i++;
             if (i >= Integer.parseInt(bild) || imageRequestCount == Integer.parseInt(bild) - 1) {
@@ -151,7 +152,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             buttonNext.setVisibility(View.GONE);
             buttonPre.setVisibility(View.GONE);
         }
-        if (video> 0) {
+        if (video > 0) {
             videoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -182,9 +183,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     public void getImages() {
         lockUI(true);
-            if(!cm.loadCachedImage(cacheRef,ID,i,true)){
-                net.makeImageRequest(ref, "ImagePreview", ID, i, true);
-            }
+        if (!cm.loadCachedImage(cacheRef, ID, i, true)) {
+            net.makeImageRequest(ref, "ImagePreview", ID, i, true);
+        }
     }
 
     public void clickableImageSwitcher() {

@@ -9,7 +9,7 @@ public class activityStart extends toolbarWrapper {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.onCreate(R.layout.toolbar_start,this,getString(R.string.app_name));
+        super.onCreate(R.layout.toolbar_start, this, getString(R.string.app_name));
         getSupportFragmentManager().beginTransaction().replace(R.id.start_fragment, new fragmentStart()).commit();
     }
 

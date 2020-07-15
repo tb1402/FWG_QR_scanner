@@ -4,12 +4,14 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,10 +45,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        //set dark mode default
+        //set dark mode default (lightmode is darkmode and vice versa)
         preferencesManager pm = new preferencesManager(getApplicationContext());
         if (pm.getDarkMode().equals("0")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -61,6 +61,9 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(this, activityStart.class);
             startActivity(intent);
         }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         //initialize variables
         drawer = findViewById(R.id.drawer_layout);
@@ -235,5 +238,11 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         } catch (PackageManager.NameNotFoundException e) {
             return getString(R.string.error_undefined);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        recreate();
     }
 }

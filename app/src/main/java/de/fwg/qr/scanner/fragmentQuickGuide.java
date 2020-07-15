@@ -22,6 +22,7 @@ public class fragmentQuickGuide extends fragmentWrapper {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         /* create button onClick listener */
         view.findViewById(R.id.btnQuickGuide).setOnClickListener(new View.OnClickListener() {
             @Override
