@@ -49,7 +49,7 @@ public class fragmentAGB extends fragmentWrapper {
             btnDecline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    requireActivity().finishAffinity();
+                    a.finishAffinity();
                 }
             });
         } else {
