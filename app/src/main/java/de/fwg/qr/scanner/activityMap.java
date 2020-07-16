@@ -1,7 +1,9 @@
 package de.fwg.qr.scanner;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -141,6 +143,21 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
             if (i < 3) {
                 getImages();
             }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.tb_item_settings:
+                Intent i = new Intent(getApplicationContext(), activitySettings.class);
+                startActivity(i);
+                return true;
+            case R.id.tb_item_map:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

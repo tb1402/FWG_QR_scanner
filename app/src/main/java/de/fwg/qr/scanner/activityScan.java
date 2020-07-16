@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
@@ -198,5 +199,23 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Intent i;
+        switch (id) {
+            case R.id.tb_item_settings:
+                i = new Intent(getApplicationContext(), activitySettings.class);
+                startActivity(i);
+                return true;
+            case R.id.tb_item_map:
+                i = new Intent(getApplicationContext(), activityMap.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
