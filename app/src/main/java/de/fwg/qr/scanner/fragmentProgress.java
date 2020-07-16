@@ -33,6 +33,7 @@ public class fragmentProgress extends fragmentWrapper {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showStartIcon();
     }
 
     @Override
