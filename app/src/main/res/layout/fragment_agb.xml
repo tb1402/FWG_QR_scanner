@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".fragmentAGB"
-    android:orientation="vertical"
     android:layout_centerHorizontal="true"
-    android:weightSum="10">
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:weightSum="10"
+    tools:context=".fragmentAGB">
 
     <TextView
         android:id="@+id/textViewAGBTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:layout_gravity="center"
+        android:padding="8dp"
         android:text="@string/agb"
         android:textColor="@color/textColor"
         android:textSize="24sp"
@@ -24,35 +24,37 @@
         android:id="@+id/wv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="9.5">
+        android:layout_weight="9.6" />
 
-    </WebView>
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="16dp" />
 
     <TableRow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="2">
+        android:layout_weight="0.2">
 
         <Button
             android:id="@+id/btnAccept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:background="@color/buttonColor"
+            android:padding="5dp"
             android:text="@string/agb_accept"
             android:textColor="@color/textColor" />
 
         <Space
-            android:layout_width="20dp"
+            android:layout_width="32dp"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btnDecline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:background="@color/buttonColor"
+            android:padding="5dp"
             android:text="@string/agb_decline"
             android:textColor="@color/textColor" />
     </TableRow>
