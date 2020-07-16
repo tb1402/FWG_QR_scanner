@@ -1,9 +1,11 @@
 package de.fwg.qr.scanner;
 
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.fragment.NavHostFragment;
@@ -31,5 +33,7 @@ public class fragmentStart extends fragmentWrapper {
                 NavHostFragment.findNavController(fragmentStart.this).navigate(R.id.action_fragmentStart_to_fragmentAGB);
             }
         });
+        TextView tvg = view.findViewById(R.id.textViewStartGithub);
+        tvg.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

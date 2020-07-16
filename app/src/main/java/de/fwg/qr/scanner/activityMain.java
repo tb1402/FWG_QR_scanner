@@ -46,7 +46,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //set dark mode default (lightmode is darkmode and vice versa)
+        //set dark mode
         preferencesManager pm = new preferencesManager(getApplicationContext());
         if (pm.getDarkMode().equals("0")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
