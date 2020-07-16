@@ -53,7 +53,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private Intent i = null;
     private String barcodeValue = "";
     private boolean check = false;
-    private boolean versionControlCheck = false;
+    private boolean updateRequired = true;
 
 
     @Override
@@ -83,11 +83,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         lockUI(true);
         pb.setVisibility(View.VISIBLE);
         net.makePostRequest(ref, "getVersion", "");
-        if (versionControlCheck == true) {
-            initialize();
-            startCamera();
-            detection();
-        }
+        initialize();
+        startCamera();
+        detection();
     }
 
     @Override
@@ -140,7 +138,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 startActivity(i);
                 return;
             }
-            versionControlCheck = true;
+            updateRequired=false;
             //initialize();
             //startCamera();
             //detection();
@@ -239,7 +237,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> detectedFrames = detections.getDetectedItems();
-                if (detectedFrames.size() != 0) {
+                if (detectedFrames.size() != 0&&!updateRequired) {
                     barcodeValue = detectedFrames.valueAt(0).displayValue;
                     newIntent();
                 }
