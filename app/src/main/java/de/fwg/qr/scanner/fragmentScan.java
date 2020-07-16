@@ -46,14 +46,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private WeakReference<networkCallbackInterface> ref;
     private CameraSource source;
     private BarcodeDetector barcodeDetector;
-    private SurfaceView surface;
+    private SurfaceView surface = null;
     private TextView textView2;
     private ProgressBar pb;
 
     private Intent i = null;
     private String barcodeValue = "";
-    private boolean check = false;
-    private boolean updateRequired = true;
+    private boolean check = true;
+    private boolean updateCheck = true;
 
 
     @Override
@@ -76,7 +76,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.CAMERA}, 201);
         }
-        check = true;
         surface = v.findViewById(R.id.surfaceView);
         textView2 = v.findViewById(R.id.textView2);
         pb = v.findViewById(R.id.progressBar);
@@ -138,10 +137,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 startActivity(i);
                 return;
             }
-            updateRequired=false;
-            //initialize();
-            //startCamera();
-            //detection();
+            updateCheck = false;
         }
     }
 
@@ -162,41 +158,27 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onPause() {
         super.onPause();
-        source.stop();
-
-        System.out.println("Thread started");
-
-
+        check = false;
+        try {
+            source.release();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        try {
-            source.stop();
-        } catch (Exception e) {
-            Intent i = new Intent(c, activityErrorHandling.class);
-            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
-            startActivity(i);
-        }
-        check = false;
     }
+
 
 
     @Override
     public void onResume() {
         super.onResume();
         if (!check) {
-            if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.CAMERA}, 201);//todo use request code
-            }
-            check = true;
+            a.recreate();
         }
-        pb.setVisibility(View.GONE);
-        lockUI(false);
-        initialize();
-        startCamera();
-        detection();
     }
 
     private void startCamera() {
@@ -223,7 +205,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-                source.stop();
+                try {
+                    source.release();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -237,7 +223,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> detectedFrames = detections.getDetectedItems();
-                if (detectedFrames.size() != 0&&!updateRequired) {
+                if (detectedFrames.size() != 0 && !updateCheck) {
                     barcodeValue = detectedFrames.valueAt(0).displayValue;
                     newIntent();
                 }
