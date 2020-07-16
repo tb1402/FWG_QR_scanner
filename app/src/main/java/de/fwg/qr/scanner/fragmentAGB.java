@@ -33,16 +33,16 @@ public class fragmentAGB extends fragmentWrapper {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         /* create button onClick listeners only if first run */
-        WebView content= view.findViewById(R.id.wv_content);
+        WebView content = view.findViewById(R.id.wv_content);
         content.loadUrl("file:///android_asset/agb.html");
+        //content.setBackgroundColor(Color.TRANSPARENT);
         Button btnAccept = view.findViewById(R.id.btnAccept);
         Button btnDecline = view.findViewById(R.id.btnDecline);
         if (p.isFirstRun()) {
             btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    preferencesManager pm = new preferencesManager(c);
-                    pm.saveBoolean("firstrun", false);
+                    p.saveBoolean("firstrun", false);
                     NavHostFragment.findNavController(fragmentAGB.this).navigate(R.id.action_fragmentAGB_to_fragmentQuickGuide);
                 }
             });
