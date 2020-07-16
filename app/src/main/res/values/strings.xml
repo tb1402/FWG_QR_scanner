@@ -35,6 +35,8 @@
     <string name="agb">Allgemeine Geschäftsbedingungen</string>
     <string name="title_activity_fullscreen_video_playback">Video Player</string>
     <string name="title_activty_error">Fehler</string>
+    <string name="txt_progress_name">Besuchte Stationen</string>
+    <string name="txt_not_visited_yet_name">Noch nicht besucht</string>
 
     <!-- button strings -->
     <string name="next">Weiter</string>

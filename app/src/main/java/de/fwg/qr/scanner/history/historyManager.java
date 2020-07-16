@@ -57,6 +57,15 @@ public class historyManager {
         return new historyEntry[0];
     }
 
+    /**
+     * Asynchronously reads all entries of the Users history
+     * @param callback method called on finish providing an array of historyEntrys
+     */
+    public void getEntriesAsync(taskResultCallback callback){
+        historyFileReadTask readTask = new historyFileReadTask(AppContext,getHistoryFile(), callback);
+        readTask.execute();
+    }
+
 
     /**
      * Synchronously adds an Entry to the Users History

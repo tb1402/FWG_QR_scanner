@@ -43,4 +43,14 @@ public class historyEntry {
         StationId = stationId;
         TimeVisited = timeVisited;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(object != null && object instanceof  historyEntry){
+            historyEntry e = (historyEntry)object;
+            return e.StationId == this.StationId; // utilizing the stationId as criteria to define unequity
+        }
+        else return false;
+    }
 }

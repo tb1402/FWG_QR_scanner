@@ -5,9 +5,33 @@
     android:layout_height="match_parent"
     tools:context=".fragmentProgress">
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/progress_list_view"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:text="@string/txt_progress_name"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="3dp"
+            android:id="@+id/txt_station_progress"/>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:id="@+id/bar_station_progress" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/progress_list_view"
+            />
+
+    </LinearLayout>
 
 </FrameLayout>
