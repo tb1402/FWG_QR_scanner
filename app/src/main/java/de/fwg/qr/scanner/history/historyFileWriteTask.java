@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 
 import de.fwg.qr.scanner.activityErrorHandling;
@@ -15,24 +16,24 @@ public class historyFileWriteTask extends AsyncTask<historyEntry, Object, Object
 
     public File HistoryFile;
     public taskCallback Callback;
-    private Context c;
+    private WeakReference<Context> cref;
 
-    public historyFileWriteTask(Context c, File file, taskCallback callback){
+    public historyFileWriteTask(Context c, File file, taskCallback callback) {
         HistoryFile = file;
         Callback = callback;
-        this.c=c;
+        this.cref = new WeakReference<>(c);
     }
 
     @Override
-    protected Object doInBackground(historyEntry ... Entries) {
+    protected Object doInBackground(historyEntry... Entries) {
 
         // Simple Try to eliminate Errors in File Reading and Writing
-        if(historyManager.FileLocked) return null;
+        if (historyManager.FileLocked) return null;
         else historyManager.FileLocked = true;
 
         // No need to check if the file exists, we overwrite it completely so we don't care
         FileOutputStream fileStream;
-        try{
+        try {
             fileStream = new FileOutputStream(HistoryFile);
 
             DataOutputStream dataStream = new DataOutputStream(fileStream);
@@ -50,14 +51,14 @@ public class historyFileWriteTask extends AsyncTask<historyEntry, Object, Object
             fileStream.close();
             dataStream.close();
         } catch (Exception e) {
-            Intent i=new Intent(c, activityErrorHandling.class);
-            i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
-            c.startActivity(i);
+            Intent i = new Intent(cref.get(), activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+            cref.get().startActivity(i);
         }
 
         // Unlock File
         historyManager.FileLocked = false;
-        if(Callback != null)
+        if (Callback != null)
             Callback.onFinished();
         return null;
     }

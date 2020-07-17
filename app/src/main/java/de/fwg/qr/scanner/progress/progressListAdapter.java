@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
 import de.fwg.qr.scanner.R;
 
 public class progressListAdapter extends ArrayAdapter<visitedStation> {
@@ -24,7 +25,7 @@ public class progressListAdapter extends ArrayAdapter<visitedStation> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.layout_progress_list_item, parent, false);
@@ -33,14 +34,13 @@ public class progressListAdapter extends ArrayAdapter<visitedStation> {
         TextView txtStationVisited = (TextView) rowView.findViewById(R.id.progress_list_item_txtlastvisited);
 
         txtStationName.setText(Entries[position].StationName);
-        txtStationName.setTextColor( Entries[position].Visited ? ContextCompat.getColor(context, R.color.progress_item_visited) : ContextCompat.getColor(context, R.color.progress_item_not_visited));
+        txtStationName.setTextColor(Entries[position].Visited ? ContextCompat.getColor(context, R.color.progress_item_visited) : ContextCompat.getColor(context, R.color.progress_item_not_visited));
 
-        if(Entries[position].Visited){
+        if (Entries[position].Visited) {
 
             String visitedDate = (String) DateFormat.format("dd.MM.yy HH:mm", Entries[position].LastVisited);
             txtStationVisited.setText(visitedDate);
-        }
-        else txtStationVisited.setText(context.getString(R.string.txt_not_visited_yet_name));
+        } else txtStationVisited.setText(context.getString(R.string.txt_not_visited_yet_name));
 
         return rowView;
     }

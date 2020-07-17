@@ -48,13 +48,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
         //set dark mode
         preferencesManager pm = new preferencesManager(getApplicationContext());
-        if (pm.getDarkMode().equals("0")) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else if (pm.getDarkMode().equals("1")) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
+        AppCompatDelegate.setDefaultNightMode(pm.getDarkMode() == 0 || pm.getDarkMode() > 1 ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
         //check if first run
         if (pm.isFirstRun()) {
@@ -107,7 +101,6 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        //todo setup options
         return true;
     }
 

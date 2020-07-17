@@ -9,14 +9,14 @@ public class visitedStation {
     public boolean Visited;
     public Date LastVisited;
 
-    public visitedStation(String stationId, String stationName, boolean visited){
+    public visitedStation(String stationId, String stationName, boolean visited) {
         StationId = stationId;
         StationName = stationName;
         Visited = visited;
         if (!Visited) LastVisited = null;
     }
 
-    public visitedStation(String stationId, String stationName, boolean visited, Date lastVisited){
+    public visitedStation(String stationId, String stationName, boolean visited, Date lastVisited) {
         this(stationId, stationName, visited);
         LastVisited = lastVisited;
     }

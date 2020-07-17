@@ -22,8 +22,10 @@ public class activitySettings extends toolbarWrapper {
                 finish();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.settings, new fragmentSettings()).commit();
     }
 

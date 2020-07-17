@@ -49,13 +49,13 @@ public class fragmentEscapeRoutes extends fragmentWrapper implements networkCall
         pd.setTitle(getString(R.string.network_buffering));
         pd.setCancelable(false);
         //a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        testb=v.findViewById(R.id.but_vs);
+        testb = v.findViewById(R.id.but_vs);
         testb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(c,activityFullscreenVideoPlayback.class);
-                i.putExtra("isER",false);
-                i.putExtra("id","test");
+                Intent i = new Intent(c, activityFullscreenVideoPlayback.class);
+                i.putExtra("isER", false);
+                i.putExtra("id", "test");
                 startActivity(i);
             }
         });

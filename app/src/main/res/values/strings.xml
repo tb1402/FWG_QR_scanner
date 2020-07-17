@@ -29,7 +29,6 @@
     <!--other title strings-->
     <string name="title_settings">Einstellungen</string>
     <string name="title_activity_start">Einführung</string>
-    <string name="title_scanned">Eingescannt</string><!--todo change string value, just a placeholder-->
     <string name="welcome_start">Willkommen zum FWG QR Scanner</string>
     <string name="quick_guide">Quick Guide</string>
     <string name="agb">Allgemeine Geschäftsbedingungen</string>
@@ -85,6 +84,4 @@
     <string name="network_buffering">Laden…</string>
     <string name="permission_needed">Bitte die Berechtingung zum nutzen der Kamera akzeptieren</string>
     <string name="scan_qr_code">Bitte den QR-Code einscannen</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -11,12 +11,10 @@ import com.android.volley.toolbox.Volley;
  */
 public class requestQueueSingleton {
     private static requestQueueSingleton queueSingleton;
-    private static Context c;
     private RequestQueue rq;
 
     private requestQueueSingleton(Context c) {
-        requestQueueSingleton.c = c;
-        rq = getRequestQueue();
+        rq = getRequestQueue(c);
     }
 
     static synchronized requestQueueSingleton getInstance(Context c) {
@@ -26,14 +24,14 @@ public class requestQueueSingleton {
         return queueSingleton;
     }
 
-    RequestQueue getRequestQueue() {
+    RequestQueue getRequestQueue(Context c) {
         if (rq == null) {
             rq = Volley.newRequestQueue(c.getApplicationContext());
         }
         return rq;
     }
 
-    <T> void addToRq(Request<T> r) {
-        getRequestQueue().add(r);
+    <T> void addToRq(Request<T> r, Context c) {
+        getRequestQueue(c).add(r);
     }
 }

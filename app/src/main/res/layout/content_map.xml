@@ -19,9 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="@color/textColor"
             android:checked="true"
             android:onClick="onRadioButtonClicked"
-            android:buttonTint="@color/textColor"
             android:text="@string/first_floor"
             android:textAlignment="center"
             android:textColor="@color/textColor" />

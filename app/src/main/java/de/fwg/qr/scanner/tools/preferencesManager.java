@@ -24,12 +24,12 @@ public class preferencesManager {
         return true;
     }
 
-    public String getDarkMode() {
+    public int getDarkMode() {
         if (preferences.contains("darkmode")) {
-            return getString("darkmode", "0");
+            return Integer.parseInt(getString("darkmode", "0"));
         }
         saveString("darkmode", "0");
-        return "0";
+        return 0;
     }
 
     public void saveBoolean(String name, boolean data) {

@@ -23,7 +23,7 @@ import de.fwg.qr.scanner.tools.cache.readCacheCallback;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
-public class activityPictureFullscreen extends AppCompatActivity implements networkCallbackInterface,readCacheCallback {
+public class activityPictureFullscreen extends AppCompatActivity implements networkCallbackInterface, readCacheCallback {
 
     private ImageView imageView;
     private FloatingActionButton button;
@@ -44,7 +44,7 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
         network net = new network(this);
         WeakReference<networkCallbackInterface> ref = new WeakReference<>((networkCallbackInterface) this);
         WeakReference<readCacheCallback> cacheRef = new WeakReference<>((readCacheCallback) this);
-        cm=new cacheManager(getApplicationContext());
+        cm = new cacheManager(getApplicationContext());
         Intent receivedIntent = getIntent();
         if (receivedIntent != null) {
             ID = receivedIntent.getStringExtra("ID");
@@ -56,7 +56,7 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
         textView = findViewById(R.id.textView);
         progressBar = findViewById(R.id.progressBar);
         assignButton();
-        if(!cm.loadCachedImage(cacheRef,ID,imagePosition,false)) {
+        if (!cm.loadCachedImage(cacheRef, ID, imagePosition, false)) {
             net.makeImageRequest(ref, "Image", ID, imagePosition, false);
         }
 
@@ -72,8 +72,8 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
     public void onImageCallback(String name, Bitmap image) {
         if (name.contentEquals("Image")) {
             imageView.setImageBitmap(image);
-            cm.cacheImage(ID,imagePosition,image,false);
-            Log.i("fwg","imgrqg");
+            cm.cacheImage(ID, imagePosition, image, false);
+            Log.i("fwg", "imgrqg");
             textView.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             button.setVisibility(View.VISIBLE);
@@ -82,11 +82,12 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
             finish();
         }
     }
+
     @Override
-    public void cacheCallback(boolean error,Bitmap image){
-        if(!error){
+    public void cacheCallback(boolean error, Bitmap image) {
+        if (!error) {
             imageView.setImageBitmap(image);
-            Log.i("fwg","lfc");
+            Log.i("fwg", "lfc");
             textView.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             button.setVisibility(View.VISIBLE);

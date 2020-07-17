@@ -1,6 +1,5 @@
 package de.fwg.qr.scanner.tools.cache;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
@@ -10,21 +9,22 @@ import android.util.LruCache;
 class memoryCacheSingleton {
     private static memoryCacheSingleton memoryCacheSingleton;
     private LruCache<String, Bitmap> memoryCache;
-    private final int memMaxMemory=(int)(Runtime.getRuntime().maxMemory()/1024);
-    final int memCacheSize=memMaxMemory/4;
+    private final int memMaxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+    final int memCacheSize = memMaxMemory / 4;
 
     static memoryCacheSingleton getInstance() {
-        if(memoryCacheSingleton==null){
-            memoryCacheSingleton=new memoryCacheSingleton();
+        if (memoryCacheSingleton == null) {
+            memoryCacheSingleton = new memoryCacheSingleton();
         }
         return memoryCacheSingleton;
     }
-    static void invalidate(){
-        memoryCacheSingleton=null;
+
+    static void invalidate() {
+        memoryCacheSingleton = null;
     }
 
     private memoryCacheSingleton() {
-        memoryCache=new LruCache<String, Bitmap>(memCacheSize){
+        memoryCache = new LruCache<String, Bitmap>(memCacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
                 // The cache size will be measured in kilobytes rather than
@@ -33,13 +33,16 @@ class memoryCacheSingleton {
             }
         };
     }
-    Bitmap get(String key){
+
+    Bitmap get(String key) {
         return memoryCache.get(key);
     }
-    int size(){
+
+    int size() {
         return memoryCache.size();
     }
-    void put(String key,Bitmap data){
-        memoryCache.put(key,data);
+
+    void put(String key, Bitmap data) {
+        memoryCache.put(key, data);
     }
 }

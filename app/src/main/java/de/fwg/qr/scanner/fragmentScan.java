@@ -91,13 +91,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onPostCallback(String operation, String response) {
         pb.setVisibility(View.GONE);
         lockUI(false);
-        if(operation.contains("error")||response.contains("Error")||response.contains("error")){
+        if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
             i = new Intent();
-            Intent i=new Intent(c,activityErrorHandling.class);
-            i.putExtra(activityErrorHandling.errorNameIntentExtra,response);
+            Intent i = new Intent(c, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, response);
             startActivity(i);
         }
-        if (operation.contentEquals("getInfo")) { try {
+        if (operation.contentEquals("getInfo")) {
+            try {
                 JSONObject object = new JSONObject(response);
                 i.putExtra("ID", barcodeValue);
                 i.putExtra("Name", object.getString("Name"));
@@ -107,22 +108,21 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 startActivity(i);
             } catch (JSONException e) {
                 i = new Intent();
-                Intent i=new Intent(c,activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+                Intent i = new Intent(c, activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
             }
-        }
-        else if(operation.contentEquals("getVersion")){
-            try{
-                preferencesManager pref=new preferencesManager(c);
-                JSONObject j=new JSONObject(response);
-                String date=j.getString("date");
-                String version=j.getString("version");
-                SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
-                if(!pref.contains("cache_date")){
-                    pref.saveString("cache_date",date);
+        } else if (operation.contentEquals("getVersion")) {
+            try {
+                preferencesManager pref = new preferencesManager(c);
+                JSONObject j = new JSONObject(response);
+                String date = j.getString("date");
+                String version = j.getString("version");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
+                if (!pref.contains("cache_date")) {
+                    pref.saveString("cache_date", date);
                 }
-                String savedDateString=pref.getString("cache_date","2020-01-01");
+                String savedDateString = pref.getString("cache_date", "2020-01-01");
                 if (df.parse(date).getTime() >= df.parse(savedDateString).getTime()) {
                     new cacheManager(c).invalidateCache();
                     pref.saveString("cache_date", date);
@@ -162,7 +162,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         try {
             source.release();
         } catch (Exception e) {
-            e.printStackTrace();
+            Intent i = new Intent(c, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+            startActivity(i);
         }
     }
 
@@ -170,7 +172,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onStop() {
         super.onStop();
     }
-
 
 
     @Override
@@ -193,8 +194,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     source.start(surface.getHolder());
 
                 } catch (IOException e) {
-                    Intent i=new Intent(c,activityErrorHandling.class);
-                    i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+                    Intent i = new Intent(c, activityErrorHandling.class);
+                    i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                     startActivity(i);
                 }
             }
@@ -208,7 +209,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 try {
                     source.release();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Intent i = new Intent(c, activityErrorHandling.class);
+                    i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+                    startActivity(i);
                 }
             }
         });
@@ -245,30 +248,32 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         }
 
     }
+
     private boolean checkUpdate(String ver) {
         try {
-            ContextWrapper cw=new ContextWrapper(c);
+            ContextWrapper cw = new ContextWrapper(c);
             PackageInfo pInfo = c.getPackageManager().getPackageInfo(cw.getPackageName(), 0);
-            preferencesManager pref=new preferencesManager(c);
+            preferencesManager pref = new preferencesManager(c);
             int vc = pInfo.versionCode;
             if (vc < Integer.parseInt(ver.replace("\n", ""))) {
-                if (!pref.getBoolean("update",true)) {
+                if (!pref.getBoolean("update", true)) {
                     pref.saveBoolean("update", true);
                 }
                 return true;
             } else {
-                if(pref.getBoolean("update",false)){
-                    pref.saveBoolean("update",false);
+                if (pref.getBoolean("update", false)) {
+                    pref.saveBoolean("update", false);
                 }
                 return false;
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Intent i=new Intent(c,activityErrorHandling.class);
-            i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+            Intent i = new Intent(c, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
             startActivity(i);
             return true;
         }
     }
+
     private void updateAlert() {
         final String appPackageName = c.getPackageName();
         AlertDialog.Builder alert;

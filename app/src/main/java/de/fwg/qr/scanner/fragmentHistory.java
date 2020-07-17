@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
+
 import de.fwg.qr.scanner.history.historyEntry;
 import de.fwg.qr.scanner.history.historyListAdapter;
 import de.fwg.qr.scanner.history.historyManager;
@@ -44,10 +45,10 @@ public class fragmentHistory extends fragmentWrapper {
         manager.getAssociatedEntriesAsync(new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
-                historyEntry[] entries = (historyEntry[])result;
+                historyEntry[] entries = (historyEntry[]) result;
                 // Rearrange the Array to list the entries descending;
                 historyEntry[] hstBuff = new historyEntry[entries.length];
-                for(int i = 0, j = entries.length - 1; i < entries.length; i++, j--){
+                for (int i = 0, j = entries.length - 1; i < entries.length; i++, j--) {
                     hstBuff[i] = entries[j];
                 }
                 historyListAdapter adapter = new historyListAdapter(c, hstBuff);

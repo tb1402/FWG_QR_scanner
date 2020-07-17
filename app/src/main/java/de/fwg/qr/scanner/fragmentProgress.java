@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+
 import de.fwg.qr.scanner.history.taskResultCallback;
 import de.fwg.qr.scanner.progress.progressListAdapter;
 import de.fwg.qr.scanner.progress.progressManager;
@@ -36,23 +37,21 @@ public class fragmentProgress extends fragmentWrapper {
     @Override
     public void onViewCreated(View v, @Nullable Bundle sis) {
         //Visuelle Elemente
-        listProgress = (ListView)v.findViewById(R.id.progress_list_view);
-        barStationProgress = (ProgressBar)v.findViewById(R.id.bar_station_progress);
-        txtStationProgress = (TextView)v.findViewById(R.id.txt_station_progress);
-
-        final View cont = v;
+        listProgress = v.findViewById(R.id.progress_list_view);
+        barStationProgress = v.findViewById(R.id.bar_station_progress);
+        txtStationProgress = v.findViewById(R.id.txt_station_progress);
 
         final progressManager manager = new progressManager(c);
         manager.getProgressAsync(new taskResultCallback() {
             @Override
             public void onFinished(Object result) {
-                visitedStation[] stations = (visitedStation[])result;
+                visitedStation[] stations = (visitedStation[]) result;
                 progressListAdapter adapter = new progressListAdapter(c, stations);
                 listProgress.setAdapter(adapter);
 
                 barStationProgress.setMax(stations.length);
-                barStationProgress.setProgress((int)(stations.length * manager.OverallProgress));
-                txtStationProgress.setText((getString(R.string.txt_progress_name) + " : " + (int)(stations.length * manager.OverallProgress) +" / " + stations.length));
+                barStationProgress.setProgress((int) (stations.length * manager.OverallProgress));
+                txtStationProgress.setText((getString(R.string.txt_progress_name) + " : " + (int) (stations.length * manager.OverallProgress) + " / " + stations.length));
 
             }
         });

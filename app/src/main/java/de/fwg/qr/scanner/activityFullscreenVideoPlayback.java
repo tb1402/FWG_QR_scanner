@@ -18,6 +18,7 @@ import android.widget.VideoView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.preferencesManager;
@@ -60,13 +61,14 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
     private VideoView vw;
     private ProgressBar pb;
     private boolean isEscapeRoute;
+    private ActionBar a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);//hide status bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//set fullscreen mode
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//set fullscreen mode
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//request landscape mode
 
@@ -79,8 +81,8 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
 
         //setup layout and elements
         setContentView(R.layout.activity_fullscreen_video_playback);
-        vw=findViewById(R.id.video);
-        pb=findViewById(R.id.pb);
+        vw = findViewById(R.id.video);
+        pb = findViewById(R.id.pb);
 
         mVisible = true;
         //mControlsView = findViewById(R.id.fullscreen_content_controls);
@@ -94,22 +96,25 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
                 toggle();
             }
         });
+        a = getSupportActionBar();
+        if (a == null) {
+            setSupportActionBar(new Toolbar(getApplicationContext()));
+        }
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
-        Intent i=getIntent();
-        isEscapeRoute=i.getBooleanExtra("isER",false);
-        if(isEscapeRoute){//check if given video url is escape route sequence
+        Intent i = getIntent();
+        isEscapeRoute = i.getBooleanExtra("isER", false);
+        if (isEscapeRoute) {//check if given video url is escape route sequence
             parseEscapeRouteSequence(i.getStringExtra("seq"));
-        }
-        else {
+        } else {
             pb.setVisibility(View.VISIBLE);
             lockUI(true);
-            String id = i.getStringExtra("id"); //Hab den namen von "ID" zu "id" geändert, weil ich einfach die kleine Schreibweise gewohnt bin
-            if(id!=null) {
+            String id = i.getStringExtra("id");
+            if (id != null) {
                 if (id.length() != 4) {
                     Toast.makeText(getApplicationContext(), getString(R.string.video_url_error), Toast.LENGTH_SHORT).show();
                 }
@@ -117,9 +122,10 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
             playVideo(craftURLForSimplePlayback(id));
         }
     }
-    private String craftURLForSimplePlayback(String id){
-        preferencesManager p=new preferencesManager(getApplicationContext());
-        return network.baseURL+"/videos/"+p.getVideoResolution()+"/"+id+"/000.mp4";
+
+    private String craftURLForSimplePlayback(String id) {
+        preferencesManager p = new preferencesManager(getApplicationContext());
+        return network.baseURL + "/videos/" + p.getVideoResolution() + "/" + id + "/000.mp4";
     }
 
     @Override
@@ -139,11 +145,12 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
             show();
         }
     }
+
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         vw.stopPlayback();
         lockUI(false);
-        getSupportActionBar().show();
+        a.show();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         show();
         finish();
@@ -151,10 +158,7 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
 
     private void hide() {
         // Hide UI first
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
+        a.hide();
         //mControlsView.setVisibility(View.GONE);
         mVisible = false;
 
@@ -231,13 +235,12 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     //pb.setVisibility(View.VISIBLE);
                     //lockUI(true);
-                    if(isEscapeRoute){
+                    if (isEscapeRoute) {
                         //todo load stuff
-                    }
-                    else{
+                    } else {
                         vw.stopPlayback();
                         lockUI(false);
-                        getSupportActionBar().show();
+                        a.show();
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                         finish();
                     }
@@ -247,8 +250,8 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
             vw.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                 @Override
                 public boolean onInfo(MediaPlayer mediaPlayer, int i, int i1) {
-                    if(i==703){
-                        Toast.makeText(getApplicationContext(),"Bitrate: "+i1+"kbps",Toast.LENGTH_SHORT).show();
+                    if (i == 703) {
+                        Toast.makeText(getApplicationContext(), "Bitrate: " + i1 + "kbps", Toast.LENGTH_SHORT).show();
                     }
                     return false;
                 }
@@ -256,18 +259,20 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),"Video Play Error :" + e.toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Video Play Error :" + e.toString(), Toast.LENGTH_SHORT).show();
         }
 
     }
+
     private void lockUI(boolean state) {
         if (state) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
     }
-    private void parseEscapeRouteSequence(String seq){
+
+    private void parseEscapeRouteSequence(String seq) {
 
     }
 }

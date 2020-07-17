@@ -1,6 +1,7 @@
 package de.fwg.qr.scanner.progress;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import org.json.JSONArray;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
 
+import de.fwg.qr.scanner.activityErrorHandling;
 import de.fwg.qr.scanner.history.historyEntry;
 import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.history.taskResultCallback;
@@ -22,7 +24,7 @@ public class progressManager {
     private Context context;
     public float OverallProgress;
 
-    public progressManager(Context ctx){
+    public progressManager(Context ctx) {
         context = ctx;
         OverallProgress = 0.0f;
     }
@@ -40,9 +42,10 @@ public class progressManager {
     /**
      * yields asynchronously a list of all Stations flagged whether they were visited or not
      * Writes the progress percentage to the public Property {@code OverallProgress}
+     *
      * @param callback callback method provides visitedStation[] as result
      */
-    public void getProgressAsync(final taskResultCallback callback){
+    public void getProgressAsync(final taskResultCallback callback) {
         // historyManager instance
 
         getUniqueStationsAsync(new taskResultCallback() {
@@ -58,25 +61,24 @@ public class progressManager {
 
                         // save the visited Stations as a hastable
                         Hashtable<String, historyEntry> visitedStationsById = new Hashtable<>();
-                        for(int i = 0; i < visitedStations.length; i++){
-                            visitedStationsById.put(visitedStations[i].StationId, visitedStations[i]);
+                        for (historyEntry visitedStation : visitedStations) {
+                            visitedStationsById.put(visitedStation.StationId, visitedStation);
                         }
 
                         // create the resulting visitedStations by comparing the Ids of visited stations
                         visitedStation[] stationprogress = new visitedStation[stations.size()];
                         Set<String> hashtablekeys = stations.keySet();
                         int i = 0;
-                        for(String key : hashtablekeys){ // iterate over all stationIds in the stations hashtable
-                            if(visitedStationsById.containsKey(key)) { // station was visited once
+                        for (String key : hashtablekeys) { // iterate over all stationIds in the stations hashtable
+                            if (visitedStationsById.containsKey(key)) { // station was visited once
                                 stationprogress[i] = new visitedStation(key, stations.get(key), true, visitedStationsById.get(key).TimeVisited);
-                            }
-                            else { // station not visited
+                            } else { // station not visited
                                 stationprogress[i] = new visitedStation(key, stations.get(key), false);
                             }
 
                             i++;
                         }
-                        OverallProgress =  (float)visitedStations.length / (float)stationprogress.length;
+                        OverallProgress = (float) visitedStations.length / (float) stationprogress.length;
                         callback.onFinished(stationprogress);
                     }
                 });
@@ -87,9 +89,10 @@ public class progressManager {
 
     /**
      * Method to get a list of unique stations and the latest time they were visited (asynchronously)
+     *
      * @param callback provides a historyEntry[] on finish
      */
-    private void getUniqueStationsAsync(final taskResultCallback callback){
+    private void getUniqueStationsAsync(final taskResultCallback callback) {
         final historyManager manager = new historyManager(context);
 
         manager.getEntriesAsync(new taskResultCallback() {
@@ -102,18 +105,17 @@ public class progressManager {
 
                 // May be worth a rework:
                 ArrayList<historyEntry> uniqueEntries = new ArrayList<>();
-                for(int i = 0; i < entries.length; i++){
+                for (int i = 0; i < entries.length; i++) {
 
                     // check if the entry already exists
                     boolean exists = false;
-                    for(int j = 0; j < uniqueEntries.size(); j++){
+                    for (int j = 0; j < uniqueEntries.size(); j++) {
 
-                        if(entries[i].StationId == uniqueEntries.get(j).StationId)
-                        {
+                        if (entries[i].StationId.contentEquals(uniqueEntries.get(j).StationId)) {
                             exists = true;
                             // check if the one wich was found is worse than the current iterator
                             // so it may have to be replaced
-                            if(entries[i].TimeVisited.getTime() > uniqueEntries.get(j).TimeVisited.getTime()){
+                            if (entries[i].TimeVisited.getTime() > uniqueEntries.get(j).TimeVisited.getTime()) {
                                 // entries[i] is the newer date and will be replaced
                                 historyEntry replacement = uniqueEntries.get(i);
                                 replacement.TimeVisited = entries[i].TimeVisited;
@@ -122,7 +124,7 @@ public class progressManager {
                             }
                         }
                     }
-                    if(!exists)
+                    if (!exists)
                         uniqueEntries.add(entries[i]);
 
                 }
@@ -135,13 +137,14 @@ public class progressManager {
 
     /**
      * Method to get all stations from the server
+     *
      * @param callback callback method providing a hastable<string,string> as result
      */
-    private void getStationsAsync(final taskResultCallback callback){
+    private void getStationsAsync(final taskResultCallback callback) {
         // get all Stations by using a network request
         networkCallbackInterface webCllb = new networkCallbackInterface() {
             @Override
-            public void onPostCallback(String operation, String response){
+            public void onPostCallback(String operation, String response) {
                 JSONArray datalists;
                 try {
                     datalists = new JSONArray(response);
@@ -151,21 +154,25 @@ public class progressManager {
                     Names = datalists.getJSONArray(1);
 
                     // Convert the data into an Dictionary
-                    Hashtable<String, String> stations = new Hashtable<String, String>();
-                    for(int i = 0; i < Ids.length(); i++){
+                    Hashtable<String, String> stations = new Hashtable<>();
+                    for (int i = 0; i < Ids.length(); i++) {
                         stations.put(Ids.getJSONArray(i).getString(0), Names.getJSONArray(i).getString(0));
                     }
                     callback.onFinished(stations);
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Intent i = new Intent(context, activityErrorHandling.class);
+                    i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+                    context.startActivity(i);
                 }
             }
+
             @Override
-            public void onImageCallback(String name, Bitmap image) {}
+            public void onImageCallback(String name, Bitmap image) {
+            }
         };
         network net = new network(context);
-        net.makePostRequest(new WeakReference<networkCallbackInterface>(webCllb), "fetchIdAndName" , "");
+        net.makePostRequest(new WeakReference<>(webCllb), "fetchIdAndName", "");
     }
 
 
