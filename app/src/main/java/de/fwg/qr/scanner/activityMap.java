@@ -26,6 +26,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     private TextView textView;
     private ProgressBar progressBar;
 
+    private RadioButton button1;
+    private RadioButton button2;
+    private RadioButton button3;
+
     private network net;
     private WeakReference<networkCallbackInterface> ref;
 
@@ -48,6 +52,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
         progressBar = findViewById(R.id.progressBar);
+        button1 = findViewById(R.id.radioButton1);
+        button2 = findViewById(R.id.radioButton2);
+        button3 = findViewById(R.id.radioButton3);
         getImages();
 
 
@@ -118,11 +125,23 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
             if (images.size() >= 1) {
                 progressBar.setVisibility(View.INVISIBLE);
                 textView.setVisibility(View.INVISIBLE);
-                imageView.setImageBitmap(images.get(0));
+                if (images.size() == 2) {
+                    imageView.setImageBitmap(images.get(1));
+                } else {
+                    imageView.setImageBitmap(images.get(0));
+                }
             }
             i++;
             if (i < 3) {
                 getImages();
+            } else {
+                if (button1.isChecked()) {
+                    imageView.setImageBitmap(images.get(0));
+                } else if (button2.isChecked()) {
+                    imageView.setImageBitmap(images.get(1));
+                } else if (button3.isChecked()) {
+                    imageView.setImageBitmap(images.get(2));
+                }
             }
 
         }
@@ -135,6 +154,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         }
     }
 
+
     @Override
     public void cacheCallback(boolean error, Bitmap image) {
         if (!error) {
@@ -142,6 +162,14 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
             i++;
             if (i < 3) {
                 getImages();
+            } else {
+                if (button1.isChecked()) {
+                    imageView.setImageBitmap(images.get(0));
+                } else if (button2.isChecked()) {
+                    imageView.setImageBitmap(images.get(1));
+                } else if (button3.isChecked()) {
+                    imageView.setImageBitmap(images.get(2));
+                }
             }
         }
     }
