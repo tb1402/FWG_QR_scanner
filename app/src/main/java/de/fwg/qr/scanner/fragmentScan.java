@@ -207,7 +207,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 try {
-                    source.release();
+                    if(source!=null) {
+                        source.release();
+                    }
                 } catch (Exception e) {
                     Intent i = new Intent(c, activityErrorHandling.class);
                     i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
