@@ -111,7 +111,7 @@ public class progressManager {
                     boolean exists = false;
                     for (int j = 0; j < uniqueEntries.size(); j++) {
 
-                        if (entries[i].StationId.contentEquals(uniqueEntries.get(j).StationId)) {
+                        if (entries[i].StationId==uniqueEntries.get(j).StationId) {//todo normally this should be replaceable with equals, but it isnt, find out why
                             exists = true;
                             // check if the one wich was found is worse than the current iterator
                             // so it may have to be replaced
