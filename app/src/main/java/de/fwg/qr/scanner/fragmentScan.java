@@ -206,15 +206,16 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-                try {
+                /*try {
                     if(source!=null) {
-                        source.release();
+                        source.release();//for some reason, even when checked for not null, this throws a nullPointerException
+                        //todo pleas fix problem described above
                     }
                 } catch (Exception e) {
                     Intent i = new Intent(c, activityErrorHandling.class);
                     i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                     startActivity(i);
-                }
+                }*/
             }
         });
     }
