@@ -125,10 +125,12 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
             if (images.size() >= 1) {
                 progressBar.setVisibility(View.INVISIBLE);
                 textView.setVisibility(View.INVISIBLE);
-                if (images.size() == 2) {
-                    imageView.setImageBitmap(images.get(1));
-                } else {
+                if (images.size() == 1) {
                     imageView.setImageBitmap(images.get(0));
+                } else if (images.size() == 2 && button2.isChecked()) {
+                    imageView.setImageBitmap(images.get(1));
+                } else if (images.size() == 3 && button3.isChecked()) {
+                    imageView.setImageBitmap(images.get(2));
                 }
             }
             i++;
@@ -159,16 +161,27 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     public void cacheCallback(boolean error, Bitmap image) {
         if (!error) {
             images.add(image);
-            i++;
-            if (i < 3) {
-                getImages();
-            } else {
-                if (button1.isChecked()) {
+            if (images.size() >= 1) {
+                progressBar.setVisibility(View.INVISIBLE);
+                textView.setVisibility(View.INVISIBLE);
+                if (images.size() == 1) {
                     imageView.setImageBitmap(images.get(0));
-                } else if (button2.isChecked()) {
+                } else if (images.size() == 2 && button2.isChecked()) {
                     imageView.setImageBitmap(images.get(1));
-                } else if (button3.isChecked()) {
+                } else if (images.size() == 3 && button3.isChecked()) {
                     imageView.setImageBitmap(images.get(2));
+                }
+                i++;
+                if (i < 3) {
+                    getImages();
+                } else {
+                    if (button1.isChecked()) {
+                        imageView.setImageBitmap(images.get(0));
+                    } else if (button2.isChecked()) {
+                        imageView.setImageBitmap(images.get(1));
+                    } else if (button3.isChecked()) {
+                        imageView.setImageBitmap(images.get(2));
+                    }
                 }
             }
         }
