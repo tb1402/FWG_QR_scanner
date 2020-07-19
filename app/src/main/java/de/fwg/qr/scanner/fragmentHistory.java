@@ -42,10 +42,10 @@ public class fragmentHistory extends fragmentWrapper {
         //manager.addEntry(new historyEntry("EQUgDFPunm"));
         //manager.addEntry(new historyEntry("EsluEnKeHJ"));
 
-        manager.getAssociatedEntriesAsync(new taskResultCallback() {
+        manager.getAssociatedEntriesAsync(new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(Object result) {
-                historyEntry[] entries = (historyEntry[]) result;
+            public void onFinished(historyEntry[] result) {
+                historyEntry[] entries = result;
                 // Rearrange the Array to list the entries descending;
                 historyEntry[] hstBuff = new historyEntry[entries.length];
                 for (int i = 0, j = entries.length - 1; i < entries.length; i++, j--) {

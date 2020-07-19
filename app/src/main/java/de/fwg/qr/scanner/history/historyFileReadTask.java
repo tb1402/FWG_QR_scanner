@@ -17,10 +17,10 @@ import de.fwg.qr.scanner.activityErrorHandling;
 public class historyFileReadTask extends AsyncTask<Object, Object, historyEntry[]> {
 
     private File HistoryFile;
-    private taskResultCallback Callback;
+    private taskResultCallback<historyEntry[]> Callback;
     private WeakReference<Context> cref;
 
-    public historyFileReadTask(Context c, File file, taskResultCallback callback) {
+    public historyFileReadTask(Context c, File file, taskResultCallback<historyEntry[]> callback) {
         HistoryFile = file;
         Callback = callback;
         this.cref = new WeakReference<>(c);

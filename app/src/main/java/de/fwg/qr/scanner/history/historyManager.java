@@ -68,7 +68,7 @@ public class historyManager {
      *
      * @param callback method called on finish providing an array of historyEntrys
      */
-    public void getEntriesAsync(taskResultCallback callback) {
+    public void getEntriesAsync(taskResultCallback<historyEntry[]> callback) {
         historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), callback);
         readTask.execute();
     }
@@ -109,10 +109,10 @@ public class historyManager {
      */
     public void addEntryAsync(final historyEntry newEntry, final taskCallback callback) {
 
-        historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback() {
+        historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(Object result) {
-                historyEntry[] entries = (historyEntry[]) result;
+            public void onFinished(historyEntry[] result) {
+                historyEntry[] entries = result;
                 if (entries.length == 0)
                     Entries = new ArrayList<>();
                 else
@@ -145,12 +145,12 @@ public class historyManager {
      *
      * @param callback Callback Interface called on completion of the Asynchronous task (result of type {@code historyEntry[]})
      */
-    public void getAssociatedEntriesAsync(final taskResultCallback callback) {
+    public void getAssociatedEntriesAsync(final taskResultCallback<historyEntry[]> callback) {
 
-        historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback() {
+        historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(Object result) {
-                historyEntry[] entries = (historyEntry[]) result;
+            public void onFinished(historyEntry[] result) {
+                historyEntry[] entries =  result;
                 if (entries.length == 0)
                     Entries = new ArrayList<>();
                 else
@@ -205,12 +205,12 @@ public class historyManager {
     }
 
 
-    public void getAssociatedEntriesAsync(final taskResultCallback callback, final int limit) {
+    public void getAssociatedEntriesAsync(final taskResultCallback<historyEntry[]> callback, final int limit) {
 
-        getAssociatedEntriesAsync(new taskResultCallback() {
+        getAssociatedEntriesAsync(new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(Object result) {
-                historyEntry[] allEntries = (historyEntry[]) result;
+            public void onFinished(historyEntry[] result) {
+                historyEntry[] allEntries = result;
 
                 if (limit > 0 && limit <= allEntries.length) {
                     // only return the last #limit entries
@@ -246,12 +246,12 @@ public class historyManager {
      *
      * @param callback callback Interface gets called on exexutionFinish and provides a string[] result
      */
-    public void getVisitedStationsAsync(final taskResultCallback callback) {
-        historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback() {
+    public void getVisitedStationsAsync(final taskResultCallback<String[]> callback) {
+        historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(Object result) {
+            public void onFinished(historyEntry[] result) {
 
-                historyEntry[] entries = (historyEntry[]) result;
+                historyEntry[] entries = result;
                 HashSet<String> visitedIds = new HashSet<>();
                 for (historyEntry entry : entries) {
                     visitedIds.add(entry.StationId); // The HashSet prevents multiple Entries of the same type so each station,

@@ -45,19 +45,19 @@ public class progressManager {
      *
      * @param callback callback method provides visitedStation[] as result
      */
-    public void getProgressAsync(final taskResultCallback callback) {
+    public void getProgressAsync(final taskResultCallback<visitedStation[]> callback) {
         // historyManager instance
 
-        getUniqueStationsAsync(new taskResultCallback() {
+        getUniqueStationsAsync(new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(Object result) {
-                final historyEntry[] visitedStations = (historyEntry[]) result;
+            public void onFinished(historyEntry[] result) {
+                final historyEntry[] visitedStations = result;
 
-                getStationsAsync(new taskResultCallback() {
+                getStationsAsync(new taskResultCallback<Hashtable<String, String>>() {
                     @Override
-                    public void onFinished(Object result) {
+                    public void onFinished(Hashtable<String, String> result) {
 
-                        Hashtable<String, String> stations = (Hashtable<String, String>) result;
+                        Hashtable<String, String> stations = result;
 
                         // save the visited Stations as a hastable
                         Hashtable<String, historyEntry> visitedStationsById = new Hashtable<>();
@@ -92,14 +92,14 @@ public class progressManager {
      *
      * @param callback provides a historyEntry[] on finish
      */
-    private void getUniqueStationsAsync(final taskResultCallback callback) {
+    private void getUniqueStationsAsync(final taskResultCallback<historyEntry[]> callback) {
         final historyManager manager = new historyManager(context);
 
-        manager.getEntriesAsync(new taskResultCallback() {
+        manager.getEntriesAsync(new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(Object result) {
+            public void onFinished(historyEntry[] result) {
 
-                historyEntry[] entries = (historyEntry[]) result;
+                historyEntry[] entries = result;
                 // Array of the history, each entry providing stationId and visitedTime
                 // => Task: sorting out duplicates and always save the one with the newest date
 
@@ -111,13 +111,14 @@ public class progressManager {
                     boolean exists = false;
                     for (int j = 0; j < uniqueEntries.size(); j++) {
 
-                        if (entries[i].StationId==uniqueEntries.get(j).StationId) {//todo normally this should be replaceable with equals, but it isnt, find out why
+                        if (entries[i].StationId.equals(uniqueEntries.get(j).StationId)) {//todo normally this should be replaceable with equals, but it isnt, find out why
+                            // todo edit: does not work with == as analyzed in debugging it does not reckognize the equality of two strings if using == instead of equals which leads to wrong numbers displayed in progress
                             exists = true;
                             // check if the one wich was found is worse than the current iterator
                             // so it may have to be replaced
                             if (entries[i].TimeVisited.getTime() > uniqueEntries.get(j).TimeVisited.getTime()) {
                                 // entries[i] is the newer date and will be replaced
-                                historyEntry replacement = uniqueEntries.get(i);
+                                historyEntry replacement = uniqueEntries.get(j);
                                 replacement.TimeVisited = entries[i].TimeVisited;
                                 uniqueEntries.set(j, replacement);
                                 break;
@@ -140,7 +141,7 @@ public class progressManager {
      *
      * @param callback callback method providing a hastable<string,string> as result
      */
-    private void getStationsAsync(final taskResultCallback callback) {
+    private void getStationsAsync(final taskResultCallback<Hashtable<String, String>> callback) {
         // get all Stations by using a network request
         networkCallbackInterface webCllb = new networkCallbackInterface() {
             @Override
