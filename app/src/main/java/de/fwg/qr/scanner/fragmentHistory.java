@@ -38,8 +38,8 @@ public class fragmentHistory extends fragmentWrapper {
         final historyManager manager = new historyManager(c);
         //lockUI(true);
         //manager.clearHistory();
-        manager.addEntry(new historyEntry("dYjeGwGiIm"));
-        manager.addEntry(new historyEntry("EQUgDFPunm"));
+        //manager.addEntry(new historyEntry("dYjeGwGiIm"));
+        //manager.addEntry(new historyEntry("EQUgDFPunm"));
         //manager.addEntry(new historyEntry("EsluEnKeHJ"));
 
         manager.getAssociatedEntriesAsync(new taskResultCallback<historyEntry[]>() {
