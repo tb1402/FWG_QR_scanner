@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import de.fwg.qr.scanner.tools.exceptionHandler;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface {
@@ -45,7 +46,9 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
+        Thread.UncaughtExceptionHandler eh=Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(new exceptionHandler(this,android.os.Process.myPid(),eh));
         //set dark mode
         preferencesManager pm = new preferencesManager(getApplicationContext());
         AppCompatDelegate.setDefaultNightMode(pm.getDarkMode() == 0 || pm.getDarkMode() > 1 ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
@@ -56,7 +59,6 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //initialize variables

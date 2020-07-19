@@ -30,6 +30,8 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
     private network net;
     private WeakReference<networkCallbackInterface> ref;
     private String error_desc;
+    private boolean isUncaught=false;
+    private int rootPID;
 
     /**
      * Method to convert an exceptions stacktrace to a String
@@ -48,7 +50,15 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
 
     @Override
     public void onBackPressed() {
-        finishAffinity();
+        //finishAffinity();
+        finishAndRemoveTask();
+        if(isUncaught){
+            if(rootPID!=-1){
+                android.os.Process.killProcess(rootPID);
+            }
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(10);
+        }
     }
 
     @Override
@@ -62,6 +72,10 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
 
         //getIntent extra
         error_desc = getIntent().getStringExtra("error_desc");
+        if(getIntent().getBooleanExtra("isUE",false)){
+            isUncaught=true;
+            rootPID=getIntent().getIntExtra("rpid",-1);
+        }
 
         //initialize views
         TextView tv_error = findViewById(R.id.tv_error_description);
@@ -86,7 +100,15 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
         but_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishAffinity();
+                //finishAffinity();
+                finishAndRemoveTask();
+                if(isUncaught){
+                    if(rootPID!=-1){
+                        android.os.Process.killProcess(rootPID);
+                    }
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(10);
+                }
             }
         });
     }
@@ -94,7 +116,15 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
     @Override
     public void onPostCallback(String operation, String response) {
         Toast.makeText(getApplicationContext(), getString(R.string.error_send), Toast.LENGTH_SHORT).show();
-        finishAffinity();
+        //finishAffinity();
+        finishAndRemoveTask();
+        if(isUncaught){
+            if(rootPID!=-1){
+                android.os.Process.killProcess(rootPID);
+            }
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(10);
+        }
     }
 
     @Override
