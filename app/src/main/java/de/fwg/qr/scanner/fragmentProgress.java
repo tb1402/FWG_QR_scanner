@@ -42,10 +42,10 @@ public class fragmentProgress extends fragmentWrapper {
         txtStationProgress = v.findViewById(R.id.txt_station_progress);
 
         final progressManager manager = new progressManager(c);
-        manager.getProgressAsync(new taskResultCallback() {
+        manager.getProgressAsync(new taskResultCallback<visitedStation[]>() {
             @Override
-            public void onFinished(Object result) {
-                visitedStation[] stations = (visitedStation[]) result;
+            public void onFinished(visitedStation[] result) {
+                visitedStation[] stations = result;
                 progressListAdapter adapter = new progressListAdapter(c, stations);
                 listProgress.setAdapter(adapter);
 
