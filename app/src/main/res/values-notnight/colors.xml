@@ -4,10 +4,4 @@
     <color name="background">#FFFFFF</color>
     <color name="buttonColor">#D7D7D7</color>
     <color name="textColor">#212121</color>
-    <!--
-        ToDo:
-            - add uiMode Method
-            - add light mode colors
-            - add responsive color values for static colors
-        -->
 </resources>
