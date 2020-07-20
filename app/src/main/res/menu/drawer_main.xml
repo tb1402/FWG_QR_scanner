@@ -12,6 +12,11 @@
             android:orderInCategory="1"
             android:title="@string/item_scan_title" />
         <item
+            android:id="@+id/item_frgm_progress"
+            android:icon="@drawable/ic_progress"
+            android:orderInCategory="10"
+            android:title="@string/item_progress" />
+        <item
             android:id="@+id/item_frgm_history"
             android:icon="@drawable/ic_history"
             android:orderInCategory="15"

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
+
 import de.fwg.qr.scanner.history.historyEntry;
 import de.fwg.qr.scanner.history.historyListAdapter;
 import de.fwg.qr.scanner.history.historyManager;
@@ -37,17 +38,17 @@ public class fragmentHistory extends fragmentWrapper {
         final historyManager manager = new historyManager(c);
         //lockUI(true);
         //manager.clearHistory();
-        //for(int i = 0; i < 10; i++){
-        //    manager.addEntry(new historyEntry(i + ". Station"));
-        //}
+        //manager.addEntry(new historyEntry("dYjeGwGiIm"));
+        //manager.addEntry(new historyEntry("EQUgDFPunm"));
+        //manager.addEntry(new historyEntry("EsluEnKeHJ"));
 
-        manager.getAssociatedEntriesAsync(new taskResultCallback() {
+        manager.getAssociatedEntriesAsync(new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(Object result) {
-                historyEntry[] entries = (historyEntry[])result;
+            public void onFinished(historyEntry[] result) {
+                historyEntry[] entries = result;
                 // Rearrange the Array to list the entries descending;
                 historyEntry[] hstBuff = new historyEntry[entries.length];
-                for(int i = 0, j = entries.length - 1; i < entries.length; i++, j--){
+                for (int i = 0, j = entries.length - 1; i < entries.length; i++, j--) {
                     hstBuff[i] = entries[j];
                 }
                 historyListAdapter adapter = new historyListAdapter(c, hstBuff);

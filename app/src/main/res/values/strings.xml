@@ -4,7 +4,7 @@
     <!--Error messages-->
     <string name="error_undefined">undefined</string>
     <string name="error_header">Ein Fehler ist aufgetreten…</string>
-    <string name="error_send">Fehlermeldung wurde gesendet! Vielen Dank für die Mitarbeit. Die App wird nun neugestartet!</string>
+    <string name="error_send">Fehlermeldung wurde gesendet. Vielen Dank für Ihre Mitarbeit. Die App wird nun neugestartet.</string>
 
     <!--Required by Android Studio-->
     <string name="msg_navigation_drawer_open">Open Navigation Drawer</string>
@@ -24,56 +24,68 @@
     <string name="item_agb_title">AGB</string>
     <string name="item_map">Karte</string>
     <string name="item_frgm_escape_routes">Fluchtwege</string>
+    <string name="item_progress">Fortschritt</string>
 
     <!--other title strings-->
     <string name="title_settings">Einstellungen</string>
     <string name="title_activity_start">Einführung</string>
-    <string name="title_scanned">Eingescannt</string><!--todo change string value, just a placeholder-->
     <string name="welcome_start">Willkommen zum FWG QR Scanner</string>
     <string name="quick_guide">Quick Guide</string>
     <string name="agb">Allgemeine Geschäftsbedingungen</string>
     <string name="title_activity_fullscreen_video_playback">Video Player</string>
     <string name="title_activty_error">Fehler</string>
+    <string name="txt_progress_name">Besuchte Stationen</string>
+    <string name="txt_not_visited_yet_name">Noch nicht besucht</string>
 
     <!-- button strings -->
     <string name="next">Weiter</string>
     <string name="previous">Zurück</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="ok">OK</string>
     <string name="agb_accept">AGB Akzeptieren</string>
     <string name="agb_decline">AGB Ablehnen</string>
     <string name="start_using">Jetzt starten</string>
     <string name="button_error_report">Fehlermeldung senden</string>
     <string name="button_error_close_app">App schließen</string>
+    <string name="first_floor">Erdgeschoss/\nFachklassentrakt</string>
+    <string name="second_floor">1.\nStockwerk</string>
+    <string name="third_floor">2.\nStockwerk</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>
     <string name="mode_rallye">Rallye</string>
     <string name="mode">Modus</string>
+    <string name="on">Ein</string>
+    <string name="off">Aus</string>
+    <string name="darkmode">Nachtmodus</string>
     <string name="pref_category_general">Allgemein</string>
     <string name="pref_category_quality">Qualität</string>
-    <string name="image_quality">Bild-Qualität</string>
+    <string name="image_quality">Bildqualität</string>
     <string name="image_quality_orig">Original (6000x4000px)</string>
     <string name="image_quality_high">Hoch (1920x1080px)</string>
     <string name="image_quality_low">Niedrig (640x360px)</string>
 
     <!-- content strings-->
     <string name="welcome_message">Der FWG QR Scanner ist eine App, mit der Sie Informationen zu wichtigen Orten im Frankenwald-Gymnasiums Kronach mit Hilfe eines QR Codes, welcher an den Orten selbst auffindbar ist, abrufen können. Die Entwicklung erfolgt in Form eines Open-Source-Projektes, sodass Sie jederzeit den Quellcode der App auf Github anschauen können.</string>
-    <string name="dev_team">Entwicklerteam:\n Q11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth, und Ben Welsch</string>
-    <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a></string>
+    <string name="dev_team">Entwicklerteam:\nQ11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth und Ben Welsch</string>
+    <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a>\n<a href="https://github.com/FWG-coder">https://github.com/FWG-coder</a></string>
 
     <!--Video Strings-->
     <string name="video_url_error">Fehler: Problem mit der Video-URL</string>
     <string name="video_quality_high">Hoch (1920x1080p)</string>
     <string name="video_quality_medium">Mittel (1270x720p)</string>
     <string name="video_quality_low">Niedrig (640x480p)</string>
-    <string name="video_quality">Video Qualität</string>
+    <string name="video_quality">Videoqualität</string>
 
     <!--Image Strings-->
     <string name="image_loading">Bild wird geladen</string>
-    <string name="image_not_found_with_current_resolution">Das Bild ist in dieser Auflösung nicht vorhanden! Bitte versuchen sie es mit einer anderen Auflösung</string>
+    <string name="image_not_found_with_current_resolution">Das Bild ist in dieser Auflösung nicht vorhanden. Bitte versuchen Sie es mit einer anderen Auflösung</string>
 
     <!--other strings-->
     <string name="network_no_connection">Keine Netzwerkverbindung!</string>
     <string name="network_buffering">Laden…</string>
-    <string name="permission_needed">Bitte die Berechtingung zum nutzen der Kamera akzeptieren</string>
-    <string name="scan_qr_code">Biite den QR-Code einscannen</string>
+    <string name="permission_needed">Bitte akzeptieren Sie die Berechtingung zum Nutzen der Kamera</string>
+    <string name="scan_qr_code">Bitte scannen Sie den QR-Code ein</string>
+    <string name="dialog_message">Bitte starten Sie die App neu um die Änderungen vollständig anzuwenden</string>
+    <string name="dialog_title">Neustart erforderlich</string>
 </resources>

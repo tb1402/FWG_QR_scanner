@@ -4,15 +4,18 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -28,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import de.fwg.qr.scanner.tools.exceptionHandler;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface {
@@ -43,21 +47,19 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // set dark mode on android 9 and earlier as default, else follow system default
-        /*if (Build.VERSION.SDK_INT < 29) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        }*/
+        Thread.UncaughtExceptionHandler eh=Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(new exceptionHandler(this,android.os.Process.myPid(),eh));
+        //set dark mode
+        preferencesManager pm = new preferencesManager(getApplicationContext());
+        AppCompatDelegate.setDefaultNightMode(pm.getDarkMode() == 0 || pm.getDarkMode() > 1 ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
         //check if first run
-        preferencesManager pm = new preferencesManager(getApplicationContext());
         if (pm.isFirstRun()) {
             Intent intent = new Intent(this, activityStart.class);
             startActivity(intent);
         }
+
+        setContentView(R.layout.activity_main);
 
         //initialize variables
         drawer = findViewById(R.id.drawer_layout);
@@ -101,7 +103,6 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        //todo setup options
         return true;
     }
 
@@ -109,7 +110,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         Intent i;
-        switch(id){
+        switch (id) {
             case R.id.tb_item_settings:
                 i = new Intent(getApplicationContext(), activitySettings.class);
                 startActivity(i);
@@ -162,7 +163,11 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 show(f);
                 break;
             case R.id.item_frgm_escape_routes:
-                f=new fragmentEscapeRoutes();
+                f = new fragmentEscapeRoutes();
+                show(f);
+                break;
+            case R.id.item_frgm_progress:
+                f = new fragmentProgress();
                 show(f);
                 break;
             default:
@@ -195,8 +200,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void showHamburgerIcon() {
-        ActionBar a=getSupportActionBar();
-        if(a!=null) {
+        ActionBar a = getSupportActionBar();
+        if (a != null) {
             a.setDisplayHomeAsUpEnabled(false);
             abdt.setDrawerIndicatorEnabled(true);
             abdt.syncState();
@@ -210,8 +215,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void showBackIcon() {
-        ActionBar a=getSupportActionBar();
-        if(a!=null) {
+        ActionBar a = getSupportActionBar();
+        if (a != null) {
             a.setDisplayHomeAsUpEnabled(true);
             abdt.setDrawerIndicatorEnabled(false);
             abdt.syncState();
@@ -232,5 +237,11 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         } catch (PackageManager.NameNotFoundException e) {
             return getString(R.string.error_undefined);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        recreate();
     }
 }

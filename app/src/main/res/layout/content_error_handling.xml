@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="56dp"
     android:background="@color/background"
-    tools:showIn="@layout/activity_error_handling"
-    android:layout_marginTop="56dp">
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_error_handling">
 
     <TextView
         android:id="@+id/tv_error_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
         android:text="@string/error_header"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/textColor"
         android:textSize="24sp" />
 
     <TableRow
@@ -26,13 +27,13 @@
             android:id="@+id/but_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_error_close_app"/>
+            android:text="@string/button_error_close_app" />
 
         <Button
             android:id="@+id/but_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_error_report"/>
+            android:text="@string/button_error_report" />
     </TableRow>
 
     <ScrollView
@@ -43,7 +44,8 @@
             android:id="@+id/tv_error_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF" />
+            android:paddingHorizontal="4dp"
+            android:textColor="@color/textColor" />
     </ScrollView>
 
 </LinearLayout>

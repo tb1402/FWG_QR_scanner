@@ -9,10 +9,21 @@ android {
         applicationId "de.fwg.qr.scanner"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "0.0.1 pre-alpha"
+        versionCode 5
+        versionName "0.0.5 pre-alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'String', 'HTTP_AUTH_PW',"\"$HTTP_AUTH_PW\""
+        def propFile=project.rootProject.file('local.properties')
+        if(propFile.exists()){
+            Properties p=new Properties()
+            p.load(propFile.newDataInputStream())
+            def HTTP_AUTH_PW=p.getProperty('HTTP_AUTH_PW')
+            if(HTTP_AUTH_PW){
+                buildConfigField 'String', 'HTTP_AUTH_PW', "\"$HTTP_AUTH_PW\""
+            }
+        }
     }
 
     buildTypes {

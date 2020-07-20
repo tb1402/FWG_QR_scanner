@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#FFFFFF"
         android:indeterminate="true"
-        android:max="100"/>
+        android:max="100" />
 
     <TextView
         android:id="@+id/textView"
@@ -23,7 +23,7 @@
         android:text="@string/scan_qr_code"
         android:textAlignment="center"
         android:textColor="@color/textColor"
-        android:textSize="23sp" />
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:id="@+id/relLayout"
@@ -43,7 +43,7 @@
             android:text="@string/permission_needed"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
     </RelativeLayout>
 

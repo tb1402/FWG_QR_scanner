@@ -1,9 +1,11 @@
 package de.fwg.qr.scanner;
 
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.fragment.NavHostFragment;
@@ -23,12 +25,6 @@ public class fragmentStart extends fragmentWrapper {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /* Getting color values
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = c.getTheme();
-        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
-        @ColorInt int color = typedValue.data;
-        Log.i("COLOR", Integer.toHexString(color));*/
 
         /* create button onClick listener */
         view.findViewById(R.id.btnStart).setOnClickListener(new View.OnClickListener() {
@@ -37,5 +33,7 @@ public class fragmentStart extends fragmentWrapper {
                 NavHostFragment.findNavController(fragmentStart.this).navigate(R.id.action_fragmentStart_to_fragmentAGB);
             }
         });
+        TextView tvg = view.findViewById(R.id.textViewStartGithub);
+        tvg.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

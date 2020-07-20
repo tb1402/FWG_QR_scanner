@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -47,13 +46,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private WeakReference<networkCallbackInterface> ref;
     private CameraSource source;
     private BarcodeDetector barcodeDetector;
-    private SurfaceView surface;
+    private SurfaceView surface = null;
     private TextView textView2;
     private ProgressBar pb;
 
     private Intent i = null;
     private String barcodeValue = "";
-    private boolean check = false;
+    private boolean check = true;
+    private boolean updateCheck = true;
 
 
     @Override
@@ -76,19 +76,27 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.CAMERA}, 201);
         }
-        check = true;
         surface = v.findViewById(R.id.surfaceView);
         textView2 = v.findViewById(R.id.textView2);
-        pb=v.findViewById(R.id.progressBar);
+        pb = v.findViewById(R.id.progressBar);
         lockUI(true);
         pb.setVisibility(View.VISIBLE);
-        net.makePostRequest(ref,"getVersion","");
+        net.makePostRequest(ref, "getVersion", "");
+        initialize();
+        startCamera();
+        detection();
     }
 
     @Override
     public void onPostCallback(String operation, String response) {
         pb.setVisibility(View.GONE);
         lockUI(false);
+        if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
+            i = new Intent();
+            Intent i = new Intent(c, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, response);
+            startActivity(i);
+        }
         if (operation.contentEquals("getInfo")) {
             try {
                 JSONObject object = new JSONObject(response);
@@ -100,40 +108,36 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 startActivity(i);
             } catch (JSONException e) {
                 i = new Intent();
-                Intent i=new Intent(c,activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+                Intent i = new Intent(c, activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
             }
-        }
-        else if(operation.contentEquals("getVersion")){
-            try{
-                preferencesManager pref=new preferencesManager(c);
-                JSONObject j=new JSONObject(response);
-                String date=j.getString("date");
-                String version=j.getString("version");
-                SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
-                if(!pref.contains("cache_date")){
-                    pref.saveString("cache_date",date);
+        } else if (operation.contentEquals("getVersion")) {
+            try {
+                preferencesManager pref = new preferencesManager(c);
+                JSONObject j = new JSONObject(response);
+                String date = j.getString("date");
+                String version = j.getString("version");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
+                if (!pref.contains("cache_date")) {
+                    pref.saveString("cache_date", date);
                 }
-                String savedDateString=pref.getString("cache_date","2020-01-01");
+                String savedDateString = pref.getString("cache_date", "2020-01-01");
                 if (df.parse(date).getTime() >= df.parse(savedDateString).getTime()) {
                     new cacheManager(c).invalidateCache();
                     pref.saveString("cache_date", date);
                 }
-                if(checkUpdate(version)){
+                if (checkUpdate(version)) {
                     updateAlert();
                     return;
                 }
-            }
-            catch(Exception e){
-                Intent i=new Intent(c,activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+            } catch (Exception e) {
+                Intent i = new Intent(c, activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
                 return;
             }
-            initialize();
-            startCamera();
-            detection();
+            updateCheck = false;
         }
     }
 
@@ -154,14 +158,21 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onPause() {
         super.onPause();
-        source.release();
-
-
+        check = false;
+        try {
+            if (source.getPreviewSize() != null) {
+                source.stop();
+            }
+        } catch (Exception e) {
+            Intent i = new Intent(c, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+            startActivity(i);
+        }
     }
 
+    @Override
     public void onStop() {
         super.onStop();
-        check = false;
     }
 
 
@@ -169,16 +180,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onResume() {
         super.onResume();
         if (!check) {
-            if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.CAMERA}, 201);//todo use request code
-            }
-            check = true;
+            a.recreate();
         }
-        pb.setVisibility(View.GONE);
-        lockUI(false);
-        initialize();
-        startCamera();
-        detection();
     }
 
     private void startCamera() {
@@ -193,8 +196,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     source.start(surface.getHolder());
 
                 } catch (IOException e) {
-                    Intent i=new Intent(c,activityErrorHandling.class);
-                    i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+                    Intent i = new Intent(c, activityErrorHandling.class);
+                    i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                     startActivity(i);
                 }
             }
@@ -205,7 +208,15 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-                source.stop();
+                try {
+                    if (source.getPreviewSize() != null) {
+                        source.stop();
+                    }
+                } catch (Exception e) {
+                    Intent i = new Intent(c, activityErrorHandling.class);
+                    i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+                    startActivity(i);
+                }
             }
         });
     }
@@ -219,7 +230,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> detectedFrames = detections.getDetectedItems();
-                if (detectedFrames.size() != 0) {
+                if (detectedFrames.size() != 0 && !updateCheck) {
                     barcodeValue = detectedFrames.valueAt(0).displayValue;
                     newIntent();
                 }
@@ -241,30 +252,32 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         }
 
     }
+
     private boolean checkUpdate(String ver) {
         try {
-            ContextWrapper cw=new ContextWrapper(c);
+            ContextWrapper cw = new ContextWrapper(c);
             PackageInfo pInfo = c.getPackageManager().getPackageInfo(cw.getPackageName(), 0);
-            preferencesManager pref=new preferencesManager(c);
+            preferencesManager pref = new preferencesManager(c);
             int vc = pInfo.versionCode;
             if (vc < Integer.parseInt(ver.replace("\n", ""))) {
-                if (!pref.getBoolean("update",true)) {
+                if (!pref.getBoolean("update", true)) {
                     pref.saveBoolean("update", true);
                 }
                 return true;
             } else {
-                if(pref.getBoolean("update",false)){
-                    pref.saveBoolean("update",false);
+                if (pref.getBoolean("update", false)) {
+                    pref.saveBoolean("update", false);
                 }
                 return false;
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Intent i=new Intent(c,activityErrorHandling.class);
-            i.putExtra(activityErrorHandling.errorNameIntentExtra,activityErrorHandling.stackTraceToString(e));
+            Intent i = new Intent(c, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
             startActivity(i);
             return true;
         }
     }
+
     private void updateAlert() {
         final String appPackageName = c.getPackageName();
         AlertDialog.Builder alert;
