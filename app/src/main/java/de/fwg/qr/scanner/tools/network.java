@@ -129,6 +129,28 @@ public class network {
             }
         };
     }
+    private ImageRequest getImageRequestWithID(WeakReference<networkCallbackImageID> w, final String name, final String id, int number, boolean preview) {
+        final networkCallbackImageID nci = w.get();
+        String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + new preferencesManager(c).getImageResolution() + "/" + id + "/" + number + ".png");
+        return new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        nci.onImageCallback(name, response,id);
+                    }
+                }, 0, 0, null, Bitmap.Config.ARGB_8888,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        nci.onImageCallback("error", BitmapFactory.decodeResource(c.getResources(), R.drawable.ic_error),id);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return headers;
+            }
+        };
+    }
 
     /**
      * Method to make a request and send post data with it
@@ -152,5 +174,8 @@ public class network {
      */
     public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String id, int number, boolean preview) {
         requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, id, number, preview), c);
+    }
+    public void makeImageRequestWithIDCallback(WeakReference<networkCallbackImageID> nci, String name, String id, int number, boolean preview) {
+        requestQueueSingleton.getInstance(c).addToRq(getImageRequestWithID(nci, name, id, number, preview), c);
     }
 }

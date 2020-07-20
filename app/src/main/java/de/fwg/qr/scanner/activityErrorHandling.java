@@ -93,7 +93,7 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
                     j.put("error", errorNameIntentExtra);
                     net.makePostRequest(ref, "error", error_desc);
                 } catch (JSONException e) {
-                    net.makePostRequest(ref, "error", "{\"device\":\"error---" + getDeviceInfo() + "\"");
+                    net.makePostRequest(ref, "error", "{\"error\":"+error_desc+",\"device\":\"error---" + getDeviceInfo() + "\"");
                 }
             }
         });
