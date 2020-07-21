@@ -29,7 +29,7 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
     public static String errorNameIntentExtra = "error_desc";
     private network net;
     private WeakReference<networkCallbackInterface> ref;
-    private String error_desc;
+    private String error_desc;//desc=description
     private boolean isUncaught=false;
     private int rootPID;
 
@@ -51,11 +51,14 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
     @Override
     public void onBackPressed() {
         //finishAffinity();
-        finishAndRemoveTask();
-        if(isUncaught){
+        finishAndRemoveTask();//finish the activity and remove the task from the app overview
+        if(isUncaught){//if uncaught, there's also a root process that needs to be killed, because activityErrorHandling is started new Thread and process
+            //this is necessary because the main process can be locked and not responding if an uncaught exception occurred
             if(rootPID!=-1){
                 android.os.Process.killProcess(rootPID);
             }
+
+            //exit completely
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(10);
         }

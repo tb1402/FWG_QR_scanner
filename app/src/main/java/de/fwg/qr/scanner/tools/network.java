@@ -129,20 +129,31 @@ public class network {
             }
         };
     }
-    private ImageRequest getImageRequestWithID(WeakReference<networkCallbackImageID> w, final String name, final String id, int number, boolean preview) {
+
+    /**
+     * Method to craft an image request that will also give back the id of the station
+     *
+     * @param w       reference to callback interface
+     * @param name    name of the request to identify it in the callback method
+     * @param id      id of the image
+     * @param number  number of the image
+     * @param preview if true only low quality will be used
+     * @return ImageRequest that can be added to the requestQueue
+     */
+    private ImageRequest getImageRequestWithID(WeakReference<networkCallbackImageID> w, final String name, final String id, final int number, boolean preview) {
         final networkCallbackImageID nci = w.get();
         String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + new preferencesManager(c).getImageResolution() + "/" + id + "/" + number + ".png");
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
-                        nci.onImageCallback(name, response,id);
+                        nci.onImageCallback(name, response,number);
                     }
                 }, 0, 0, null, Bitmap.Config.ARGB_8888,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        nci.onImageCallback("error", BitmapFactory.decodeResource(c.getResources(), R.drawable.ic_error),id);
+                        nci.onImageCallback("error", BitmapFactory.decodeResource(c.getResources(), R.drawable.ic_error),number);
                     }
                 }) {
             @Override
@@ -175,6 +186,16 @@ public class network {
     public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String id, int number, boolean preview) {
         requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, id, number, preview), c);
     }
+
+    /**
+     * Method to make a request for an image and also give back the image number in the callback
+     *
+     * @param nci     reference to networkCallbackImageID for callback
+     * @param name    name of the request, to differentiate the request in callback
+     * @param id      the id of the station
+     * @param number  the number of the image being requested
+     * @param preview is image needed for preview only? if so, only low resolution image will be given back
+     */
     public void makeImageRequestWithIDCallback(WeakReference<networkCallbackImageID> nci, String name, String id, int number, boolean preview) {
         requestQueueSingleton.getInstance(c).addToRq(getImageRequestWithID(nci, name, id, number, preview), c);
     }
