@@ -13,9 +13,10 @@ import java.util.ArrayList;
 
 import de.fwg.qr.scanner.activityErrorHandling;
 import de.fwg.qr.scanner.tools.network;
+import de.fwg.qr.scanner.tools.networkCallbackImageID;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
-public class mapBuilding implements networkCallbackInterface {
+public class mapBuilding implements networkCallbackImageID {
 
     private Context context;
 
@@ -27,34 +28,40 @@ public class mapBuilding implements networkCallbackInterface {
     private network net;
     private WeakReference<networkCallbackInterface> ref;
 
+    private String[] floor;
+
     private int i = 0;
     private int length = -1;
 
     private Intent intent;
 
-    public mapBuilding(Context context, int level) {
+    public mapBuilding(Context context, String object, String[] ids) {
         this.context = context;
         net = new network(context);
         ref = new WeakReference<>((networkCallbackInterface) this);
-        String floor = "";
-        switch (level) {
-            case 0:
-                floor = "erdgeschoss";
-                break;
-            case 1:
-                floor = "stock1";
-                break;
-            case 2:
-                floor = "stock2";
-                break;
+        try {
+            JSONObject json = new JSONObject(object);
+            /*switch (level) {
+                case 0:
+                    floor = json.getString("Erdgeschoss");
+                    break;
+                case 1:
+                    floor = json.getString("ersterStock");
+                    break;
+                case 2:
+                    floor = json.getString("zweiterStock");
+                    break;
 
+            }*/
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        net.makeImageRequest(ref, "ImageRequest", floor, i, true);
+        floor = new String[]{"Erdgeschoss", "stock1", "stock2"};
+        net.makeImageRequest(ref, "ImageRequest", floor[0], i, true);
     }
 
     @Override
     public void onPostCallback(String operation, String response) {
-        //lockUI(false);
         if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
             intent = new Intent();
             Intent i = new Intent(context, activityErrorHandling.class);
@@ -71,33 +78,30 @@ public class mapBuilding implements networkCallbackInterface {
                 Intent i = new Intent(context, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 context.startActivity(intent);
-            }        //lockUI(false);
-            if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
-                intent = new Intent();
-                Intent i = new Intent(context, activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra, response);
-                context.startActivity(intent);
             }
 
         }
     }
 
-        @Override
-        public void onImageCallback (String name, Bitmap image){
-            if (name.contentEquals("ImageRequest")) {
+    @Override
+    public void onImageCallback(String name, Bitmap image, int number) {
+        if (name.contentEquals("ImageRequest")) {
 
-
-            }
 
         }
+    }
 
-        public Bitmap getBitmap () {
-            return bitmap;
-        }
 
-        public void getImages () {
-            for (int x = 0; x < length; x++) {
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
 
+
+    public void getImages() {
+        for (int x = 0; x < floor.length; x++) {
+            for (int j = 0; j < length; j++) {
+                net.makeImageRequest(ref, "ImageRequest", floor[x], j, true);
             }
         }
     }
+}
