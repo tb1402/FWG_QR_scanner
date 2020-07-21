@@ -1,6 +1,9 @@
 package de.fwg.qr.scanner;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,9 +35,17 @@ public class fragmentSettings extends PreferenceFragmentCompat {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
-                Intent i = new Intent(requireActivity(), activityMain.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                PendingIntent pi=PendingIntent.getActivity(requireContext(),0,new Intent(requireContext(),activityMain.class),PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager am=(AlarmManager)requireActivity().getSystemService(Context.ALARM_SERVICE);
+                if(am!=null) {
+                    am.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pi);
+                }
+                else{//this is not really a restart, just a kind of dirty solution, but good enough for acting as a fail-safe
+                    //although the alarmManager should never be null on a normal android os
+                    Intent i = new Intent(requireActivity(), activityMain.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

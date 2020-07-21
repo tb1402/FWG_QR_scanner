@@ -4,7 +4,7 @@
     <!--Error messages-->
     <string name="error_undefined">undefined</string>
     <string name="error_header">Ein Fehler ist aufgetreten…</string>
-    <string name="error_send">Fehlermeldung wurde gesendet. Vielen Dank für Ihre Mitarbeit. Die App wird nun neugestartet.</string>
+    <string name="error_send">Fehlermeldung wurde gesendet! Vielen Dank für Ihre Mitarbeit. Die App wird nun beendet.</string>
 
     <!--Required by Android Studio-->
     <string name="msg_navigation_drawer_open">Open Navigation Drawer</string>
@@ -75,7 +75,7 @@
     <string name="video_quality_high">Hoch (1920x1080p)</string>
     <string name="video_quality_medium">Mittel (1270x720p)</string>
     <string name="video_quality_low">Niedrig (640x480p)</string>
-    <string name="video_quality">Videoqualität</string>
+    <string name="video_quality">Video-Qualität</string>
 
     <!--Image Strings-->
     <string name="image_loading">Bild wird geladen</string>
