@@ -1,5 +1,6 @@
 package de.fwg.qr.scanner;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +33,10 @@ public class fragmentAGB extends fragmentWrapper {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /* create button onClick listeners only if first run */
         WebView content = view.findViewById(R.id.wv_content);
-        content.loadUrl("file:///android_asset/agb.html");
-        //content.setBackgroundColor(Color.TRANSPARENT);
+        content.loadUrl(p.getDarkMode() != 1 ? "file:///android_asset/agb.html" : "file:///android_asset/agb-light.html");
+        content.setBackgroundColor(Color.TRANSPARENT);
+        /* create button onClick listeners only if first run */
         Button btnAccept = view.findViewById(R.id.btnAccept);
         Button btnDecline = view.findViewById(R.id.btnDecline);
         if (p.isFirstRun()) {
