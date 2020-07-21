@@ -47,9 +47,13 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //set the default  uncaught exception handler, to redirect all exceptions to activityErrorHandling
         Thread.UncaughtExceptionHandler eh=Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(new exceptionHandler(this,android.os.Process.myPid(),eh));
-        //set dark mode
+
+        //set dark/light mode, depending on users settings
         preferencesManager pm = new preferencesManager(getApplicationContext());
         AppCompatDelegate.setDefaultNightMode(pm.getDarkMode() == 0 || pm.getDarkMode() > 1 ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
@@ -59,15 +63,13 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
 
-        setContentView(R.layout.activity_main);
-
-        //initialize variables
+        //initialize variables for navigation
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);//needed for navigation controller
         navCon = Navigation.findNavController(this, R.id.host_fragment);
-        Toolbar tb = findViewById(R.id.toolbar);
 
         //Toolbar and Drawer toggle setup
+        Toolbar tb = findViewById(R.id.toolbar);
         tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
         setSupportActionBar(tb);//set the toolbar as Action bar
         abdt = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close) {
@@ -194,7 +196,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Implementation of corresponding method in  tools.drawerToggleInterface
+     * Implementation of corresponding method in tools.drawerToggleInterface
      * Shows the hamburger icon in toolbar,
      * to be able to open/close the drawer
      */
