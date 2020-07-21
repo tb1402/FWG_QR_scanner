@@ -80,6 +80,7 @@ public class mapBuilding implements networkCallbackInterface {
             }
 
         }
+    }
 
         @Override
         public void onImageCallback (String name, Bitmap image){
@@ -95,6 +96,8 @@ public class mapBuilding implements networkCallbackInterface {
         }
 
         public void getImages () {
-            for (int x = 0, x)
+            for (int x = 0; x < length; x++) {
+
+            }
         }
     }
