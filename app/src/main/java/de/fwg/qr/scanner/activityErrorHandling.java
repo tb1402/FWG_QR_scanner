@@ -93,8 +93,8 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
                 try {
                     JSONObject j = new JSONObject();
                     j.put("device", getDeviceInfo());
-                    j.put("error", errorNameIntentExtra);
-                    net.makePostRequest(ref, "error", error_desc);
+                    j.put("error", error_desc);
+                    net.makePostRequest(ref, "error", j.toString());
                 } catch (JSONException e) {
                     net.makePostRequest(ref, "error", "{\"error\":"+error_desc+",\"device\":\"error---" + getDeviceInfo() + "\"");
                 }
