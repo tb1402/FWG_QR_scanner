@@ -14,13 +14,13 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField 'String', 'HTTP_AUTH_PW',"\"$HTTP_AUTH_PW\""
-        def propFile=project.rootProject.file('local.properties')
-        if(propFile.exists()){
-            Properties p=new Properties()
+        buildConfigField 'String', 'HTTP_AUTH_PW', "\"$HTTP_AUTH_PW\""
+        def propFile = project.rootProject.file('local.properties')
+        if (propFile.exists()) {
+            Properties p = new Properties()
             p.load(propFile.newDataInputStream())
-            def HTTP_AUTH_PW=p.getProperty('HTTP_AUTH_PW')
-            if(HTTP_AUTH_PW){
+            def HTTP_AUTH_PW = p.getProperty('HTTP_AUTH_PW')
+            if (HTTP_AUTH_PW) {
                 buildConfigField 'String', 'HTTP_AUTH_PW', "\"$HTTP_AUTH_PW\""
             }
         }
@@ -28,7 +28,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

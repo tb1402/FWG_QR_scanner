@@ -17,9 +17,9 @@
         <activity
             android:name=".activityErrorHandling"
             android:configChanges="uiMode"
+            android:process=":report_process"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:process=":report_process"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activityFullscreenVideoPlayback"
             android:configChanges="orientation|keyboardHidden|screenSize"

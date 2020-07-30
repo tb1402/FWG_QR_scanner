@@ -76,7 +76,7 @@
     <string name="video_quality_high">Hoch (1920x1080p)</string>
     <string name="video_quality_medium">Mittel (1270x720p)</string>
     <string name="video_quality_low">Niedrig (640x480p)</string>
-    <string name="video_quality">Video-Qualität</string>
+    <string name="video_quality">Videoqualität</string>
 
     <!--Image Strings-->
     <string name="image_loading">Bild wird geladen</string>

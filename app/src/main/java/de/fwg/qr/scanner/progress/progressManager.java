@@ -21,8 +21,8 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class progressManager {
 
-    private Context context;
     public float OverallProgress;
+    private Context context;
 
     public progressManager(Context ctx) {
         context = ctx;
@@ -57,8 +57,6 @@ public class progressManager {
                     @Override
                     public void onFinished(Hashtable<String, String> result) {
 
-                        Hashtable<String, String> stations = result;
-
                         // save the visited Stations as a hastable
                         Hashtable<String, historyEntry> visitedStationsById = new Hashtable<>();
                         for (historyEntry visitedStation : visitedStations) {
@@ -66,14 +64,14 @@ public class progressManager {
                         }
 
                         // create the resulting visitedStations by comparing the Ids of visited stations
-                        visitedStation[] stationprogress = new visitedStation[stations.size()];
-                        Set<String> hashtablekeys = stations.keySet();
+                        visitedStation[] stationprogress = new visitedStation[result.size()];
+                        Set<String> hashtablekeys = result.keySet();
                         int i = 0;
                         for (String key : hashtablekeys) { // iterate over all stationIds in the stations hashtable
                             if (visitedStationsById.containsKey(key)) { // station was visited once
-                                stationprogress[i] = new visitedStation(key, stations.get(key), true, visitedStationsById.get(key).TimeVisited);
+                                stationprogress[i] = new visitedStation(key, result.get(key), true, visitedStationsById.get(key).TimeVisited);
                             } else { // station not visited
-                                stationprogress[i] = new visitedStation(key, stations.get(key), false);
+                                stationprogress[i] = new visitedStation(key, result.get(key), false);
                             }
 
                             i++;
@@ -99,34 +97,33 @@ public class progressManager {
             @Override
             public void onFinished(historyEntry[] result) {
 
-                historyEntry[] entries = result;
                 // Array of the history, each entry providing stationId and visitedTime
                 // => Task: sorting out duplicates and always save the one with the newest date
 
                 // May be worth a rework:
                 ArrayList<historyEntry> uniqueEntries = new ArrayList<>();
-                for (int i = 0; i < entries.length; i++) {
+                for (int i = 0; i < result.length; i++) {
 
                     // check if the entry already exists
                     boolean exists = false;
                     for (int j = 0; j < uniqueEntries.size(); j++) {
 
-                        if (entries[i].StationId.equals(uniqueEntries.get(j).StationId)) {//todo normally this should be replaceable with equals, but it isnt, find out why
+                        if (result[i].StationId.equals(uniqueEntries.get(j).StationId)) {//todo normally this should be replaceable with equals, but it isnt, find out why
                             // todo edit: does not work with == as analyzed in debugging it does not reckognize the equality of two strings if using == instead of equals which leads to wrong numbers displayed in progress
                             exists = true;
                             // check if the one wich was found is worse than the current iterator
                             // so it may have to be replaced
-                            if (entries[i].TimeVisited.getTime() > uniqueEntries.get(j).TimeVisited.getTime()) {
+                            if (result[i].TimeVisited.getTime() > uniqueEntries.get(j).TimeVisited.getTime()) {
                                 // entries[i] is the newer date and will be replaced
                                 historyEntry replacement = uniqueEntries.get(j);
-                                replacement.TimeVisited = entries[i].TimeVisited;
+                                replacement.TimeVisited = result[i].TimeVisited;
                                 uniqueEntries.set(j, replacement);
                                 break;
                             }
                         }
                     }
                     if (!exists)
-                        uniqueEntries.add(entries[i]);
+                        uniqueEntries.add(result[i]);
 
                 }
                 callback.onFinished(uniqueEntries.toArray(new historyEntry[0]));

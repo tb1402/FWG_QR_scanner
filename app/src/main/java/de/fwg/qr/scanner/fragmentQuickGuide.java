@@ -34,7 +34,7 @@ public class fragmentQuickGuide extends fragmentWrapper {
         view.findViewById(R.id.btnQuickGuide).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requireActivity().finish();
+                a.finish();
             }
         });
     }

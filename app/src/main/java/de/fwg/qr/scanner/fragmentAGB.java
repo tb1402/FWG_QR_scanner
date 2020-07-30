@@ -9,7 +9,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.fragment.NavHostFragment;
 
 import de.fwg.qr.scanner.tools.preferencesManager;
 
@@ -44,7 +43,7 @@ public class fragmentAGB extends fragmentWrapper {
                 @Override
                 public void onClick(View view) {
                     p.saveBoolean("firstrun", false);
-                    NavHostFragment.findNavController(fragmentAGB.this).navigate(R.id.action_fragmentAGB_to_fragmentQuickGuide);
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.start_fragment, new fragmentQuickGuide()).commit();
                 }
             });
             btnDecline.setOnClickListener(new View.OnClickListener() {

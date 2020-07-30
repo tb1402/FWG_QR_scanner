@@ -46,8 +46,6 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         //set dark/light mode, depending on users settings; this has to be run before the view is set in  order for changes to be applied
         preferencesManager pm = new preferencesManager(getApplicationContext());
         switch (pm.getDarkMode()) {
@@ -62,6 +60,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //set the default  uncaught exception handler, to redirect all exceptions to activityErrorHandling

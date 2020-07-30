@@ -50,7 +50,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(R.layout.toolbar_scan, this,"Placeholder");
+        super.onCreate(R.layout.toolbar_scan, this, "Placeholder");
         super.onCreate(savedInstanceState);
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);

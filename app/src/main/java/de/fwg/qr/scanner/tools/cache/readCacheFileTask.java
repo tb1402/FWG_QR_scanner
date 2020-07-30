@@ -18,9 +18,9 @@ import de.fwg.qr.scanner.activityErrorHandling;
  */
 class readCacheFileTask extends AsyncTask<File, Void, Bitmap> {
 
+    private final String key;
     private WeakReference<readCacheCallback> ref;
     private WeakReference<addToMemCacheWhileReadInterface> cm;
-    private final String key;
     private WeakReference<Context> cref;
 
     public readCacheFileTask(Context c, WeakReference<readCacheCallback> ref, WeakReference<addToMemCacheWhileReadInterface> cm, String key) {

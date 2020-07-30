@@ -6,5 +6,5 @@ public interface networkCallbackImageID {
 
     void onPostCallback(String operation, String response);
 
-    void onImageCallback(String name, Bitmap image,int number);
+    void onImageCallback(String name, Bitmap image, int number);
 }

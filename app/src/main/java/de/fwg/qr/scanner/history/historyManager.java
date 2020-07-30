@@ -26,14 +26,13 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
  */
 public class historyManager {
 
-    private Context AppContext;
-    public static boolean FileLocked;
-    public ArrayList<historyEntry> Entries;
-
     /**
      * Constant that defines the amount of Entries after which the oldest entry gets deleted on insertion of a new one
      */
     public static final int MaxEntries = 50;
+    public static boolean FileLocked;
+    public ArrayList<historyEntry> Entries;
+    private Context AppContext;
 
     /**
      * Minimalistic HistoryManager Constructor
@@ -112,11 +111,10 @@ public class historyManager {
         historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback<historyEntry[]>() {
             @Override
             public void onFinished(historyEntry[] result) {
-                historyEntry[] entries = result;
-                if (entries.length == 0)
+                if (result.length == 0)
                     Entries = new ArrayList<>();
                 else
-                    Entries = new ArrayList<>(Arrays.asList(entries));
+                    Entries = new ArrayList<>(Arrays.asList(result));
 
                 /*
                 // Delete the first if the size exceeds the maximum define in the constant
@@ -150,11 +148,10 @@ public class historyManager {
         historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback<historyEntry[]>() {
             @Override
             public void onFinished(historyEntry[] result) {
-                historyEntry[] entries =  result;
-                if (entries.length == 0)
+                if (result.length == 0)
                     Entries = new ArrayList<>();
                 else
-                    Entries = new ArrayList<>(Arrays.asList(entries));
+                    Entries = new ArrayList<>(Arrays.asList(result));
 
                 // Calling the HTTP-Request to get the Stations Names
                 network net = new network(AppContext);
@@ -209,9 +206,7 @@ public class historyManager {
 
         getAssociatedEntriesAsync(new taskResultCallback<historyEntry[]>() {
             @Override
-            public void onFinished(historyEntry[] result) {
-                historyEntry[] allEntries = result;
-
+            public void onFinished(historyEntry[] allEntries) {
                 if (limit > 0 && limit <= allEntries.length) {
                     // only return the last #limit entries
                     historyEntry[] latest = Arrays.copyOfRange(allEntries, (allEntries.length - limit), allEntries.length);
@@ -251,9 +246,8 @@ public class historyManager {
             @Override
             public void onFinished(historyEntry[] result) {
 
-                historyEntry[] entries = result;
                 HashSet<String> visitedIds = new HashSet<>();
-                for (historyEntry entry : entries) {
+                for (historyEntry entry : result) {
                     visitedIds.add(entry.StationId); // The HashSet prevents multiple Entries of the same type so each station,
                     // if visited twice only shows up once
                 }

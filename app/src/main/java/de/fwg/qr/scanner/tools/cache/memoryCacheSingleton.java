@@ -8,20 +8,9 @@ import android.util.LruCache;
  */
 class memoryCacheSingleton {
     private static memoryCacheSingleton memoryCacheSingleton;
-    private LruCache<String, Bitmap> memoryCache;
     private final int memMaxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
     final int memCacheSize = memMaxMemory / 4;
-
-    static memoryCacheSingleton getInstance() {
-        if (memoryCacheSingleton == null) {
-            memoryCacheSingleton = new memoryCacheSingleton();
-        }
-        return memoryCacheSingleton;
-    }
-
-    static void invalidate() {
-        memoryCacheSingleton = null;
-    }
+    private LruCache<String, Bitmap> memoryCache;
 
     private memoryCacheSingleton() {
         memoryCache = new LruCache<String, Bitmap>(memCacheSize) {
@@ -32,6 +21,17 @@ class memoryCacheSingleton {
                 return bitmap.getByteCount() / 1024;
             }
         };
+    }
+
+    static memoryCacheSingleton getInstance() {
+        if (memoryCacheSingleton == null) {
+            memoryCacheSingleton = new memoryCacheSingleton();
+        }
+        return memoryCacheSingleton;
+    }
+
+    static void invalidate() {
+        memoryCacheSingleton = null;
     }
 
     Bitmap get(String key) {
