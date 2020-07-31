@@ -89,4 +89,26 @@
     <string name="scan_qr_code">Bitte scannen Sie den QR-Code ein</string>
     <string name="dialog_message">Bitte starten Sie die App neu um die Änderungen vollständig anzuwenden</string>
     <string name="dialog_title">Neustart erforderlich</string>
+
+    <!-- Settings related strings. -->
+    <string name="pref_screen_title_live_preview">Live preview settings</string>
+    <string name="pref_screen_title_still_image">Still image settings</string>
+    <string name="pref_screen_title_camerax_live_preview">CameraX live preview settings</string>
+    <string name="pref_category_face_detection">Face Detection</string>
+    <string name="pref_category_object_detection">Object Detection / Custom Object Detection</string>
+    <string name="pref_category_automl">AutoML Image Labeling</string>
+    <!-- Strings for camera settings. -->
+    <string name="pref_category_key_camera" translatable="false">pckc</string>
+    <string name="pref_category_title_camera">Camera</string>
+    <string name="pref_key_rear_camera_preview_size" translatable="false">rcpvs</string>
+    <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
+    <string name="pref_key_front_camera_preview_size" translatable="false">fcpvs</string>
+    <string name="pref_key_front_camera_picture_size" translatable="false">fcpts</string>
+    <string name="pref_key_camerax_target_analysis_size" translatable="false">ctas</string>
+    <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
+    <string name="pref_title_rear_camera_preview_size">Rear camera preview size</string>
+    <string name="pref_title_front_camera_preview_size">Front camera preview size</string>
+    <string name="pref_title_camerax_target_analysis_size">CameraX target analysis resolution</string>
+    <string name="pref_title_camera_live_viewport">Enable live viewport</string>
+    <string name="pref_summary_camera_live_viewport">Do not block camera preview drawing on detection</string>
 </resources>

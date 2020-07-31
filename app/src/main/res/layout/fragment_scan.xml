@@ -30,10 +30,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <SurfaceView
+        <!--<SurfaceView
             android:id="@+id/surfaceView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" />-->
+        <de.fwg.qr.scanner.mlkit.camera.CameraSourcePreview
+            android:id="@+id/preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <TextView
             android:id="@+id/textView2"

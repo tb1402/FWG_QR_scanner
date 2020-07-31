@@ -2,6 +2,7 @@ package de.fwg.qr.scanner;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -22,11 +24,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.mlkit.common.model.LocalModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -35,8 +39,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import de.fwg.qr.scanner.mlkit.barcode.BarcodeScannerProcessor;
+import de.fwg.qr.scanner.mlkit.camera.CameraSourcePreview;
 import de.fwg.qr.scanner.tools.cache.cacheManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
@@ -54,6 +62,10 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private String barcodeValue = "";
     private boolean check = true;
     private boolean updateCheck = true;
+
+    private de.fwg.qr.scanner.mlkit.camera.CameraSource cameraSource;
+    private CameraSourcePreview preview;
+    private static final int PERMISSION_REQUESTS = 1;
 
 
     @Override
@@ -76,15 +88,96 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.CAMERA}, 201);
         }
-        surface = v.findViewById(R.id.surfaceView);
+        //surface = v.findViewById(R.id.surfaceView);
         textView2 = v.findViewById(R.id.textView2);
         pb = v.findViewById(R.id.progressBar);
-        lockUI(true);
-        pb.setVisibility(View.VISIBLE);
-        net.makePostRequest(ref, "getVersion", "");
-        initialize();
-        startCamera();
-        detection();
+        //lockUI(true);
+        //pb.setVisibility(View.VISIBLE);
+        //net.makePostRequest(ref, "getVersion", "");
+        //initialize();
+        //startCamera();
+        //detection();
+        preview=v.findViewById(R.id.preview);
+        createCameraSource("");
+    }
+    private void createCameraSource(String model) {
+        // If there's no existing cameraSource, create one.
+        if (cameraSource == null) {
+            cameraSource = new de.fwg.qr.scanner.mlkit.camera.CameraSource(a);
+        }
+
+        try {
+            cameraSource.setMachineLearningFrameProcessor(new BarcodeScannerProcessor(a));
+        } catch (Exception e) {
+
+            Toast.makeText(
+                    c,
+                    "Can not create image processor: " + e.getMessage(),
+                    Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+    private void startCameraSource() {
+        if (cameraSource != null) {
+            try {
+                preview.start(cameraSource);
+            } catch (IOException e) {
+                cameraSource.release();
+                cameraSource = null;
+            }
+        }
+    }
+    private String[] getRequiredPermissions() {
+        try {
+            PackageInfo info =
+                    a.getPackageManager()
+                            .getPackageInfo(a.getPackageName(), PackageManager.GET_PERMISSIONS);
+            String[] ps = info.requestedPermissions;
+            if (ps != null && ps.length > 0) {
+                return ps;
+            } else {
+                return new String[0];
+            }
+        } catch (Exception e) {
+            return new String[0];
+        }
+    }
+    private boolean allPermissionsGranted() {
+        for (String permission : getRequiredPermissions()) {
+            if (!isPermissionGranted(a, permission)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void getRuntimePermissions() {
+        List<String> allNeededPermissions = new ArrayList<>();
+        for (String permission : getRequiredPermissions()) {
+            if (!isPermissionGranted(a, permission)) {
+                allNeededPermissions.add(permission);
+            }
+        }
+
+        if (!allNeededPermissions.isEmpty()) {
+            ActivityCompat.requestPermissions(
+                    a, allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, String[] permissions, int[] grantResults) {
+        if (allPermissionsGranted()) {
+            createCameraSource("");
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    private static boolean isPermissionGranted(Context context, String permission) {
+        if (ContextCompat.checkSelfPermission(context, permission)
+                == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -158,16 +251,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onPause() {
         super.onPause();
-        check = false;
-        try {
-            if (source.getPreviewSize() != null) {
-                source.stop();
-            }
-        } catch (Exception e) {
-            Intent i = new Intent(c, activityErrorHandling.class);
-            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
-            startActivity(i);
-        }
+        preview.stop();
     }
 
     @Override
@@ -179,8 +263,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onResume() {
         super.onResume();
-        if (!check) {
-            a.recreate();
+        createCameraSource("");
+        startCameraSource();
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if (cameraSource != null) {
+            cameraSource.release();
         }
     }
 
