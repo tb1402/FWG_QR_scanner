@@ -61,8 +61,7 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
             //exit completely
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(10);
-        }
-        else{
+        } else {
             finishAffinity();
         }
     }
@@ -114,8 +113,7 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
                     }
                     android.os.Process.killProcess(android.os.Process.myPid());
                     System.exit(10);
-                }
-                else{
+                } else {
                     finishAffinity();
                 }
             }

@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activityErrorHandling"
-            android:configChanges="uiMode"
             android:process=":report_process"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -27,23 +26,19 @@
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".activityStart"
-            android:configChanges="uiMode"
             android:label="@string/title_activity_start"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activitySettings"
-            android:configChanges="uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activityScan"
-            android:configChanges="uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activityMap"
-            android:configChanges="uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -52,7 +47,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activityMain"
-            android:configChanges="uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
