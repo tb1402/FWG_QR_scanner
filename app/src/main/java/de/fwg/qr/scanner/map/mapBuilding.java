@@ -22,26 +22,28 @@ public class mapBuilding implements networkCallbackImageID {
 
     private ArrayList<Bitmap> stockwerk;
 
+    private Bitmap result;
     private Bitmap bitmap;
     private Canvas canvas;
 
     private network net;
     private WeakReference<networkCallbackInterface> ref;
 
-    private String[] floor;
+    private String floor;
+    private String[] allObtainedID;
 
     private int i = 0;
     private int length = -1;
 
-    private Intent intent;
+    //private Intent intent;
 
-    public mapBuilding(Context context, String object, String[] ids) {
+    public mapBuilding(Context context, int level, String JSONobject, String[] ids) {
         this.context = context;
         net = new network(context);
         ref = new WeakReference<>((networkCallbackInterface) this);
         try {
-            JSONObject json = new JSONObject(object);
-            /*switch (level) {
+            JSONObject json = new JSONObject(JSONobject);
+            switch (level) {
                 case 0:
                     floor = json.getString("Erdgeschoss");
                     break;
@@ -52,21 +54,20 @@ public class mapBuilding implements networkCallbackImageID {
                     floor = json.getString("zweiterStock");
                     break;
 
-            }*/
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        floor = new String[]{"Erdgeschoss", "stock1", "stock2"};
-        net.makeImageRequest(ref, "ImageRequest", floor[0], i, true);
+        allObtainedID = ids;
+        getImages();
     }
 
     @Override
     public void onPostCallback(String operation, String response) {
         if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
-            intent = new Intent();
             Intent i = new Intent(context, activityErrorHandling.class);
             i.putExtra(activityErrorHandling.errorNameIntentExtra, response);
-            context.startActivity(intent);
+            context.startActivity(i);
         }
         if (operation.contentEquals("getInfo")) {
             try {
@@ -74,10 +75,10 @@ public class mapBuilding implements networkCallbackImageID {
                 length = Integer.parseInt(object.getString("Bild"));
 
             } catch (JSONException e) {
-                intent = new Intent();
+                //intent = new Intent();
                 Intent i = new Intent(context, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
-                context.startActivity(intent);
+                context.startActivity(i);
             }
 
         }
@@ -86,8 +87,7 @@ public class mapBuilding implements networkCallbackImageID {
     @Override
     public void onImageCallback(String name, Bitmap image, int number) {
         if (name.contentEquals("ImageRequest")) {
-
-
+            bitmap = addBitmapToMap(image);
         }
     }
 
@@ -98,10 +98,21 @@ public class mapBuilding implements networkCallbackImageID {
 
 
     public void getImages() {
-        for (int x = 0; x < floor.length; x++) {
-            for (int j = 0; j < length; j++) {
-                net.makeImageRequest(ref, "ImageRequest", floor[x], j, true);
-            }
+        //for (int x = 0; x < floor.length; x++) {
+        for (int j = 0; j < length; j++) {
+            net.makeImageRequest(ref, "ImageRequest", floor, j, true);
         }
+        //}
+    }
+
+    private Bitmap addBitmapToMap(Bitmap newImage) {
+        if (result == null) {
+            result = Bitmap.createBitmap(newImage.getWidth(), newImage.getHeight(), newImage.getConfig());
+        }
+        if (canvas == null) {
+            canvas = new Canvas(result);
+        }
+        canvas.drawBitmap(newImage, 0f, 0f, null);
+        return result;
     }
 }
