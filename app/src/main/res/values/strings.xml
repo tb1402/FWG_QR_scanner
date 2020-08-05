@@ -40,8 +40,6 @@
     <!-- button strings -->
     <string name="next">Weiter</string>
     <string name="previous">Zurück</string>
-    <string name="cancel">Abbrechen</string>
-    <string name="ok">OK</string>
     <string name="agb_accept">AGB Akzeptieren</string>
     <string name="agb_decline">AGB Ablehnen</string>
     <string name="start_using">Jetzt starten</string>

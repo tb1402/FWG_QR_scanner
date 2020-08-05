@@ -1,5 +1,6 @@
 package de.fwg.qr.scanner;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,6 @@ public class fragmentQuickGuide extends fragmentWrapper {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // this is no longer needed
-        /*if (Build.VERSION.SDK_INT < 29) {
-            ((AppCompatActivity) a).getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }*/
     }
 
     @Override
@@ -31,6 +28,8 @@ public class fragmentQuickGuide extends fragmentWrapper {
         view.findViewById(R.id.btnQuickGuide).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(a, activityMain.class);
+                startActivity(intent);
                 a.finish();
             }
         });
