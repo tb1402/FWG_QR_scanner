@@ -107,10 +107,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 i.putExtra("Video", object.getString("Video"));
                 startActivity(i);
             } catch (JSONException e) {
-                i = new Intent();
-                Intent i = new Intent(c, activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
-                startActivity(i);
+                Toast.makeText(c, getString(R.string.barcode_not_found), Toast.LENGTH_SHORT).show();
             }
         } else if (operation.contentEquals("getVersion")) {
             try {

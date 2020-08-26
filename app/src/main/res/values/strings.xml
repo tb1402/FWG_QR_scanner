@@ -5,6 +5,7 @@
     <string name="error_undefined">undefined</string>
     <string name="error_header">Ein Fehler ist aufgetreten…</string>
     <string name="error_send">Fehlermeldung wurde gesendet! Vielen Dank für Ihre Mitarbeit. Die App wird nun beendet.</string>
+    <string name="barcode_not_found">Barcode konnte nicht gefunden werden.</string>
 
     <!--Required by Android Studio-->
     <string name="msg_navigation_drawer_open">Open Navigation Drawer</string>
