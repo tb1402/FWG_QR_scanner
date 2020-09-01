@@ -6,9 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -19,76 +16,42 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 public class mapBuilding implements networkCallbackImageID {
 
-    private Context context;
-
-    private ArrayList<Bitmap> stockwerk;
-
     private Bitmap result;
     private Bitmap bitmap;
     private Canvas canvas;
     private Paint paint;
 
+    private final static int AMOUNT_OF_STATIONS = 25;
     private network net;
     private WeakReference<networkCallbackInterface> ref;
-
-    private String floor;
-    private String[] allObtainedStationNames;
+    private Context context;
 
     private int i = 0;
-    private int length = -1;
+    private ArrayList<String> allObtainedStationNames;
+    private boolean check = false;
 
-    //private Intent intent;
-
-    public mapBuilding(Context context, int level, String JSONobject, String[] stationNames) {
+    public mapBuilding(Context context, int level, ArrayList<String> stationNames) {
         this.context = context;
         net = new network(context);
         ref = new WeakReference<>((networkCallbackInterface) this);
-        try {
-            JSONObject json = new JSONObject(JSONobject);
-            switch (level) {
-                case 0:
-                    floor = json.getString("Erdgeschoss");
-                    break;
-                case 1:
-                    floor = json.getString("ersterStock");
-                    break;
-                case 2:
-                    floor = json.getString("zweiterStock");
-                    break;
+        if (level >= 0 && level <= 2) {
 
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } else {
+            Intent i = new Intent(context, activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, "Usage of wrong level ID");
+            context.startActivity(i);
         }
+
         if (stationNames != null) {
             allObtainedStationNames = stationNames;
         } else {
-            allObtainedStationNames = new String[1];
-            allObtainedStationNames[1] = "NamesNotFound";
+            allObtainedStationNames.add("NamesNotFound");
         }
-        getImages();
+        getImages(level);
     }
 
     @Override
     public void onPostCallback(String operation, String response) {
-        if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
-            Intent i = new Intent(context, activityErrorHandling.class);
-            i.putExtra(activityErrorHandling.errorNameIntentExtra, response);
-            context.startActivity(i);
-        }
-        if (operation.contentEquals("getInfo")) {
-            try {
-                JSONObject object = new JSONObject(response);
-                length = Integer.parseInt(object.getString("Bild"));
-
-            } catch (JSONException e) {
-                //intent = new Intent();
-                Intent i = new Intent(context, activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
-                context.startActivity(i);
-            }
-
-        }
     }
 
     @Override
@@ -100,19 +63,36 @@ public class mapBuilding implements networkCallbackImageID {
 
 
     public Bitmap getBitmap() {
-        return bitmap;
+        if (check) {
+            return bitmap;
+        } else {
+            return null;
+        }
     }
 
 
-    public void getImages() {
-        //for (int x = 0; x < floor.length; x++) {
-        for (int j = 0; j < length; j++) {
-            net.makeImageRequest(ref, "ImageRequest", floor, j, true);
+    public void getImages(int level) {
+        if (level == 0) {
+            for (int j = 0; j < AMOUNT_OF_STATIONS; j++) {
+                if (j == 15 || j == 17) {
+                    j++;
+                }
+                net.makeImageRequest(ref, "ImageRequest", "map", j, true);
+            }
+        } else if (level != -1) {
+            i = 24;
+            switch (level) {
+                case 1:
+                    net.makeImageRequest(ref, "ImageRequest", "map", 15, true);
+                    break;
+                case 2:
+                    net.makeImageRequest(ref, "ImageRequest", "map", 17, true);
+            }
         }
-        //}
     }
 
     private Bitmap addBitmapToMap(Bitmap newImage, int number) {
+        i++;
         if (result == null) {
             result = Bitmap.createBitmap(newImage.getWidth(), newImage.getHeight(), newImage.getConfig());
         }
@@ -122,17 +102,15 @@ public class mapBuilding implements networkCallbackImageID {
         if (paint == null) {
             paint = new Paint();
         }
-        for (int i = 0; i < allObtainedStationNames.length; i++) {
-            switch (allObtainedStationNames[i]) {
-                case "":
-                    //if(number == __  || number == __){ //Alle Räume die zu Station x gehören werden mit alpha wert 100 gezeichnet
-                    // paint.setAlpha(100);}
-                    break;
-                default:
-                    paint.setAlpha(255);
-            }
+        if (allObtainedStationNames.lastIndexOf("map" + number) != -1) {
+            paint.setAlpha(255);
+        } else {
+            paint.setAlpha(100);
         }
         canvas.drawBitmap(newImage, 0f, 0f, paint);
+        if (i >= (AMOUNT_OF_STATIONS - 1)) {
+            check = true;
+        }
         return result;
     }
 }
