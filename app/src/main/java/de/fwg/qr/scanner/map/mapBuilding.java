@@ -6,10 +6,16 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import de.fwg.qr.scanner.activityErrorHandling;
+import de.fwg.qr.scanner.history.historyEntry;
+import de.fwg.qr.scanner.history.taskResultCallback;
+import de.fwg.qr.scanner.progress.progressManager;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackImageID;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
@@ -29,6 +35,48 @@ public class mapBuilding implements networkCallbackImageID {
     private int i = 0;
     private ArrayList<String> allObtainedStationNames;
     private boolean check = false;
+
+
+    public void getMapParts(final taskResultCallback<String[]> callback){
+
+        progressManager prog = new progressManager(context);
+        prog.getUniqueStationsAsync(new taskResultCallback<historyEntry[]>() {
+            @Override
+            public void onFinished(historyEntry[] result) {
+
+                JSONArray arr = new JSONArray();
+                for(int i = 0; i < result.length; i++){
+                    arr.put(result[i].StationId);
+                }
+                String json = arr.toString();
+
+                networkCallbackInterface nci = new networkCallbackInterface() {
+                    @Override
+                    public void onPostCallback(String operation, String response) {
+
+                        try {
+                            JSONArray ret = new JSONArray(response);
+
+                            String[] mapfragments = new String[ret.length()];
+                            for(int j = 0; j < ret.length(); j++){
+                                mapfragments[j] = ret.getString(j);
+                            }
+                            callback.onFinished(mapfragments);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onImageCallback(String name, Bitmap image) {
+
+                    }
+                };
+                net.makePostRequest(new WeakReference<networkCallbackInterface>(nci), "PermittedMapFragments", json);
+            }
+        });
+    }
+
+
 
     public mapBuilding(Context context, int level, ArrayList<String> stationNames) {
         this.context = context;
