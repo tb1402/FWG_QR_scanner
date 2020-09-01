@@ -66,8 +66,8 @@ public class preferencesManager {
         return preferences.contains(name);
     }
 
-    public int getMode() {
-        return Integer.parseInt(preferences.getString("mode", "1"));
+    public boolean isRallyeMode() {
+        return Integer.parseInt(preferences.getString("mode", "1")) == 0;
     }
 
     public String getVideoResolution() {
