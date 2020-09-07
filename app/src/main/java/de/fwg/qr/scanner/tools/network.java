@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Base64;
-import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -27,7 +26,7 @@ import de.fwg.qr.scanner.BuildConfig;
 import de.fwg.qr.scanner.R;
 
 public class network {
-    public static String baseURL = "https://srv.cloud-tb.de";//server url
+    public static String baseURL = "https://srv.tobias-bittner.de";//server url
     private Context c;
     private HashMap<String, String> headers;
 
@@ -41,9 +40,8 @@ public class network {
         }
         headers = new HashMap<>();
         String credentials = "fwgqr:" + BuildConfig.HTTP_AUTH_PW;
-        Log.i("fwg", credentials);
         String enc = Base64.encodeToString(credentials.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
-        headers.put("User-Agent", "FWG QR Scanner version " + versionName + " on " + Build.DEVICE + " " + Build.VERSION.RELEASE);
+        headers.put("User-Agent", "FWG_QR_Scanner_version " + versionName + " on " + Build.DEVICE + " " + Build.VERSION.RELEASE);
         //headers.put("Content-Type","text/plain; charset=utf-8");
         headers.put("Authorization", "Basic " + enc);
     }
