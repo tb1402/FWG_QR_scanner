@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.fragment.NavHostFragment;
 
 public class fragmentStart extends fragmentWrapper {
 
@@ -30,7 +29,7 @@ public class fragmentStart extends fragmentWrapper {
         view.findViewById(R.id.btnStart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(fragmentStart.this).navigate(R.id.action_fragmentStart_to_fragmentAGB);
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.start_fragment, new fragmentAGB()).commit();
             }
         });
         TextView tvg = view.findViewById(R.id.textViewStartGithub);

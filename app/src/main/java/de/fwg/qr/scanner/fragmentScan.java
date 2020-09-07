@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -74,7 +75,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onViewCreated(@NotNull View v, @Nullable Bundle sis) {
         if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.CAMERA}, 201);
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 201);
         }
         surface = v.findViewById(R.id.surfaceView);
         textView2 = v.findViewById(R.id.textView2);
@@ -85,6 +86,29 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         initialize();
         startCamera();
         detection();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        //System.out.println("RequesResult wird gecalled");
+        if (requestCode == 201) {
+            //System.out.println("RequesResult wird gecalled");
+            for (int i = 0, len = permissions.length; i < len; i++) {
+                String permission = permissions[i];
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    boolean showRationale = shouldShowRequestPermissionRationale(permission);
+                    if (!showRationale) {
+                        Toast.makeText(c, getString(R.string.permission_needed), Toast.LENGTH_SHORT).show();
+                        System.out.println("false showRationale");
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", a.getPackageName(), null);
+                        intent.setData(uri);
+                        startActivity(intent);
+                        a.finishAffinity();
+                    }
+                }
+            }
+        }
     }
 
     @Override

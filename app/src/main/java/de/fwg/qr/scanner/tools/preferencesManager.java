@@ -8,9 +8,9 @@ import android.content.SharedPreferences;
  */
 public class preferencesManager {
 
+    public static String preferenceName = "FWG_QR";
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    public static String preferenceName = "FWG_QR";
 
     public preferencesManager(Context c) {
         preferences = c.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
@@ -66,8 +66,8 @@ public class preferencesManager {
         return preferences.contains(name);
     }
 
-    public int getMode() {
-        return Integer.parseInt(preferences.getString("mode", "1"));
+    public boolean isRallyeMode() {
+        return Integer.parseInt(preferences.getString("mode", "1")) == 0;
     }
 
     public String getVideoResolution() {

@@ -30,7 +30,7 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
     private network net;
     private WeakReference<networkCallbackInterface> ref;
     private String error_desc;//desc=description
-    private boolean isUncaught=false;
+    private boolean isUncaught = false;
     private int rootPID;
 
     /**
@@ -52,15 +52,17 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
     public void onBackPressed() {
         //finishAffinity();
         finishAndRemoveTask();//finish the activity and remove the task from the app overview
-        if(isUncaught){//if uncaught, there's also a root process that needs to be killed, because activityErrorHandling is started new Thread and process
+        if (isUncaught) {//if uncaught, there's also a root process that needs to be killed, because activityErrorHandling is started new Thread and process
             //this is necessary because the main process can be locked and not responding if an uncaught exception occurred
-            if(rootPID!=-1){
+            if (rootPID != -1) {
                 android.os.Process.killProcess(rootPID);
             }
 
             //exit completely
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(10);
+        } else {
+            finishAffinity();
         }
     }
 
@@ -75,9 +77,9 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
 
         //getIntent extra
         error_desc = getIntent().getStringExtra("error_desc");
-        if(getIntent().getBooleanExtra("isUE",false)){
-            isUncaught=true;
-            rootPID=getIntent().getIntExtra("rpid",-1);
+        if (getIntent().getBooleanExtra("isUE", false)) {
+            isUncaught = true;
+            rootPID = getIntent().getIntExtra("rpid", -1);
         }
 
         //initialize views
@@ -93,10 +95,10 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
                 try {
                     JSONObject j = new JSONObject();
                     j.put("device", getDeviceInfo());
-                    j.put("error", errorNameIntentExtra);
-                    net.makePostRequest(ref, "error", error_desc);
+                    j.put("error", error_desc);
+                    net.makePostRequest(ref, "error", j.toString());
                 } catch (JSONException e) {
-                    net.makePostRequest(ref, "error", "{\"error\":"+error_desc+",\"device\":\"error---" + getDeviceInfo() + "\"");
+                    net.makePostRequest(ref, "error", "{\"error\":" + error_desc + ",\"device\":\"error---" + getDeviceInfo() + "\"");
                 }
             }
         });
@@ -105,12 +107,14 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
             public void onClick(View view) {
                 //finishAffinity();
                 finishAndRemoveTask();
-                if(isUncaught){
-                    if(rootPID!=-1){
+                if (isUncaught) {
+                    if (rootPID != -1) {
                         android.os.Process.killProcess(rootPID);
                     }
                     android.os.Process.killProcess(android.os.Process.myPid());
                     System.exit(10);
+                } else {
+                    finishAffinity();
                 }
             }
         });
@@ -121,8 +125,8 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
         Toast.makeText(getApplicationContext(), getString(R.string.error_send), Toast.LENGTH_SHORT).show();
         //finishAffinity();
         finishAndRemoveTask();
-        if(isUncaught){
-            if(rootPID!=-1){
+        if (isUncaught) {
+            if (rootPID != -1) {
                 android.os.Process.killProcess(rootPID);
             }
             android.os.Process.killProcess(android.os.Process.myPid());

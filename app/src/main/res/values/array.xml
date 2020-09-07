@@ -11,10 +11,12 @@
     <string-array name="settings_darkmode_str_val">
         <item>@string/on</item>
         <item>@string/off</item>
+        <item>@string/automatic</item>
     </string-array>
     <string-array name="settings_darkmode_int_val">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
     <string-array name="settings_video_quality_names">
         <item>@string/video_quality_high</item>

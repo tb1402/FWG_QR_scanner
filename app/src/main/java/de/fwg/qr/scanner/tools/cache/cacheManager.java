@@ -15,8 +15,8 @@ import de.fwg.qr.scanner.tools.preferencesManager;
  */
 public class cacheManager implements addToMemCacheWhileReadInterface {
 
-    private Context c;
     public int cacheSaveIndex = 0;//index to count how many pictures have been cached
+    private Context c;
     private memoryCacheSingleton memoryCache;
 
     /**

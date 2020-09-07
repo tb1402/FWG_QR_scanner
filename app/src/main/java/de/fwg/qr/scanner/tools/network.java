@@ -147,13 +147,13 @@ public class network {
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
-                        nci.onImageCallback(name, response,number);
+                        nci.onImageCallback(name, response, number);
                     }
                 }, 0, 0, null, Bitmap.Config.ARGB_8888,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        nci.onImageCallback("error", BitmapFactory.decodeResource(c.getResources(), R.drawable.ic_error),number);
+                        nci.onImageCallback("error", BitmapFactory.decodeResource(c.getResources(), R.drawable.ic_error), number);
                     }
                 }) {
             @Override

@@ -41,8 +41,6 @@
     <!-- button strings -->
     <string name="next">Weiter</string>
     <string name="previous">Zurück</string>
-    <string name="cancel">Abbrechen</string>
-    <string name="ok">OK</string>
     <string name="agb_accept">AGB Akzeptieren</string>
     <string name="agb_decline">AGB Ablehnen</string>
     <string name="start_using">Jetzt starten</string>
@@ -56,9 +54,10 @@
     <string name="mode_info">Info</string>
     <string name="mode_rallye">Rallye</string>
     <string name="mode">Modus</string>
+    <string name="darkmode">Nachtmodus</string>
     <string name="on">Ein</string>
     <string name="off">Aus</string>
-    <string name="darkmode">Nachtmodus</string>
+    <string name="automatic">Automatisch</string>
     <string name="pref_category_general">Allgemein</string>
     <string name="pref_category_quality">Qualität</string>
     <string name="image_quality">Bildqualität</string>
@@ -76,7 +75,7 @@
     <string name="video_quality_high">Hoch (1920x1080p)</string>
     <string name="video_quality_medium">Mittel (1270x720p)</string>
     <string name="video_quality_low">Niedrig (640x480p)</string>
-    <string name="video_quality">Video-Qualität</string>
+    <string name="video_quality">Videoqualität</string>
 
     <!--Image Strings-->
     <string name="image_loading">Bild wird geladen</string>

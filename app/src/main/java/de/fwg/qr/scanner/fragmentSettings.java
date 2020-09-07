@@ -32,15 +32,14 @@ public class fragmentSettings extends PreferenceFragmentCompat {
         //set up the restart prompt
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
-                PendingIntent pi=PendingIntent.getActivity(requireContext(),0,new Intent(requireContext(),activityMain.class),PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager am=(AlarmManager)requireActivity().getSystemService(Context.ALARM_SERVICE);
-                if(am!=null) {
+                PendingIntent pi = PendingIntent.getActivity(requireContext(), 0, new Intent(requireContext(), activityMain.class), PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager am = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
+                if (am != null) {
                     am.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pi);
-                }
-                else{//this is not really a restart, just a kind of dirty solution, but good enough for acting as a fail-safe
+                } else {//this is not really a restart, just a kind of dirty solution, but good enough for acting as a fail-safe
                     //although the alarmManager should never be null on a normal android os
                     Intent i = new Intent(requireActivity(), activityMain.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -48,7 +47,7 @@ public class fragmentSettings extends PreferenceFragmentCompat {
                 }
             }
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
                 requireActivity().recreate();

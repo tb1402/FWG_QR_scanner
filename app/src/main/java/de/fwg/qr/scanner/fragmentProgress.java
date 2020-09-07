@@ -45,13 +45,12 @@ public class fragmentProgress extends fragmentWrapper {
         manager.getProgressAsync(new taskResultCallback<visitedStation[]>() {
             @Override
             public void onFinished(visitedStation[] result) {
-                visitedStation[] stations = result;
-                progressListAdapter adapter = new progressListAdapter(c, stations);
+                progressListAdapter adapter = new progressListAdapter(c, result);
                 listProgress.setAdapter(adapter);
 
-                barStationProgress.setMax(stations.length);
-                barStationProgress.setProgress((int) (stations.length * manager.OverallProgress));
-                txtStationProgress.setText((getString(R.string.txt_progress_name) + " : " + (int) (stations.length * manager.OverallProgress) + " / " + stations.length));
+                barStationProgress.setMax(result.length);
+                barStationProgress.setProgress((int) (result.length * manager.OverallProgress));
+                txtStationProgress.setText((getString(R.string.txt_progress_name) + " : " + (int) (result.length * manager.OverallProgress) + " / " + result.length));
 
             }
         });
