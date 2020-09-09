@@ -32,7 +32,7 @@ import de.fwg.qr.scanner.history.historyEntry;
 import de.fwg.qr.scanner.history.taskResultCallback;
 
 
-public class activityMap extends toolbarWrapper implements networkCallbackImageID, readCacheCallback {
+public class activityMap extends toolbarWrapper implements networkCallbackInterface, readCacheCallback {
 
     private ImageView imageView;
     private ArrayList<Bitmap> images;
@@ -90,7 +90,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         });
     }
 
-    public void onRadioButtonClicked(View view) { //TODO: altering certain parts of Method; adding fourth radio button
+    public void onRadioButtonClicked(View view) { //TODO: altering certain parts of Method; adding fourth radio button, change of currentLevel
 
         boolean checked = ((RadioButton) view).isChecked();
 
@@ -166,7 +166,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     }
 
     @Override
-    public void onImageCallback(String name, Bitmap image, int number) { //TODO: start working on this method
+    public void onImageCallback(String name, Bitmap image) { //TODO: start working on this method
         if (name.contentEquals("ImagePreview")) {
             images.add(image);
             if (images.size() >= 1) {
