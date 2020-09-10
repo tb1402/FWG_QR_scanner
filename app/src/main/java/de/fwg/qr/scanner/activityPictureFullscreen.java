@@ -38,8 +38,6 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
         requestWindowFeature(Window.FEATURE_NO_TITLE);//hide status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//set fullscreen mode
         setContentView(R.layout.activity_picture_fullscreen);
-        network net = new network(this);
-        WeakReference<networkCallbackInterface> ref = new WeakReference<>((networkCallbackInterface) this);
         Intent receivedIntent = getIntent();
         if (receivedIntent != null) {
             ID = receivedIntent.getStringExtra("ID");
@@ -51,9 +49,10 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
         textView = findViewById(R.id.textView);
         progressBar = findViewById(R.id.progressBar);
         assignButton();
+        network net = new network(this);
+        WeakReference<networkCallbackInterface> ref = new WeakReference<>((networkCallbackInterface) this);
         net.makeImageRequest(ref, "Image", ID, imagePosition, false);
     }
-
 
     @Override
     public void onPostCallback(String operation, String response) {
@@ -64,10 +63,10 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
     public void onImageCallback(String name, Bitmap image) {
         Log.i("FWGO",name);
         if (name.contentEquals("Image")) {
-            imageView.setImageBitmap(image);
             textView.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             button.setVisibility(View.VISIBLE);
+            imageView.setImageBitmap(image);
         } else {
             Toast.makeText(this, getText(R.string.image_not_found_with_current_resolution), Toast.LENGTH_SHORT).show();
             finish();

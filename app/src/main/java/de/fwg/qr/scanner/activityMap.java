@@ -13,13 +13,11 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import de.fwg.qr.scanner.tools.cache.cacheManager;
-import de.fwg.qr.scanner.tools.cache.readCacheCallback;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 
-public class activityMap extends toolbarWrapper implements networkCallbackInterface, readCacheCallback {
+public class activityMap extends toolbarWrapper implements networkCallbackInterface {
 
     private ImageView imageView;
     private ArrayList<Bitmap> images;
@@ -33,9 +31,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     private network net;
     private WeakReference<networkCallbackInterface> ref;
 
-    private WeakReference<readCacheCallback> cacheRef;
-    private cacheManager cm;
-
     private int i = 0;
 
 
@@ -45,8 +40,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         super.onCreate(savedInstanceBundle);
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);
-        cacheRef = new WeakReference<>((readCacheCallback) this);
-        cm = new cacheManager(getApplicationContext());
         images = new ArrayList<>();
         setupAbHome();
         imageView = findViewById(R.id.imageView);
@@ -151,13 +144,11 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     }
 
     public void getImages() {
-        if (!cm.loadCachedImage(cacheRef, "map", i, true)) {
-            net.makeImageRequest(ref, "ImagePreview", "map", i, true);
-        }
+        net.makeImageRequest(ref, "ImagePreview", "map", i, true);
     }
 
 
-    @Override
+   /* @Override
     public void cacheCallback(boolean error, Bitmap image) {
         if (!error) {
             images.add(image);
@@ -185,7 +176,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
                 }
             }
         }
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
