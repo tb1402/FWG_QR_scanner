@@ -69,23 +69,6 @@
         android:layout_below="@+id/gridLayout"
         android:layout_centerVertical="true" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/gridLayout"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="271dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/progressBar"
-        android:layout_centerHorizontal="true"
-        android:text="@string/image_loading"
-        android:textColor="@color/textColor"
-        android:textSize="25sp" />
 
 
 </RelativeLayout>
