@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import de.fwg.qr.scanner.tools.async.asyncWrapper;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
@@ -93,6 +94,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
                 if (f.exists() && !f.isDirectory()) {
                     Log.i("FWGO","cached!");
                     new readCacheFileTask(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key,operation).execute(f);//load from storage and add to memory cache see the readCacheFileTask
+                    //new asyncWrapper<Void>().execute(new readCacheFileNA(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key,operation,f));
                     return true;
                 }
             }
