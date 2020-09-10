@@ -29,14 +29,14 @@
 
         <ListPreference
             android:id="@+id/pref_video_quality"
-            android:defaultValue="true"
+            android:defaultValue="medium"
             android:entries="@array/settings_video_quality_names"
             android:entryValues="@array/settings_video_quality_values"
             android:key="video_quality"
             android:title="@string/video_quality" />
         <ListPreference
             android:id="@+id/pref_image_quality"
-            android:defaultValue="1"
+            android:defaultValue="high"
             android:entries="@array/settings_image_quality_names"
             android:entryValues="@array/settings_image_quality_values"
             android:key="image_quality"
