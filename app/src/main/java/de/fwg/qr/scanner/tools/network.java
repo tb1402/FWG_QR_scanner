@@ -24,14 +24,18 @@ import java.util.Map;
 
 import de.fwg.qr.scanner.BuildConfig;
 import de.fwg.qr.scanner.R;
+import de.fwg.qr.scanner.tools.cache.cacheManager;
 
 public class network {
     public static String baseURL = "https://srv.tobias-bittner.de";//server url
     private Context c;
     private HashMap<String, String> headers;
+    private cacheManager cm;
 
     public network(Context c) {
         this.c = c;
+        cm=new cacheManager(c);
+
         String versionName;
         try {
             versionName = c.getPackageManager().getPackageInfo(new ContextWrapper(c).getPackageName(), 0).versionName;
@@ -105,7 +109,7 @@ public class network {
      * @param preview if true only low quality will be used
      * @return ImageRequest that can be added to the requestQueue
      */
-    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, String id, int number, boolean preview) {
+    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, final String id, final int number, final boolean preview) {
         final networkCallbackInterface nci = w.get();
         String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + new preferencesManager(c).getImageResolution() + "/" + id + "/" + number + ".png");
         return new ImageRequest(url,
@@ -113,6 +117,7 @@ public class network {
                     @Override
                     public void onResponse(Bitmap response) {
                         nci.onImageCallback(name, response);
+                        cm.cacheImage(id, number, response, preview);
                     }
                 }, 0, 0, null, Bitmap.Config.ARGB_8888,
                 new Response.ErrorListener() {
@@ -138,7 +143,7 @@ public class network {
      * @param preview if true only low quality will be used
      * @return ImageRequest that can be added to the requestQueue
      */
-    private ImageRequest getImageRequestWithID(WeakReference<networkCallbackImageID> w, final String name, final String id, final int number, boolean preview) {
+    private ImageRequest getImageRequestWithID(WeakReference<networkCallbackImageID> w, final String name, final String id, final int number, final boolean preview) {
         final networkCallbackImageID nci = w.get();
         String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + new preferencesManager(c).getImageResolution() + "/" + id + "/" + number + ".png");
         return new ImageRequest(url,
@@ -182,7 +187,9 @@ public class network {
      * @param preview is image needed for preview only? if so, only low resolution image will be given back
      */
     public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String id, int number, boolean preview) {
-        requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, id, number, preview), c);
+        if(!cm.loadCachedImage(nci, id, name, number, preview)) {
+            requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, id, number, preview), c);
+        }
     }
 
     /**

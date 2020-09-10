@@ -3,10 +3,12 @@ package de.fwg.qr.scanner.tools.cache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 /**
@@ -78,23 +80,25 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
      * @param ref     reference to callback in target class
      * @param id      id of the image
      * @param number  number of the image
-     * @param preview used for previewß
+     * @param preview used for preview
      * @return true means image is in cache and will be loaded and given back via the {@link readCacheCallback} interface,
      * false means no image is in cache
      */
-    public boolean loadCachedImage(WeakReference<readCacheCallback> ref, String id, int number, boolean preview) {
+    public boolean loadCachedImage(WeakReference<networkCallbackInterface> ref, String id, String operation, int number, boolean preview) {
         String key = getCacheKey(id, number, preview);
         Bitmap bm = memoryCache.get(key);//get image from memory cache, no need for an asynchronous task, because RAM is very fast ;-)
         if (bm == null) {//if null, image isn't in memoryCache
             if (isExternalStorageReadable()) {
                 File f = new File(c.getExternalCacheDir(), key + ".img");
                 if (f.exists() && !f.isDirectory()) {
-                    new readCacheFileTask(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key).execute(f);//load from storage and add to memory cache see the readCacheFileTask
+                    Log.i("FWGO","cached!");
+                    new readCacheFileTask(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key,operation).execute(f);//load from storage and add to memory cache see the readCacheFileTask
                     return true;
                 }
             }
-        } else {//image found in memory cache, can be giving back
-            ref.get().cacheCallback(false, bm);
+        } else {//image found in memory cache, can be given back
+            ref.get().onImageCallback(operation,bm);
+            Log.i("FWGO","cached!");
             return true;
         }
         return false;
@@ -120,6 +124,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
         memoryCache = memoryCacheSingleton.getInstance();
         File f = new File(c.getExternalCacheDir(), "/");
         new deleteCacheTask(c).execute(f);
+        Log.i("FWGO","del");
     }
 
     /**

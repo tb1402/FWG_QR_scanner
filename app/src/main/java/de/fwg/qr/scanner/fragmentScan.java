@@ -147,7 +147,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     pref.saveString("cache_date", date);
                 }
                 String savedDateString = pref.getString("cache_date", "2020-01-01");
-                if (df.parse(date).getTime() >= df.parse(savedDateString).getTime()) {
+                if (df.parse(date).getTime() > df.parse(savedDateString).getTime()) {
                     new cacheManager(c).invalidateCache();
                     pref.saveString("cache_date", date);
                 }
