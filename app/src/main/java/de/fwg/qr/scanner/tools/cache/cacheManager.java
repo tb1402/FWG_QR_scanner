@@ -70,7 +70,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
         if (isExternalStorageWritable()) {
             File f = new File(c.getExternalCacheDir(), key + ".img");
             if (!f.exists()) {
-                new writeCacheFileTask(c, data).execute(f);//task to write image asynchronous
+                new writeCacheFileTask(c, data,"mykey").execute(f);//task to write image asynchronous
             }
         }
     }
@@ -93,8 +93,8 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
                 File f = new File(c.getExternalCacheDir(), key + ".img");
                 if (f.exists() && !f.isDirectory()) {
                     Log.i("FWGO","cached!");
-                    new readCacheFileTask(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key,operation).execute(f);//load from storage and add to memory cache see the readCacheFileTask
-                    //new readCacheFileNA(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key,operation,f).execute();
+                    //new readCacheFileTask(c, ref, (addToMemCacheWhileReadInterface) this, key,operation,"mykey").execute(f);//load from storage and add to memory cache see the readCacheFileTask
+                    new readCacheFileNA(c, ref.get(), (addToMemCacheWhileReadInterface) this, key,operation,f,"mykey").execute();
                     return true;
                 }
             }

@@ -42,12 +42,17 @@ public abstract class toolbarWrapper extends AppCompatActivity {
         tb.setTitle(title);
     }
 
-    void lockUI(boolean state) {
-        if (state) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        }
+    void lockUI(final boolean state) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (state) {
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            }
+        });
     }
 }

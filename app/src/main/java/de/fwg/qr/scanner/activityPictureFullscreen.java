@@ -60,13 +60,18 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
     }
 
     @Override
-    public void onImageCallback(String name, Bitmap image) {
+    public void onImageCallback(String name, final Bitmap image) {
         Log.i("FWGO",name);
         if (name.contentEquals("Image")) {
-            textView.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
-            button.setVisibility(View.VISIBLE);
-            imageView.setImageBitmap(image);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    button.setVisibility(View.VISIBLE);
+                    imageView.setImageBitmap(image);
+                }
+            });
         } else {
             Toast.makeText(this, getText(R.string.image_not_found_with_current_resolution), Toast.LENGTH_SHORT).show();
             finish();

@@ -12,7 +12,7 @@ public class asyncWrapper<result> {
         executorService=Executors.newSingleThreadExecutor();
     }
 
-    public void execute(asyncTask<result> at){
-        executorService.execute(new FutureTask<result>(at));
+    public void execute(asyncTask at){
+        //executorService.execute(new FutureTask<result>(at));
     }
 }
