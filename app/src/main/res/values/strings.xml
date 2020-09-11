@@ -69,6 +69,13 @@
     <string name="dev_team">Entwicklerteam:\nQ11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth und Ben Welsch</string>
     <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a>\n<a href="https://github.com/FWG-coder">https://github.com/FWG-coder</a></string>
 
+    <!-- guide strings -->
+    <string name="quick_guide_body"><b>Nutzen der App\n</b>Scannen Sie nun einen von Ihnen gefundenen QR Code ein. Bei erfolgreichem Scannen sollte die aktuelle Station und deren Informationen angezeigt werden. Wenn Sie zurück möchten, klicken Sie auf den Pfeil oben links.\nKlicken Sie auf die 3 Linien oben links, um zum Navigationsmenü zu gelangen.\nKlicken Sie das Karten Icon, um zur Karte zu gelangen.\nKlicken Sie die 3 Punkte oben rechts, um zu den Einstellungen zu gelangen.</string>
+    <string name="full_guide_body"><b>Nutzen der App\n</b>Klicken Sie auf die 3 Linien oben links, um zum Navigationsmenü zu gelangen.\nWählen Sie <i>Einscannen</i>.\nScannen Sie nun einen von Ihnen gefundenen QR Code ein. Bei erfolgreichem Scannen sollte die aktuelle Station und deren Informationen angezeigt werden.\nWenn Sie zurück möchten, klicken Sie auf den Pfeil oben links.\nKlicken Sie das Karten Icon, um zur Karte zu gelangen.\nKlicken Sie die 3 Punkte oben rechts, um zu den Einstellungen zu gelangen.</string>
+    <string name="full_guide_drawer"><b>Informationen zum Navigationsmenü\n</b>Die aktuelle Seite ist hervorgehoben\nEinscannen: Scannen der QR Codes\nFortschritt: Anzeige aller verfügbarer Stationen\nVerlauf: Anzeige der bereits besuchten Stationen\nAnleitung: Das hier\nÜber uns: Informationen über das Entwicklerteam\nAGB: Allgemeine Geschäftbedingungen</string>
+    <string name="full_guide_map"><b>Informationen zur Karte</b>\nUm auf die Karte zugreifen zu können, ist die Erlaubnis eines Lehrers erforderlich. Diese können Sie erhalten, indem Sie einen vom Lehrer generierten QR Code einscannen. Sobald Sie die Karte freigeschalten haben, können Sie die Teile der Karte sehen, wo Sie die Stationen eingescannt haben. Grau hinterlegt sind die Teile der Karte, die eine Nachbarstation einer bereits absolvierten Station sind oder keiner Station entsprechen. Die Pfeile zeigen zur nächsten Station.</string>
+    <string name="full_guide_options"><b>Informationen zu den Einstellungen\n</b>Allgemein > Modus: Wahl zwischen Schulhaus-Rallye und Information Modus\nAllgemein > Nachtmodus: Einstellungen zum Erscheinungsbild der App (automatisch richtet sich nach den Systemeinstellungen)\nQualität > Videoqualität / Bildqualität: Auflösung der Videos und Bilder festlegen; für die Nutzung mit mobilen Daten ist eine niedrige Auflösung empfehlenswert</string>
+
     <!--Video Strings-->
     <string name="video_url_error">Fehler: Problem mit der Video-URL</string>
     <string name="video_quality_high">Hoch (1920x1080p)</string>
@@ -83,7 +90,7 @@
     <!--other strings-->
     <string name="network_no_connection">Keine Netzwerkverbindung!</string>
     <string name="network_buffering">Laden…</string>
-    <string name="permission_needed">Bitte akzeptieren Sie die Berechtingung zum Nutzen der Kamera</string>
+    <string name="permission_needed">Bitte akzeptieren Sie die Berechtigung zum Nutzen der Kamera</string>
     <string name="scan_qr_code">Bitte scannen Sie den QR-Code ein</string>
     <string name="dialog_message">Bitte starten Sie die App neu um die Änderungen vollständig anzuwenden</string>
     <string name="dialog_title">Neustart erforderlich</string>
