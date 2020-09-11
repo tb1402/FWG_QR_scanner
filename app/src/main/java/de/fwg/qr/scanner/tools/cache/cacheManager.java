@@ -94,7 +94,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
                 if (f.exists() && !f.isDirectory()) {
                     Log.i("FWGO","cached!");
                     new readCacheFileTask(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key,operation).execute(f);//load from storage and add to memory cache see the readCacheFileTask
-                    //new asyncWrapper<Void>().execute(new readCacheFileNA(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key,operation,f));
+                    //new readCacheFileNA(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key,operation,f).execute();
                     return true;
                 }
             }
@@ -115,6 +115,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
     @Override
     public void addToCache(String key, Bitmap data) {
         memoryCache.put(key, data);
+        Log.i("FWGO","added");
     }
 
     /**
