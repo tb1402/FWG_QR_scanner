@@ -6,11 +6,6 @@
     android:layout_marginTop="?attr/actionBarSize"
     tools:showIn="@layout/activity_map">
 
-    <GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="match_parent"
@@ -36,7 +31,7 @@
                 android:layout_weight="1"
                 android:buttonTint="@color/textColor"
                 android:onClick="onRadioButtonClicked"
-                android:text="@string/second_floor"
+                android:text="@string/basement"
                 android:textColor="@color/textColor" />
 
             <RadioButton
@@ -45,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/textColor"
                 android:onClick="onRadioButtonClicked"
-                android:text="@string/third_floor"
+                android:text="@string/second_floor"
                 android:textColor="@color/textColor" />
 
             <RadioButton
@@ -54,21 +49,18 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/textColor"
                 android:onClick="onRadioButtonClicked"
-                android:text="@string/basement"
+                android:text="@string/third_floor"
                 android:textAlignment="center"
                 android:textColor="@color/textColor" />
 
         </RadioGroup>
 
-    </GridLayout>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/gridLayout"
+        android:layout_below="@+id/radioGroup"
         android:layout_centerVertical="true" />
-
-
 
 </RelativeLayout>

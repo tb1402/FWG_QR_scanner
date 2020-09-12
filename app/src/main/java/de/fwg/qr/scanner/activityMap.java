@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,9 +29,6 @@ import de.fwg.qr.scanner.tools.preferencesManager;
 public class activityMap extends toolbarWrapper implements networkCallbackInterface {
 
     private ImageView imageView;
-    private ArrayList[] images;
-    private TextView textView;
-    private ProgressBar progressBar;
 
     private RadioButton button1;
     private RadioButton button2;
@@ -48,15 +43,13 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     private Bitmap result;
     private Bitmap bitmapOfImageView;
 
-    private boolean checkForImageCompletion = false;
-    private int i = 0;
+
     private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
     private preferencesManager manager;
     private int currentLevel = 0;
     private ArrayList<Integer> allObtainedStationNames;
     private JSONObject mapData;
     private JSONArray stationData;
-
 
 
     @Override
@@ -67,14 +60,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);
         manager = new preferencesManager(this);
-        //images = new ArrayList<Bitmap>[4];
-        images = new ArrayList[4];
         allObtainedStationNames = new ArrayList<>();
         AMOUNT_OF_STATIONS_PER_LEVEL = new int[4];
         setupAbHome();
         imageView = findViewById(R.id.imageView);
-        //textView = findViewById(R.id.textView);
-        //progressBar = findViewById(R.id.progressBar);
         button1 = findViewById(R.id.radioButton1);
         button2 = findViewById(R.id.radioButton2);
         button3 = findViewById(R.id.radioButton3);
@@ -90,63 +79,30 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         });
     }
 
-    public void onRadioButtonClicked(View view) { //TODO: altering certain parts of Method; adding fourth radio button, change of currentLevel
+    public void onRadioButtonClicked(View view) {
 
         boolean checked = ((RadioButton) view).isChecked();
 
         switch (view.getId()) {
             case R.id.radioButton1: //Erdgeschoss
                 if (checked) {
-                    /*if (images.size() >= 1) {
-                        if (textView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            textView.setVisibility(View.INVISIBLE);
-                        }
-                        //imageView.setImageBitmap(images.get(0));
-                    } else {
-                        imageView.setImageBitmap(null);
-                        progressBar.setVisibility(View.VISIBLE);
-                        textView.setVisibility(View.VISIBLE);
-                    }*/
                     currentLevel = 0;
                     getImages(currentLevel);
                 }
                 break;
-            case R.id.radioButton2: //1.Stock
+            case R.id.radioButton2: //Untergeschoss
                 if (checked) {
-                   /* if (images.size() >= 2) {
-                        if (textView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            textView.setVisibility(View.INVISIBLE);
-                        }
-                        imageView.setImageBitmap(images.get(1));
-                    } else {
-                        imageView.setImageBitmap(null);
-                        progressBar.setVisibility(View.VISIBLE);
-                        textView.setVisibility(View.VISIBLE);
-                    }*/
                     currentLevel = -1;
                     getImages(currentLevel);
                 }
                 break;
-            case R.id.radioButton3: //2. Stock
+            case R.id.radioButton3: //1. Stock
                 if (checked) {
-                /*    if (images.size() >= 3) {
-                        if (textView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            textView.setVisibility(View.INVISIBLE);
-                        }
-                        imageView.setImageBitmap(images.get(2));
-                    } else {
-                        imageView.setImageBitmap(null);
-                        progressBar.setVisibility(View.VISIBLE);
-                        textView.setVisibility(View.VISIBLE);
-                    } */
+                    currentLevel = 1;
+                    getImages(currentLevel);
+                    break;
                 }
-                currentLevel = 1;
-                getImages(currentLevel);
-                break;
-            case R.id.radioButton4: // Untergeschoss
+            case R.id.radioButton4: // 2. Stock
                 if (checked) {
                     currentLevel = 2;
                     getImages(currentLevel);
@@ -167,7 +123,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
                 stationData = mapData.getJSONArray("stations");
                 AMOUNT_OF_STATIONS = stationData.length();
                 AMOUNT_OF_STATIONS_PER_LEVEL = getStationsPerLevel();
-                getImages(currentLevel); //TODO: level value
+                System.out.println("Value of AMOUNT_OF_STATIONS: " + AMOUNT_OF_STATIONS);
+                getImages(currentLevel);
             } catch (JSONException e) {
                 Intent i = new Intent(this, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
@@ -177,50 +134,25 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     }
 
     @Override
-    public void onImageCallback(String name, Bitmap image) { //TODO: start working on this method
-       /* if (name.contentEquals("ImagePreview")) {
-            images.add(image);
-            if (images.size() >= 1) {
-                progressBar.setVisibility(View.INVISIBLE);
-                textView.setVisibility(View.INVISIBLE);
-                if (images.size() == 1) {
-                    imageView.setImageBitmap(images.get(0));
-                } else if (images.size() == 2 && button2.isChecked()) {
-                    imageView.setImageBitmap(images.get(1));
-                } else if (images.size() == 3 && button3.isChecked()) {
-                    imageView.setImageBitmap(images.get(2));
-                }
-            }
-            i++;
-            if (i < 3) {
-                //getImages();
-            } else {
-                if (button1.isChecked()) {
-                    imageView.setImageBitmap(images.get(0));
-                } else if (button2.isChecked()) {
-                    imageView.setImageBitmap(images.get(1));
-                } else if (button3.isChecked()) {
-                    imageView.setImageBitmap(images.get(2));
-                }
-            }
-
-        }*/
-        i++;
+    public void onImageCallback(String name, Bitmap image) {
         if (name.contentEquals("FloorRequest")) {
             bitmapOfImageView = floorRequest(image);
+            imageView.setImageBitmap(bitmapOfImageView);
         }
         if (name.contentEquals("ImageRequest")) {
             bitmapOfImageView = imageRequest(image);
+            imageView.setImageBitmap(bitmapOfImageView);
         }
         if (name.contentEquals("NextImageRequest")) {
             bitmapOfImageView = nextImageRequest(image);
+            imageView.setImageBitmap(bitmapOfImageView);
         }
         if (name.contentEquals("FinalStage")) {
-            imageView.setImageBitmap(image);
+            if (currentLevel == 0) {
+                Bitmap bit = nextImageRequest(image);
+                imageView.setImageBitmap(bit);
+            }
         }
-        imageView.setImageBitmap(bitmapOfImageView);
-
-
     }
 
 
@@ -253,13 +185,18 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
                 startActivity(i);
             }
         }
-        array[0]--; //Wegen Weg zur Sporthalle, ansonsten später Fehler bei getImages()
+        array[1]--; //Wegen Weg zur Sporthalle, ansonsten später Fehler bei getImages()
         return array;
     }
 
     public void getImages(int level) {
-        i = 0;
         canvas = null;
+        if (manager.isRallyeMode() && currentLevel == 0) { //Letzte Station ist Speziallfall, ist nicht nach Stockwerk geordnet und ersetzt den Erdgeschoss
+            if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) == (AMOUNT_OF_STATIONS - 2)) {
+                net.makeImageRequest(ref, "FinalStage", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true);
+                return;
+            }
+        }
         net.makeImageRequest(ref, "FloorRequest", "mapFloors", level, true);
         switch (level) {
             case 0:
@@ -316,12 +253,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
                 startActivity(i);
                 return;
 
-        }
-        checkForImageCompletion = true;
-        if (manager.isRallyeMode()) { //Letzte Station ist Speziallfall, ist nicht nach Stockwerk geordnet und ersetzt den Erdgeschoss
-            if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) == (AMOUNT_OF_STATIONS - 2)) {
-                net.makeImageRequest(ref, "FinalStage", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true);
-            }
         }
     }
 
