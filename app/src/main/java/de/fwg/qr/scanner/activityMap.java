@@ -1,6 +1,5 @@
 package de.fwg.qr.scanner;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -48,7 +47,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     private preferencesManager manager;
     private int currentLevel = 0;
     private ArrayList<Integer> allObtainedStationNames;
-    private JSONObject mapData;
     private JSONArray stationData;
 
 
@@ -56,7 +54,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     public void onCreate(Bundle savedInstanceBundle) {
         super.onCreate(R.layout.activity_map, this, getString(R.string.item_map));
         super.onCreate(savedInstanceBundle);
-        final Context c = this;
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);
         manager = new preferencesManager(this);
@@ -68,6 +65,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         button2 = findViewById(R.id.radioButton2);
         button3 = findViewById(R.id.radioButton3);
         button4 = findViewById(R.id.radioButton4);
+        net.makeImageRequest(ref, "FloorRequest", "mapFloors", currentLevel, true);
         getMapParts(new taskResultCallback<String[]>() {
             @Override
             public void onFinished(String[] result) {
@@ -114,7 +112,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     public void onPostCallback(String operation, String response) {
         if (operation.contentEquals("getMapData")) {
             try {
-                mapData = new JSONObject(response);
+                JSONObject mapData = new JSONObject(response);
                 if (!mapData.getString("status").contentEquals("ok")) {
                     Intent i = new Intent(this, activityErrorHandling.class);
                     i.putExtra(activityErrorHandling.errorNameIntentExtra, "mapData status not ok");
@@ -251,7 +249,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
                 Intent i = new Intent(this, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, "Error with methode getImages; Wrong level id");
                 startActivity(i);
-                return;
 
         }
     }
