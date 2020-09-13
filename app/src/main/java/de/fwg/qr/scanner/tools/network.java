@@ -28,6 +28,7 @@ import de.fwg.qr.scanner.tools.cache.cacheManager;
 
 public class network {
     public static String baseURL = "https://srv.tobias-bittner.de";//server url
+    private static String imageRequestTag="imageRequest";
     private Context c;
     private HashMap<String, String> headers;
     private cacheManager cm;
@@ -112,7 +113,7 @@ public class network {
     private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, final String id, final int number, final boolean preview) {
         final networkCallbackInterface nci = w.get();
         String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + new preferencesManager(c).getImageResolution() + "/" + id + "/" + number + ".png");
-        return new ImageRequest(url,
+        ImageRequest r=new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
@@ -131,6 +132,8 @@ public class network {
                 return headers;
             }
         };
+        r.setTag(imageRequestTag);
+        return r;
     }
 
     /**
@@ -203,5 +206,9 @@ public class network {
      */
     public void makeImageRequestWithIDCallback(WeakReference<networkCallbackImageID> nci, String name, String id, int number, boolean preview) {
         requestQueueSingleton.getInstance(c).addToRq(getImageRequestWithID(nci, name, id, number, preview), c);
+    }
+
+    public void cancelAllImageRequests(){
+        requestQueueSingleton.getInstance(c).cancelAll(imageRequestTag);
     }
 }

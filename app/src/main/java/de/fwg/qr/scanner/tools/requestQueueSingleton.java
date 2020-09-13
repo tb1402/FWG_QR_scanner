@@ -34,4 +34,8 @@ public class requestQueueSingleton {
     <T> void addToRq(Request<T> r, Context c) {
         getRequestQueue(c).add(r);
     }
+
+    void cancelAll(Object tag){
+        rq.cancelAll(tag);
+    }
 }
