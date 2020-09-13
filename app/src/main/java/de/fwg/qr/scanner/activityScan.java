@@ -35,13 +35,29 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private WeakReference<networkCallbackInterface> ref;
     private network net;
 
+    /**
+     * The ID of the visited Station as a String
+     */
     private String ID = "";
+    /**
+     * String with how many pictures this station hast
+     */
     private String bild = "";
+    /**
+     * Value for indicating if this station has a video; (-1 || 0): no video, (>=1): video existing
+     */
     private int video = -1;
-
+    /**
+     * Value for indicating which picture schould be displayed by ImageSwitcher
+     */
     private int imagePosition = 0;
+    /**
+     * Value for knowing which picture should be loaded next
+     */
     private int i = 0;
-    private int imageRequestCount = 0;
+    /**
+     * ArrayList for all bitmaps given back by ImageCallback
+     */
     private ArrayList<Bitmap> images;
 
     @Override
@@ -95,17 +111,12 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             } else {
                 getImages();
             }
-            /*f (i >= Integer.parseInt(bild) || imageRequestCount == Integer.parseInt(bild) - 1) {
-                lockUI(false);
-                setImageSwitcher();
-            }
-            imageRequestCount++;
-            if (i < Integer.parseInt(bild)) {
-                getImages();
-            }*/
         }
     }
 
+    /**
+     * Methode for handling Buttons used by ImageSwitcher as well as creating a Button if a video for this station exists
+     */
     public void assignButtons() {
         if (Integer.parseInt(bild) > 1) {
             buttonPre.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +159,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         }
     }
 
+    /**
+     * Initialization of ImageSwitcher; Removal of progressBar when initialized successfully
+     */
     public void setImageSwitcher() {
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -165,11 +179,17 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     }
 
+    /**
+     * Method for making image requests
+     */
     public void getImages() {
         lockUI(true);
         net.makeImageRequest(ref, "ImagePreview", ID, i, true);
     }
 
+    /**
+     * Method for setting onCLickListener on ImageSwitcher to display pictures in Fullscreen via the activity activityPictureFullscreen
+     */
     public void clickableImageSwitcher() {
         imageSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override

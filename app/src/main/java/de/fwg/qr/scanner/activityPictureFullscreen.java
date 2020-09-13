@@ -18,7 +18,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.ref.WeakReference;
 
-import de.fwg.qr.scanner.tools.cache.cacheManager;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
@@ -29,7 +28,13 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
     private ProgressBar progressBar;
     private TextView textView;
 
+    /**
+     * The ID of the visited Station as a String
+     */
     private String ID = "";
+    /**
+     * Value indicating which picture should be displayed in fullscreen
+     */
     private int imagePosition = 0;
 
     @Override
@@ -74,6 +79,9 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
         }
     }
 
+    /**
+     * Assignment of button for exiting the activity (Back press possible as well)
+     */
     public void assignButton() {
         button.setOnClickListener(new View.OnClickListener() {
             @Override

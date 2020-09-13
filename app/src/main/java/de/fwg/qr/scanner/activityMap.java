@@ -37,12 +37,17 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     private network net;
     private WeakReference<networkCallbackInterface> ref;
     private static int AMOUNT_OF_STATIONS = 0;
-
-    private Canvas canvas;
-    private Bitmap result;
-    private Bitmap bitmapOfImageView;
     private preferencesManager manager;
+    /**
+     * Canvas where all bitmaps get drawn to
+     */
+    private Canvas canvas;
+    private Bitmap bitmapOfImageView;
     private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
+    /**
+     * Bitmap returned by
+     */
+    private Bitmap result;
 
     private int currentLevel = 0;
     private ArrayList<Integer> allObtainedStationNames;
