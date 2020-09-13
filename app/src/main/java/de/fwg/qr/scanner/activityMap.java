@@ -41,10 +41,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     private Canvas canvas;
     private Bitmap result;
     private Bitmap bitmapOfImageView;
-
-
-    private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
     private preferencesManager manager;
+    private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
+
     private int currentLevel = 0;
     private ArrayList<Integer> allObtainedStationNames;
     private JSONArray stationData;
@@ -77,9 +76,20 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         });
     }
 
+    /**
+     * Method for changing between radioButtons grouped under radioGroup
+     * All RadioButtons: *1 Main floor
+     * *2 Basement
+     * *3 First floor
+     * *4 Second floor
+     *
+     * @param view View provided by radioButtons
+     */
+
     public void onRadioButtonClicked(View view) {
 
         boolean checked = ((RadioButton) view).isChecked();
+
 
         switch (view.getId()) {
             case R.id.radioButton1: //Erdgeschoss
@@ -120,7 +130,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
                 }
                 stationData = mapData.getJSONArray("stations");
                 AMOUNT_OF_STATIONS = stationData.length();
-                AMOUNT_OF_STATIONS_PER_LEVEL = getStationsPerLevel();
+                AMOUNT_OF_STATIONS_PER_LEVEL = getStationsPerLevel(stationData);
                 System.out.println("Value of AMOUNT_OF_STATIONS: " + AMOUNT_OF_STATIONS);
                 getImages(currentLevel);
             } catch (JSONException e) {
@@ -140,21 +150,34 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         if (name.contentEquals("ImageRequest")) {
             bitmapOfImageView = imageRequest(image);
             imageView.setImageBitmap(bitmapOfImageView);
+
         }
         if (name.contentEquals("NextImageRequest")) {
             bitmapOfImageView = nextImageRequest(image);
             imageView.setImageBitmap(bitmapOfImageView);
+
         }
         if (name.contentEquals("FinalStage")) {
             if (currentLevel == 0) {
                 Bitmap bit = nextImageRequest(image);
                 imageView.setImageBitmap(bit);
             }
+
         }
+
     }
 
 
-    public int[] getStationsPerLevel() { //Methode um zu wissen, wieviele Stationen pro Stockwerk vorhanden sind
+    /**
+     * Method for knowing how many Stations there are per level (Last station excluded)
+     *
+     * @param stationData JSONArray containing all Information about all Stations
+     * @return int array index: *0 Basement
+     * *1 Main floor
+     * *2 First floor
+     * *3 Second floor
+     */
+    public int[] getStationsPerLevel(JSONArray stationData) {
         int[] array = new int[4];
         for (int j = 0; j < stationData.length(); j++) {
             try {
@@ -173,7 +196,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
                         break;
                     default:
                         Intent i = new Intent(this, activityErrorHandling.class);
-                        i.putExtra(activityErrorHandling.errorNameIntentExtra, "Error with methode getStationsPerLevel");
+                        i.putExtra(activityErrorHandling.errorNameIntentExtra, "Error with method getStationsPerLevel");
                         startActivity(i);
                         break;
                 }
@@ -186,6 +209,12 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         array[1]--; //Wegen Weg zur Sporthalle, ansonsten später Fehler bei getImages()
         return array;
     }
+
+    /**
+     * Method for making all ImageRequests based on the current Level
+     *
+     * @param level current Level
+     */
 
     public void getImages(int level) {
         canvas = null;
@@ -253,6 +282,13 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         }
     }
 
+    /**
+     * Method for adding image to canvas
+     *
+     * @param bitmap new bitmap drawn on canvas
+     * @return bitmap of canvas
+     */
+
     public Bitmap imageRequest(Bitmap bitmap) {
         if (result == null || canvas == null) {
             result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
@@ -262,14 +298,28 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         return result;
     }
 
-    public Bitmap floorRequest(Bitmap floor) {
+    /**
+     * Method for adding image of floor to canvas
+     *
+     * @param bitmap floor gets drawn on canvas
+     * @return bitmap of canvas
+     */
+
+    public Bitmap floorRequest(Bitmap bitmap) {
         if (result == null || canvas == null) {
-            result = Bitmap.createBitmap(floor.getWidth(), floor.getHeight(), floor.getConfig());
+            result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
             canvas = new Canvas(result);
         }
-        canvas.drawBitmap(floor, 0f, 0f, null);
+        canvas.drawBitmap(bitmap, 0f, 0f, null);
         return result;
     }
+
+    /**
+     * Method for adding image which should be the next one to be scanned when using app in Rally-Mode
+     *
+     * @param bitmap new bitmap drawn opaque on canvas
+     * @return bitmap of canvas
+     */
 
     public Bitmap nextImageRequest(Bitmap bitmap) {
         if (result == null || canvas == null) {
@@ -282,6 +332,11 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         return result;
     }
 
+    /**
+     * Methode for getting String array with all previously visited stations
+     *
+     * @param callback in order to get string returned
+     */
 
     public void getMapParts(final taskResultCallback<String[]> callback) {
 
