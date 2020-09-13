@@ -5,6 +5,7 @@
     <string name="error_undefined">undefined</string>
     <string name="error_header">Ein Fehler ist aufgetreten…</string>
     <string name="error_send">Fehlermeldung wurde gesendet! Vielen Dank für Ihre Mitarbeit. Die App wird nun beendet.</string>
+    <string name="barcode_not_found">Barcode konnte nicht gefunden werden.</string>
 
     <!--Required by Android Studio-->
     <string name="msg_navigation_drawer_open">Open Navigation Drawer</string>
@@ -45,9 +46,10 @@
     <string name="start_using">Jetzt starten</string>
     <string name="button_error_report">Fehlermeldung senden</string>
     <string name="button_error_close_app">App schließen</string>
-    <string name="first_floor">Erdgeschoss/\nFachklassentrakt</string>
-    <string name="second_floor">1.\nStockwerk</string>
-    <string name="third_floor">2.\nStockwerk</string>
+    <string name="first_floor">Erdgeschoss/Fachklassentrakt</string>
+    <string name="basement">Untergeschoss</string>
+    <string name="second_floor">1.Stockwerk</string>
+    <string name="third_floor">2.Stockwerk</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>

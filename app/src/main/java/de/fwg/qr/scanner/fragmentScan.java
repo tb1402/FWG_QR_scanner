@@ -51,8 +51,18 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private TextView textView2;
     private ProgressBar pb;
 
+    /**
+     * Intent made qlobal because of reciveDetection being called multiple times
+     */
     private Intent i = null;
+
+    /**
+     * Value received by detected barcode
+     */
     private String barcodeValue = "";
+    /**
+     * Boolean for checking if activity is resuming for the first time or not; if it isn't the first time the fragment will be recreated because of camera issues
+     */
     private boolean check = true;
     private boolean updateCheck = true;
 
@@ -88,6 +98,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         detection();
     }
 
+    /**
+     * If user always denies camera access, he'll be sent to the settings of his device
+     *
+     * @param requestCode  Code for permissonRequest
+     * @param permissions  All permissions that were asked of user
+     * @param grantResults Shows if permissions with same index were granted or denied
+     */
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         //System.out.println("RequesResult wird gecalled");
@@ -116,10 +134,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         pb.setVisibility(View.GONE);
         lockUI(false);
         if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
-            i = new Intent();
-            Intent i = new Intent(c, activityErrorHandling.class);
-            i.putExtra(activityErrorHandling.errorNameIntentExtra, response);
-            startActivity(i);
+            Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT);
         }
         if (operation.contentEquals("getInfo")) {
             try {
@@ -131,10 +146,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 i.putExtra("Video", object.getString("Video"));
                 startActivity(i);
             } catch (JSONException e) {
-                i = new Intent();
-                Intent i = new Intent(c, activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
-                startActivity(i);
+                Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT);
             }
         } else if (operation.contentEquals("getVersion")) {
             try {
@@ -168,6 +180,10 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onImageCallback(String name, Bitmap image) {
     }
+
+    /**
+     * Initializes both barcodeDetector as well as CameraSource where the detector is underlined
+     */
 
     private void initialize() {
         i = null;
@@ -208,6 +224,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         }
     }
 
+    /**
+     * Methode for starting usage of camera
+     */
     private void startCamera() {
         surface.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -245,6 +264,10 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         });
     }
 
+    /**
+     * Method for handling situation where barcode is detected, starts newIntent afterwards
+     */
+
     private void detection() {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
@@ -262,6 +285,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         });
     }
 
+    /**
+     * Creates new Intent for starting activityScan
+     */
     private void newIntent() {
         if (i == null && !barcodeValue.contentEquals("")) {
             i = new Intent(getActivity(), activityScan.class);

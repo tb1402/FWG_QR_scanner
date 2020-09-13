@@ -6,47 +6,55 @@
     android:layout_marginTop="?attr/actionBarSize"
     tools:showIn="@layout/activity_map">
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/radioButton1"
-            android:layout_width="wrap_content"
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="@color/textColor"
-            android:checked="true"
-            android:onClick="onRadioButtonClicked"
-            android:text="@string/first_floor"
-            android:textAlignment="center"
-            android:textColor="@color/textColor" />
+            android:layout_centerHorizontal="true">
 
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="@color/textColor"
-            android:onClick="onRadioButtonClicked"
-            android:text="@string/second_floor"
-            android:textAlignment="center"
-            android:textColor="@color/textColor" />
+            <RadioButton
+                android:id="@+id/radioButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/textColor"
+                android:checked="true"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/first_floor"
+                android:textAlignment="center"
+                android:textColor="@color/textColor" />
 
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="@color/textColor"
-            android:onClick="onRadioButtonClicked"
-            android:text="@string/third_floor"
-            android:textAlignment="center"
-            android:textColor="@color/textColor" />
-    </RadioGroup>
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/textColor"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/basement"
+                android:textColor="@color/textColor" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="136dp"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/textColor"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/second_floor"
+                android:textColor="@color/textColor" />
+
+            <RadioButton
+                android:id="@+id/radioButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/textColor"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/third_floor"
+                android:textAlignment="center"
+                android:textColor="@color/textColor" />
+
+        </RadioGroup>
+
 
     <ImageView
         android:id="@+id/imageView"
@@ -54,23 +62,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/radioGroup"
         android:layout_centerVertical="true" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/radioGroup"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="271dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/progressBar"
-        android:layout_centerHorizontal="true"
-        android:text="@string/image_loading"
-        android:textColor="@color/textColor"
-        android:textSize="25sp" />
 
 </RelativeLayout>

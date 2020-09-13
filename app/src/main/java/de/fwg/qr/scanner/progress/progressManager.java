@@ -90,7 +90,7 @@ public class progressManager {
      *
      * @param callback provides a historyEntry[] on finish
      */
-    private void getUniqueStationsAsync(final taskResultCallback<historyEntry[]> callback) {
+    public void getUniqueStationsAsync(final taskResultCallback<historyEntry[]> callback) {
         final historyManager manager = new historyManager(context);
 
         manager.getEntriesAsync(new taskResultCallback<historyEntry[]>() {
