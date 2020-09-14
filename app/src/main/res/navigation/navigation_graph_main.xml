@@ -36,11 +36,6 @@
         android:label="@string/item_information_title"
         tools:layout="@layout/fragment_information" />
     <fragment
-        android:id="@+id/item_frgm_escape_routes"
-        android:name="de.fwg.qr.scanner.fragmentEscapeRoutes"
-        android:label="@string/item_frgm_escape_routes"
-        tools:layout="@layout/fragment_escape_routes" />
-    <fragment
         android:id="@+id/item_frgm_progress"
         android:name="de.fwg.qr.scanner.fragmentProgress"
         android:label="@string/item_progress"

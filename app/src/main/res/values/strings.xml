@@ -1,74 +1,69 @@
 <resources>
-    <string name="app_name">FWG QR scanner</string>
+    <string name="app_name" translatable="false">FWG QR scanner</string>
 
     <!--Error messages-->
     <string name="error_undefined">undefined</string>
-    <string name="error_header">Ein Fehler ist aufgetreten…</string>
-    <string name="error_send">Fehlermeldung wurde gesendet! Vielen Dank für Ihre Mitarbeit. Die App wird nun beendet.</string>
-    <string name="barcode_not_found">Barcode konnte nicht gefunden werden.</string>
+    <string name="error_header">An error has occurred…</string>
+    <string name="error_send">Error message was sent! Thank you for your cooperation. The app will now close.</string>
+    <string name="barcode_not_found">Barcode could not be found.</string>
 
     <!--Required by Android Studio-->
-    <string name="msg_navigation_drawer_open">Open Navigation Drawer</string>
-    <string name="msg_navigation_drawer_close">Close Navigation Drawer</string>
-
-    <!-- just for development purposes -->
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="hello_world">Hello World!</string>
+    <string name="msg_navigation_drawer_open" translatable="false">Open Navigation Drawer</string>
+    <string name="msg_navigation_drawer_close" translatable="false">Close Navigation Drawer</string>
 
     <!--strings for the drawer and toolbar title-->
     <string name="item_start_title">Welcome</string>
-    <string name="item_scan_title">Einscannen</string>
-    <string name="item_history_title">Verlauf</string>
-    <string name="item_help_title">Anleitung</string>
+    <string name="item_scan_title">Scan</string>
+    <string name="item_history_title">History</string>
+    <string name="item_help_title">Instructions</string>
     <string name="item_information_title">Information</string>
-    <string name="item_about_title">Über uns</string>
-    <string name="item_agb_title">AGB</string>
-    <string name="item_map">Karte</string>
-    <string name="item_frgm_escape_routes">Fluchtwege</string>
-    <string name="item_progress">Fortschritt</string>
+    <string name="item_about_title">About us</string>
+    <string name="item_agb_title">ToS</string>
+    <string name="item_map">Map</string>
+    <string name="item_progress">Progress</string>
 
     <!--other title strings-->
-    <string name="title_settings">Einstellungen</string>
-    <string name="title_activity_start">Einführung</string>
-    <string name="welcome_start">Willkommen zum FWG QR Scanner</string>
+    <string name="title_settings">Preferences</string>
+    <string name="title_activity_start">Introduction</string>
+    <string name="welcome_start">Welcome to FWG QR Scanner</string>
     <string name="quick_guide">Quick Guide</string>
-    <string name="agb">Allgemeine Geschäftsbedingungen</string>
-    <string name="title_activity_fullscreen_video_playback">Video Player</string>
-    <string name="title_activty_error">Fehler</string>
-    <string name="txt_progress_name">Besuchte Stationen</string>
-    <string name="txt_not_visited_yet_name">Noch nicht besucht</string>
+    <string name="agb">Terms of Service</string>
+    <string name="title_activity_fullscreen_video_playback">Video player</string>
+    <string name="title_activty_error">Error</string>
+    <string name="txt_progress_name">Visited stations</string>
+    <string name="txt_not_visited_yet_name">Not visited yet</string>
 
     <!-- button strings -->
-    <string name="next">Weiter</string>
-    <string name="previous">Zurück</string>
-    <string name="agb_accept">AGB Akzeptieren</string>
-    <string name="agb_decline">AGB Ablehnen</string>
-    <string name="start_using">Jetzt starten</string>
-    <string name="button_error_report">Fehlermeldung senden</string>
-    <string name="button_error_close_app">App schließen</string>
-    <string name="first_floor">Erdgeschoss/Fachklassentrakt</string>
-    <string name="basement">Untergeschoss</string>
-    <string name="second_floor">1.Stockwerk</string>
-    <string name="third_floor">2.Stockwerk</string>
+    <string name="next">Next</string>
+    <string name="previous">Back</string>
+    <string name="agb_accept">Accept ToS</string>
+    <string name="agb_decline">Decline ToS</string>
+    <string name="start_using">Get started</string>
+    <string name="button_error_report">Send crash report</string>
+    <string name="button_error_close_app">Close app</string>
+    <string name="first_floor">Ground floor / Subject class wing</string>
+    <string name="basement">Basement</string>
+    <string name="second_floor">1st floor</string>
+    <string name="third_floor">2nd floor</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>
-    <string name="mode_rallye">Rallye</string>
-    <string name="mode">Modus</string>
-    <string name="darkmode">Nachtmodus</string>
-    <string name="on">Ein</string>
-    <string name="off">Aus</string>
-    <string name="automatic">Automatisch</string>
-    <string name="pref_category_general">Allgemein</string>
-    <string name="pref_category_quality">Qualität</string>
-    <string name="image_quality">Bildqualität</string>
+    <string name="mode_rallye">Rally</string>
+    <string name="mode">Mode</string>
+    <string name="darkmode">Dark mode</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="automatic">Automatic</string>
+    <string name="pref_category_general">General</string>
+    <string name="pref_category_quality">Quality</string>
+    <string name="image_quality">Image quality</string>
     <string name="image_quality_orig">Original (6000x4000px)</string>
-    <string name="image_quality_high">Hoch (1920x1080px)</string>
-    <string name="image_quality_low">Niedrig (640x360px)</string>
+    <string name="image_quality_high">High (1920x1080px)</string>
+    <string name="image_quality_low">Low (640x360px)</string>
 
     <!-- content strings-->
-    <string name="welcome_message">Der FWG QR Scanner ist eine App, mit der Sie Informationen zu wichtigen Orten im Frankenwald-Gymnasiums Kronach mit Hilfe eines QR Codes, welcher an den Orten selbst auffindbar ist, abrufen können. Die Entwicklung erfolgt in Form eines Open-Source-Projektes, sodass Sie jederzeit den Quellcode der App auf Github anschauen können.</string>
-    <string name="dev_team">Entwicklerteam:\nQ11 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth und Ben Welsch</string>
+    <string name="welcome_message">The FWG QR scanner is an app with which you can call up information on important locations in the Frankenwald-Gymnasium Kronach with the help of a QR code, which can be found at the locations themselves. The development takes place in the form of an open source project, so that you can view the source code of the app on Github at any time.</string>
+    <string name="dev_team">Entwicklerteam:\nQ12 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth und Ben Welsch</string>
     <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a>\n<a href="https://github.com/FWG-coder">https://github.com/FWG-coder</a></string>
 
     <!-- guide strings -->
@@ -79,21 +74,23 @@
     <string name="full_guide_options"><b>Informationen zu den Einstellungen\n</b>Allgemein > Modus: Wahl zwischen Schulhaus-Rallye und Information Modus\nAllgemein > Nachtmodus: Einstellungen zum Erscheinungsbild der App (automatisch richtet sich nach den Systemeinstellungen)\nQualität > Videoqualität / Bildqualität: Auflösung der Videos und Bilder festlegen; für die Nutzung mit mobilen Daten ist eine niedrige Auflösung empfehlenswert</string>
 
     <!--Video Strings-->
-    <string name="video_url_error">Fehler: Problem mit der Video-URL</string>
-    <string name="video_quality_high">Hoch (1920x1080p)</string>
-    <string name="video_quality_medium">Mittel (1270x720p)</string>
-    <string name="video_quality_low">Niedrig (640x480p)</string>
-    <string name="video_quality">Videoqualität</string>
+    <string name="video_url_error">Error: problem with video URL</string>
+    <string name="video_quality_high">High (1920x1080p)</string>
+    <string name="video_quality_medium">Medium (1270x720p)</string>
+    <string name="video_quality_low">Low (640x480p)</string>
+    <string name="video_quality">Video quality</string>
 
     <!--Image Strings-->
-    <string name="image_loading">Bild wird geladen</string>
-    <string name="image_not_found_with_current_resolution">Das Bild ist in dieser Auflösung nicht vorhanden. Bitte versuchen Sie es mit einer anderen Auflösung</string>
+    <string name="image_loading">Image is loading</string>
+    <string name="image_not_found_with_current_resolution">The image is not available in this resolution. Please try a different resolution.</string>
 
     <!--other strings-->
-    <string name="network_no_connection">Keine Netzwerkverbindung!</string>
-    <string name="network_buffering">Laden…</string>
-    <string name="permission_needed">Bitte akzeptieren Sie die Berechtigung zum Nutzen der Kamera</string>
-    <string name="scan_qr_code">Bitte scannen Sie den QR-Code ein</string>
-    <string name="dialog_message">Bitte starten Sie die App neu um die Änderungen vollständig anzuwenden</string>
-    <string name="dialog_title">Neustart erforderlich</string>
+    <string name="network_no_connection">No network connection</string>
+    <string name="network_buffering">Loading…</string>
+    <string name="permission_needed">Please grant this app camera access</string>
+    <string name="scan_qr_code">Please scan the QR code</string>
+    <string name="dialog_message">Please restart the app to fully apply the pending changes</string>
+    <string name="dialog_title">Restart required</string>
+    <string name="station_name">station name</string>
+    <string name="retrieval_date">retrieval date</string>
 </resources>

@@ -134,7 +134,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         pb.setVisibility(View.GONE);
         lockUI(false);
         if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
-            Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT);
+            Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT).show();
         }
         if (operation.contentEquals("getInfo")) {
             try {
@@ -146,7 +146,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 i.putExtra("Video", object.getString("Video"));
                 startActivity(i);
             } catch (JSONException e) {
-                Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT);
+                Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT).show();
             }
         } else if (operation.contentEquals("getVersion")) {
             try {
@@ -209,12 +209,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             startActivity(i);
         }
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
 
     @Override
     public void onResume() {

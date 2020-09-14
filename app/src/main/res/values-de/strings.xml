@@ -1,0 +1,90 @@
+<resources>
+    <!--Error messages-->
+    <string name="error_undefined">nicht definiert</string>
+    <string name="error_header">Ein Fehler ist aufgetreten…</string>
+    <string name="error_send">Fehlermeldung wurde gesendet! Vielen Dank für Ihre Mitarbeit. Die App wird nun beendet.</string>
+    <string name="barcode_not_found">Barcode konnte nicht gefunden werden.</string>
+
+    <!--strings for the drawer and toolbar title-->
+    <string name="item_start_title">Willkommen</string>
+    <string name="item_scan_title">Einscannen</string>
+    <string name="item_history_title">Verlauf</string>
+    <string name="item_help_title">Anleitung</string>
+    <string name="item_information_title">Information</string>
+    <string name="item_about_title">Über uns</string>
+    <string name="item_agb_title">AGB</string>
+    <string name="item_map">Karte</string>
+    <string name="item_progress">Fortschritt</string>
+
+    <!--other title strings-->
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_activity_start">Einführung</string>
+    <string name="welcome_start">Willkommen zum FWG QR Scanner</string>
+    <string name="quick_guide">Kurzanleitung</string>
+    <string name="agb">Allgemeine Geschäftsbedingungen</string>
+    <string name="title_activity_fullscreen_video_playback">Videoplayer</string>
+    <string name="title_activty_error">Fehler</string>
+    <string name="txt_progress_name">Besuchte Stationen</string>
+    <string name="txt_not_visited_yet_name">Noch nicht besucht</string>
+
+    <!-- button strings -->
+    <string name="next">Weiter</string>
+    <string name="previous">Zurück</string>
+    <string name="agb_accept">AGB Akzeptieren</string>
+    <string name="agb_decline">AGB Ablehnen</string>
+    <string name="start_using">Jetzt starten</string>
+    <string name="button_error_report">Fehlermeldung senden</string>
+    <string name="button_error_close_app">App schließen</string>
+    <string name="first_floor">Erdgeschoss/Fachklassentrakt</string>
+    <string name="basement">Untergeschoss</string>
+    <string name="second_floor">1.Stockwerk</string>
+    <string name="third_floor">2.Stockwerk</string>
+
+    <!--preferences strings-->
+    <string name="mode_info">Info</string>
+    <string name="mode_rallye">Rallye</string>
+    <string name="mode">Modus</string>
+    <string name="darkmode">Nachtmodus</string>
+    <string name="on">Ein</string>
+    <string name="off">Aus</string>
+    <string name="automatic">Automatisch</string>
+    <string name="pref_category_general">Allgemein</string>
+    <string name="pref_category_quality">Qualität</string>
+    <string name="image_quality">Bildqualität</string>
+    <string name="image_quality_orig">Original (6000x4000px)</string>
+    <string name="image_quality_high">Hoch (1920x1080px)</string>
+    <string name="image_quality_low">Niedrig (640x360px)</string>
+
+    <!-- content strings-->
+    <string name="welcome_message">Der FWG QR Scanner ist eine App, mit der Sie Informationen zu wichtigen Orten im Frankenwald-Gymnasiums Kronach mit Hilfe eines QR Codes, welcher an den Orten selbst auffindbar ist, abrufen können. Die Entwicklung erfolgt in Form eines Open-Source-Projektes, sodass Sie jederzeit den Quellcode der App auf Github anschauen können.</string>
+    <string name="dev_team">Entwicklerteam:\nQ12 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth und Ben Welsch</string>
+    <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a>\n<a href="https://github.com/FWG-coder">https://github.com/FWG-coder</a></string>
+
+    <!-- guide strings -->
+    <string name="quick_guide_body"><b>Nutzen der App\n</b>Scannen Sie nun einen von Ihnen gefundenen QR Code ein. Bei erfolgreichem Scannen sollte die aktuelle Station und deren Informationen angezeigt werden. Wenn Sie zurück möchten, klicken Sie auf den Pfeil oben links.\nKlicken Sie auf die 3 Linien oben links, um zum Navigationsmenü zu gelangen.\nKlicken Sie das Karten Icon, um zur Karte zu gelangen.\nKlicken Sie die 3 Punkte oben rechts, um zu den Einstellungen zu gelangen.</string>
+    <string name="full_guide_body"><b>Nutzen der App\n</b>Klicken Sie auf die 3 Linien oben links, um zum Navigationsmenü zu gelangen.\nWählen Sie <i>Einscannen</i>.\nScannen Sie nun einen von Ihnen gefundenen QR Code ein. Bei erfolgreichem Scannen sollte die aktuelle Station und deren Informationen angezeigt werden.\nWenn Sie zurück möchten, klicken Sie auf den Pfeil oben links.\nKlicken Sie das Karten Icon, um zur Karte zu gelangen.\nKlicken Sie die 3 Punkte oben rechts, um zu den Einstellungen zu gelangen.</string>
+    <string name="full_guide_drawer"><b>Informationen zum Navigationsmenü\n</b>Die aktuelle Seite ist hervorgehoben\nEinscannen: Scannen der QR Codes\nFortschritt: Anzeige aller verfügbarer Stationen\nVerlauf: Anzeige der bereits besuchten Stationen\nAnleitung: Das hier\nÜber uns: Informationen über das Entwicklerteam\nAGB: Allgemeine Geschäftbedingungen</string>
+    <string name="full_guide_map"><b>Informationen zur Karte</b>\nUm auf die Karte zugreifen zu können, ist die Erlaubnis eines Lehrers erforderlich. Diese können Sie erhalten, indem Sie einen vom Lehrer generierten QR Code einscannen. Sobald Sie die Karte freigeschalten haben, können Sie die Teile der Karte sehen, wo Sie die Stationen eingescannt haben. Grau hinterlegt sind die Teile der Karte, die eine Nachbarstation einer bereits absolvierten Station sind oder keiner Station entsprechen. Die Pfeile zeigen zur nächsten Station.</string>
+    <string name="full_guide_options"><b>Informationen zu den Einstellungen\n</b>Allgemein > Modus: Wahl zwischen Schulhaus-Rallye und Information Modus\nAllgemein > Nachtmodus: Einstellungen zum Erscheinungsbild der App (automatisch richtet sich nach den Systemeinstellungen)\nQualität > Videoqualität / Bildqualität: Auflösung der Videos und Bilder festlegen; für die Nutzung mit mobilen Daten ist eine niedrige Auflösung empfehlenswert</string>
+
+    <!--Video Strings-->
+    <string name="video_url_error">Fehler: Problem mit der Video-URL</string>
+    <string name="video_quality_high">Hoch (1920x1080p)</string>
+    <string name="video_quality_medium">Mittel (1270x720p)</string>
+    <string name="video_quality_low">Niedrig (640x480p)</string>
+    <string name="video_quality">Videoqualität</string>
+
+    <!--Image Strings-->
+    <string name="image_loading">Bild wird geladen</string>
+    <string name="image_not_found_with_current_resolution">Das Bild ist in dieser Auflösung nicht vorhanden. Bitte versuchen Sie es mit einer anderen Auflösung</string>
+
+    <!--other strings-->
+    <string name="network_no_connection">Keine Netzwerkverbindung!</string>
+    <string name="network_buffering">Laden…</string>
+    <string name="permission_needed">Bitte gewähren Sie dieser App Kamerazugriff</string>
+    <string name="scan_qr_code">Bitte scannen Sie den QR-Code ein</string>
+    <string name="dialog_message">Bitte starten Sie die App neu um die Änderungen vollständig anzuwenden</string>
+    <string name="dialog_title">Neustart erforderlich</string>
+    <string name="station_name">Stationsname</string>
+    <string name="retrieval_date">Abrufdatum</string>
+</resources>
