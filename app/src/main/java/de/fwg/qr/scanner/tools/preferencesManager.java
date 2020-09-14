@@ -98,6 +98,16 @@ public class preferencesManager {
     }
 
     /**
+     * Method to delete a key from the preferences
+     * @param name name of the key
+     */
+    public void deleteValue(String name){
+        editor=preferences.edit();
+        editor.remove(name);
+        editor.apply();
+    }
+
+    /**
      * get current mode setting
      * @return mode (true=rallye, false=info)
      */
@@ -119,5 +129,13 @@ public class preferencesManager {
      */
     public String getImageResolution() {
         return preferences.getString("image_quality", "high");
+    }
+
+    /**
+     * get unlocked features boolean
+     * @return features unlocked?
+     */
+    public boolean areFeaturesUnlocked(){
+        return preferences.getBoolean("unlocked",false);
     }
 }
