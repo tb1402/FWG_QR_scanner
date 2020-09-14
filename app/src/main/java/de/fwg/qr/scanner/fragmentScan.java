@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -38,6 +39,7 @@ import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import de.fwg.qr.scanner.progress.progressManager;
 import de.fwg.qr.scanner.tools.cache.cacheManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
@@ -111,9 +113,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        //System.out.println("RequesResult wird gecalled");
         if (requestCode == 201) {
-            //System.out.println("RequesResult wird gecalled");
             for (int i = 0, len = permissions.length; i < len; i++) {
                 String permission = permissions[i];
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
@@ -136,9 +136,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onPostCallback(String operation, String response) {
         pb.setVisibility(View.GONE);
         lockUI(false);
-        if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
+        /*if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
             Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT).show();
-        }
+        }*/
         if (operation.contentEquals("getInfo")) {
             try {
                 JSONObject object = new JSONObject(response);
@@ -178,6 +178,10 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     updateAlert();
                     return;
                 }
+                pb.setVisibility(View.VISIBLE);
+                lockUI(true);
+                Log.i("FWGO",preferencesManager.getInstance(c).getPreferences().getString("token","nof"));
+                net.makePostRequest(ref,"getPermission",preferencesManager.getInstance(c).getPreferences().getString("token",""));
             } catch (Exception e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
@@ -185,6 +189,34 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 return;
             }
             updateCheck = false;
+        }
+        else if(operation.contentEquals("getPermission")){
+            try {
+                JSONObject js = new JSONObject(response);
+                preferencesManager pm= preferencesManager.getInstance(c);
+                if (js.getString("status").contentEquals("200")) {
+                    if (!pm.getPreferences().contains("token")){
+                        pm.saveBoolean("unlocked", true);
+                        pm.saveString("token", barcodeValue);
+                        //TODO @me delete progress?
+                        Toast.makeText(c, getString(R.string.scan_teacher_success), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Log.i("FWGO",response);
+                    if(pm.getPreferences().contains("token")){
+                        pm.deleteValue("token");
+                    }
+                    if(pm.areFeaturesUnlocked()){
+                        pm.saveBoolean("unlocked",false);
+                    }
+                }
+            }
+            catch (JSONException e){
+                Intent i = new Intent(c, activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+                startActivity(i);
+            }
         }
     }
 
@@ -271,7 +303,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     /**
      * Method for handling situation where barcode is detected, starts newIntent afterwards
      */
-
     private void detection() {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
@@ -302,9 +333,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     lockUI(true);
                 }
             });
-            net.makePostRequest(ref, "getInfo", barcodeValue);
+            if (barcodeValue.length() == 10) {
+                net.makePostRequest(ref, "getInfo", barcodeValue);
+            }
+            else{
+                net.makePostRequest(ref,"getPermission",barcodeValue);
+            }
         }
-
     }
 
     /**

@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
@@ -57,11 +58,17 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
 
     @Override
     public void onCreate(Bundle savedInstanceBundle) {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);//prevent screenshots and video capture (not supported by some devices)
         super.onCreate(R.layout.activity_map, this, getString(R.string.item_map));
         super.onCreate(savedInstanceBundle);
+
+        manager = preferencesManager.getInstance(this);
+        if(!manager.areFeaturesUnlocked()){
+            finish();
+        }
+
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);
-        manager = preferencesManager.getInstance(this);
         allObtainedStationNames = new ArrayList<>();
         AMOUNT_OF_STATIONS_PER_LEVEL = new int[4];
         setupAbHome();

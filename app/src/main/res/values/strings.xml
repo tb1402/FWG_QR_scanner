@@ -33,7 +33,7 @@
     <string name="txt_progress_name">Visited stations</string>
     <string name="txt_not_visited_yet_name">Not visited yet</string>
     <string name="update_dialog_title">Update available</string>
-    <string name="update_dialog_content">A new version is available, pleas update now.</string>
+    <string name="update_dialog_content">A new version is available, please update now.</string>
 
     <!-- button strings -->
     <string name="next">Next</string>
@@ -93,6 +93,8 @@
     <string name="network_buffering">Loading…</string>
     <string name="permission_needed">Please grant this app camera access</string>
     <string name="scan_qr_code">Please scan the QR code</string>
+    <string name="scan_teacher_code">To use this feature, please scan the code from your teacher</string>
+    <string name="scan_teacher_success">Successfully scanned teacher code</string>
     <string name="dialog_message">Please restart the app to fully apply the pending changes</string>
     <string name="dialog_title">Restart required</string>
     <string name="station_name">station name</string>

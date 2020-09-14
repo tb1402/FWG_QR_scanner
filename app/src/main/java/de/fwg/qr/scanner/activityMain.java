@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -130,8 +131,13 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
                 return true;
             case R.id.tb_item_map:
-                i = new Intent(getApplicationContext(), activityMap.class);
-                startActivity(i);
+                if(preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()) {
+                    i = new Intent(getApplicationContext(), activityMap.class);
+                    startActivity(i);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -174,8 +180,13 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 show(f);
                 break;
             case R.id.item_frgm_progress:
-                f = new fragmentProgress();
-                show(f);
+                if(preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()){
+                    f = new fragmentProgress();
+                    show(f);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
+                }
                 break;
             default:
                 return false;
