@@ -115,7 +115,7 @@ public class network {
      */
     private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, final String id, final int number, final boolean preview) {
         final networkCallbackInterface nci = w.get();
-        String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + new preferencesManager(c).getImageResolution() + "/" + id + "/" + number + ".png");
+        String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + preferencesManager.getInstance(c).getImageResolution() + "/" + id + "/" + number + ".png");
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
@@ -149,7 +149,7 @@ public class network {
      */
     private ImageRequest getImageRequestWithID(WeakReference<networkCallbackImageID> w, final String name, final String id, final int number, final boolean preview) {
         final networkCallbackImageID nci = w.get();
-        String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + new preferencesManager(c).getImageResolution() + "/" + id + "/" + number + ".png");
+        String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + preferencesManager.getInstance(c).getImageResolution() + "/" + id + "/" + number + ".png");
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
