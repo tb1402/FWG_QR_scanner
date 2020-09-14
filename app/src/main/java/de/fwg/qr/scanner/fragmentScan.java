@@ -39,6 +39,7 @@ import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.progress.progressManager;
 import de.fwg.qr.scanner.tools.cache.cacheManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
@@ -198,7 +199,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     if (!pm.getPreferences().contains("token")){
                         pm.saveBoolean("unlocked", true);
                         pm.saveString("token", barcodeValue);
-                        //TODO @me delete progress?
+                        new historyManager(c).clearHistory();
                         Toast.makeText(c, getString(R.string.scan_teacher_success), Toast.LENGTH_SHORT).show();
                     }
                 }
