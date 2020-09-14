@@ -12,9 +12,11 @@ import java.lang.ref.WeakReference;
 import de.fwg.qr.scanner.tools.drawerToggleInterface;
 import de.fwg.qr.scanner.tools.network;
 
+/**
+ * wrapper class for resources used in all fragments
+ */
 public abstract class fragmentWrapper extends Fragment {
     network net;
-    //WeakReference<networkCallbackInterface> ref;
     Activity a;
     Context c;
 
@@ -24,10 +26,13 @@ public abstract class fragmentWrapper extends Fragment {
         a = requireActivity();
         c = requireContext();
         net = new network(c);
-        //ref=new WeakReference<>((networkCallbackInterface) this);
         setHasOptionsMenu(true);
     }
 
+    /**
+     * (un)lock ui, used during network request to prevent errors
+     * @param state (un)lock
+     */
     void lockUI(boolean state) {
         if (state) {
             a.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

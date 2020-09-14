@@ -8,7 +8,6 @@ import android.util.Log;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
-import de.fwg.qr.scanner.tools.async.asyncWrapper;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
@@ -94,7 +93,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
                 if (f.exists() && !f.isDirectory()) {
                     Log.i("FWGO","cached!");
                     //new readCacheFileTask(c, ref, (addToMemCacheWhileReadInterface) this, key,operation,"mykey").execute(f);//load from storage and add to memory cache see the readCacheFileTask
-                    new readCacheFileNA(c, ref.get(), (addToMemCacheWhileReadInterface) this, key,operation,f,"mykey").execute();
+                    new readCacheFileCustomAsyncTask(c, ref.get(), (addToMemCacheWhileReadInterface) this, key,operation,f,"mykey").execute();
                     return true;
                 }
             }
@@ -139,6 +138,6 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
      * @return crafted key
      */
     private String getCacheKey(String id, int number, boolean preview) {
-        return preview ? "low-" + id + "-" + number : new preferencesManager(c).getImageResolution() + "-" + id + "-" + number;
+        return preview ? "low-" + id + "-" + number : preferencesManager.getInstance(c).getImageResolution() + "-" + id + "-" + number;
     }
 }

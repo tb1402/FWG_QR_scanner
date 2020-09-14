@@ -34,15 +34,14 @@ import java.util.Locale;
 import de.fwg.qr.scanner.tools.exceptionHandler;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
+/**
+* Main (launcher) activity, used to setup navigation, start firstRun screen etc.
+*/
 public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface {
-    /**
-     * WICHTIG!!!
-     * Diese Klasse bleibt unverändert, hier wird nur Code eingefügt, der zur Navigation dient!!!
-     */
 
     private DrawerLayout drawer;
     private NavController navCon;
-    private ActionBarDrawerToggle abdt;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //set dark/light mode, depending on users settings
-        preferencesManager pm = new preferencesManager(getApplicationContext());
+        preferencesManager pm = preferencesManager.getInstance(getApplicationContext());
         switch (pm.getDarkMode()) {
             case 1:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -63,11 +62,12 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        //set the default  uncaught exception handler, to redirect all exceptions to activityErrorHandling
+        //set the default  uncaught exception handler, to redirect all exceptions (in activityMain) to activityErrorHandling
+        //TODO @me add other activities
         Thread.UncaughtExceptionHandler eh = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(new exceptionHandler(this, android.os.Process.myPid(), eh));
 
-        //check if first run
+        //check if first run and if so, show start activity
         if (pm.isFirstRun()) {
             Intent intent = new Intent(this, activityStart.class);
             startActivity(intent);
@@ -83,7 +83,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         Toolbar tb = findViewById(R.id.toolbar);
         tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
         setSupportActionBar(tb);//set the toolbar as Action bar
-        abdt = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) { //Bugfix: Drawer otherwise hidden when starting App for first time
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -91,8 +91,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 drawer.requestLayout();
             }
         };
-        drawer.addDrawerListener(abdt);
-        abdt.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
+        drawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
 
         //setup Navigation
         NavigationUI.setupActionBarWithNavController(this, navCon, drawer);
@@ -121,6 +121,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //handle toolbar items
         int id = item.getItemId();
         Intent i;
         switch (id) {
@@ -149,15 +150,12 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        //handle drawer items
         int id = item.getItemId();
         Fragment f;
         switch (id) {
             case R.id.item_frgm_history:
                 f = new fragmentHistory();
-                show(f);
-                break;
-            case R.id.item_frgm_information:
-                f = new fragmentInformation();
                 show(f);
                 break;
             case R.id.item_frgm_about:
@@ -212,8 +210,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         ActionBar a = getSupportActionBar();
         if (a != null) {
             a.setDisplayHomeAsUpEnabled(false);
-            abdt.setDrawerIndicatorEnabled(true);
-            abdt.syncState();
+            drawerToggle.setDrawerIndicatorEnabled(true);
+            drawerToggle.syncState();
         }
     }
 
@@ -227,8 +225,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         ActionBar a = getSupportActionBar();
         if (a != null) {
             a.setDisplayHomeAsUpEnabled(true);
-            abdt.setDrawerIndicatorEnabled(false);
-            abdt.syncState();
+            drawerToggle.setDrawerIndicatorEnabled(false);
+            drawerToggle.syncState();
         }
     }
 

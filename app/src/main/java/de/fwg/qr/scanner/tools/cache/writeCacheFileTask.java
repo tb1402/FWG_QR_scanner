@@ -42,21 +42,21 @@ class writeCacheFileTask extends AsyncTask<File, Void, Void> {
     @Override
     protected Void doInBackground(File... files) {
         try {
-            preferencesManager pm=new preferencesManager(cref.get());
+            preferencesManager pm=preferencesManager.getInstance(cref.get());
             ByteArrayOutputStream byteOutput=new ByteArrayOutputStream();
             data.compress(Bitmap.CompressFormat.PNG,100,byteOutput);
             byte[] bytes=byteOutput.toByteArray();
             byteOutput.close();
 
             byte[] salt = new byte[32];
-            if(pm.getString("enc_salt","").contentEquals("")) {
+            if(pm.getPreferences().getString("enc_salt","").contentEquals("")) {
                 SecureRandom random = new SecureRandom();
                 random.nextBytes(salt);
                 String saltString = Base64.encodeToString(salt, Base64.NO_WRAP);
                 pm.saveString("enc_salt", saltString);
             }
             else{
-                salt= Base64.decode(pm.getString("enc_salt",""),Base64.NO_WRAP);
+                salt= Base64.decode(pm.getPreferences().getString("enc_salt",""),Base64.NO_WRAP);
             }
 
             SecretKeyFactory secretKeyFactory=SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");

@@ -15,6 +15,9 @@ import de.fwg.qr.scanner.progress.progressListAdapter;
 import de.fwg.qr.scanner.progress.progressManager;
 import de.fwg.qr.scanner.progress.visitedStation;
 
+/**
+ * fragment showing the progress
+ */
 public class fragmentProgress extends fragmentWrapper {
 
     public ListView listProgress;

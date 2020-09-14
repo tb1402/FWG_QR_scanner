@@ -25,6 +25,9 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 
+/**
+*Activity to display and manage the map
+*/
 public class activityMap extends toolbarWrapper implements networkCallbackInterface {
 
     private ImageView imageView;
@@ -38,15 +41,13 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
     private WeakReference<networkCallbackInterface> ref;
     private static int AMOUNT_OF_STATIONS = 0;
     private preferencesManager manager;
-    /**
-     * Canvas where all bitmaps get drawn to
-     */
+
+    //Canvas where all bitmaps get drawn to
     private Canvas canvas;
     private Bitmap bitmapOfImageView;
     private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
-    /**
-     * Bitmap returned by
-     */
+
+    //Bitmap returned by
     private Bitmap result;
 
     private int currentLevel = 0;
@@ -60,7 +61,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackInterf
         super.onCreate(savedInstanceBundle);
         net = new network(this);
         ref = new WeakReference<>((networkCallbackInterface) this);
-        manager = new preferencesManager(this);
+        manager = preferencesManager.getInstance(this);
         allObtainedStationNames = new ArrayList<>();
         AMOUNT_OF_STATIONS_PER_LEVEL = new int[4];
         setupAbHome();

@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * fragment showing information about the developers
+ */
 public class fragmentAbout extends fragmentWrapper {
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -13,6 +13,9 @@ import de.fwg.qr.scanner.history.historyListAdapter;
 import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.history.taskResultCallback;
 
+/**
+ * fragment to show the history
+ */
 public class fragmentHistory extends fragmentWrapper {
 
     private ListView listHistory;

@@ -9,6 +9,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+/**
+ * wrapper class for common activity resources
+ */
 public abstract class toolbarWrapper extends AppCompatActivity {
     private Toolbar tb;
 
@@ -38,10 +41,18 @@ public abstract class toolbarWrapper extends AppCompatActivity {
         }
     }
 
+    /**
+     * set the toolbar title
+     * @param title value
+     */
     void setToolbarTitle(String title) {
         tb.setTitle(title);
     }
 
+    /**
+     * (un)lock ui, used during network request to prevent errors
+     * @param state (un)lock
+     */
     void lockUI(final boolean state) {
         runOnUiThread(new Runnable() {
             @Override

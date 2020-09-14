@@ -6,13 +6,16 @@ import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 
+/**
+ * Activity which manages the creation of the settings fragment
+ */
 public class activitySettings extends toolbarWrapper {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //super.onCreate(R.layout.activity_settings,this,getString(R.string.title_settings));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
         Toolbar tb = findViewById(R.id.toolbar);
         tb.setTitle(getString(R.string.title_settings));
         setSupportActionBar(tb);
@@ -22,6 +25,7 @@ public class activitySettings extends toolbarWrapper {
                 finish();
             }
         });
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);

@@ -28,7 +28,6 @@ import de.fwg.qr.scanner.tools.cache.cacheManager;
 
 public class network {
     public static String baseURL = "https://srv.tobias-bittner.de";//server url
-    private static String imageRequestTag="imageRequest";
     private Context c;
     private HashMap<String, String> headers;
     private cacheManager cm;
@@ -37,24 +36,28 @@ public class network {
         this.c = c;
         cm=new cacheManager(c);
 
+        //get version name, needed in userAgent
         String versionName;
         try {
             versionName = c.getPackageManager().getPackageInfo(new ContextWrapper(c).getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             versionName = "failed " + e.toString();
         }
+
+        //hashMap with headers, which will be send in every request
         headers = new HashMap<>();
+
+        //auth credentials
         String credentials = "fwgqr:" + BuildConfig.HTTP_AUTH_PW;
         String enc = Base64.encodeToString(credentials.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+
         headers.put("User-Agent", "FWG_QR_Scanner_version " + versionName + " on " + Build.DEVICE + " " + Build.VERSION.RELEASE);
-        //headers.put("Content-Type","text/plain; charset=utf-8");
         headers.put("Authorization", "Basic " + enc);
     }
 
     /**
-     * Method to check if network connectivity is available,
+     * Method to check whether network connectivity is available,
      * despite the warnings in this method there is no alternative, even google uses it until now in their docs
-     *
      * @return network available?
      */
     public boolean isNetworkAvailable() {
@@ -87,7 +90,7 @@ public class network {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> d = new HashMap<>();
-                d.put("data", data);
+                d.put("data", data);//put post data
                 return d;
             }
 
@@ -96,7 +99,7 @@ public class network {
                 return headers;
             }
         };
-        r.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        r.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));//increase timeout
         return r;
     }
 
@@ -113,12 +116,12 @@ public class network {
     private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, final String id, final int number, final boolean preview) {
         final networkCallbackInterface nci = w.get();
         String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + new preferencesManager(c).getImageResolution() + "/" + id + "/" + number + ".png");
-        ImageRequest r=new ImageRequest(url,
+        return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
                         nci.onImageCallback(name, response);
-                        cm.cacheImage(id, number, response, preview);
+                        cm.cacheImage(id, number, response, preview);//pass to cacheManager
                     }
                 }, 0, 0, null, Bitmap.Config.ARGB_8888,
                 new Response.ErrorListener() {
@@ -132,8 +135,6 @@ public class network {
                 return headers;
             }
         };
-        r.setTag(imageRequestTag);
-        return r;
     }
 
     /**
@@ -154,6 +155,7 @@ public class network {
                     @Override
                     public void onResponse(Bitmap response) {
                         nci.onImageCallback(name, response, number);
+                        cm.cacheImage(id, number, response, preview);//pass to cacheManager
                     }
                 }, 0, 0, null, Bitmap.Config.ARGB_8888,
                 new Response.ErrorListener() {
@@ -206,9 +208,5 @@ public class network {
      */
     public void makeImageRequestWithIDCallback(WeakReference<networkCallbackImageID> nci, String name, String id, int number, boolean preview) {
         requestQueueSingleton.getInstance(c).addToRq(getImageRequestWithID(nci, name, id, number, preview), c);
-    }
-
-    public void cancelAllImageRequests(){
-        requestQueueSingleton.getInstance(c).cancelAll(imageRequestTag);
     }
 }

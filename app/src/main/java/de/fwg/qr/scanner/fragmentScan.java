@@ -42,6 +42,9 @@ import de.fwg.qr.scanner.tools.cache.cacheManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
+/**
+*fragment to scan a qr code
+*/
 public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {
 
     private WeakReference<networkCallbackInterface> ref;
@@ -146,23 +149,31 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 i.putExtra("Video", object.getString("Video"));
                 startActivity(i);
             } catch (JSONException e) {
+                //TODO @everyone use resource
                 Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT).show();
             }
         } else if (operation.contentEquals("getVersion")) {
             try {
-                preferencesManager pref = new preferencesManager(c);
+                preferencesManager pref = preferencesManager.getInstance(c);
+
                 JSONObject j = new JSONObject(response);
                 String date = j.getString("date");
                 String version = j.getString("version");
+
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
-                if (!pref.contains("cache_date")) {
+                if (!pref.getPreferences().contains("cache_date")) {
                     pref.saveString("cache_date", date);
                 }
-                String savedDateString = pref.getString("cache_date", "2020-01-01");
+
+                String savedDateString = pref.getPreferences().getString("cache_date", "2020-01-01");
+
+                //compare the locally and the server date for cache update, if server data is larger, cached files will be deleted
                 if (df.parse(date).getTime() > df.parse(savedDateString).getTime()) {
                     new cacheManager(c).invalidateCache();
                     pref.saveString("cache_date", date);
                 }
+
+                //check for update
                 if (checkUpdate(version)) {
                     updateAlert();
                     return;
@@ -184,7 +195,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     /**
      * Initializes both barcodeDetector as well as CameraSource where the detector is underlined
      */
-
     private void initialize() {
         i = null;
         barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
@@ -219,7 +229,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     }
 
     /**
-     * Methode for starting usage of camera
+     * Method for starting usage of camera
      */
     private void startCamera() {
         surface.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -297,19 +307,24 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
     }
 
+    /**
+     * compare version string from server to local version
+     * @param ver version string from server
+     * @return update available?
+     */
     private boolean checkUpdate(String ver) {
         try {
             ContextWrapper cw = new ContextWrapper(c);
             PackageInfo pInfo = c.getPackageManager().getPackageInfo(cw.getPackageName(), 0);
-            preferencesManager pref = new preferencesManager(c);
+            preferencesManager pref = preferencesManager.getInstance(c);
             int vc = pInfo.versionCode;
             if (vc < Integer.parseInt(ver.replace("\n", ""))) {
-                if (!pref.getBoolean("update", true)) {
+                if (!pref.getPreferences().getBoolean("update", true)) {
                     pref.saveBoolean("update", true);
                 }
                 return true;
             } else {
-                if (pref.getBoolean("update", false)) {
+                if (pref.getPreferences().getBoolean("update", false)) {
                     pref.saveBoolean("update", false);
                 }
                 return false;
@@ -322,26 +337,30 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         }
     }
 
+    /**
+     * alert dialog, if update is available
+     */
     private void updateAlert() {
         final String appPackageName = c.getPackageName();
         AlertDialog.Builder alert;
         alert = new AlertDialog.Builder(c);
         alert.setCancelable(false);
-        alert.setTitle("Alte Version!");
-        alert.setMessage("Bitte aktualisiere die App!");
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alert.setTitle(getString(R.string.update_dialog_title));
+        alert.setMessage(getString(R.string.update_dialog_content));
+        alert.setPositiveButton(getString(R.string.button_update_dialog_close), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 a.finishAffinity();
             }
         });
-        alert.setNegativeButton("Update", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getString(R.string.button_update_dialog_update), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 } catch (android.content.ActivityNotFoundException e) {
+                    //no local android market, open browser
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
                 }
                 a.finishAffinity();

@@ -2,15 +2,14 @@ package de.fwg.qr.scanner.tools.cache;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.security.spec.KeySpec;
 
@@ -22,11 +21,11 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import de.fwg.qr.scanner.activityErrorHandling;
-import de.fwg.qr.scanner.tools.async.asyncTask;
+import de.fwg.qr.scanner.tools.asyncTask;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
-class readCacheFileNA extends asyncTask {
+class readCacheFileCustomAsyncTask extends asyncTask {
 
     private final String key;
     private networkCallbackInterface ref;
@@ -36,7 +35,7 @@ class readCacheFileNA extends asyncTask {
     private File f;
     private String encKey;
 
-    public readCacheFileNA(Context c, networkCallbackInterface ref, addToMemCacheWhileReadInterface cm, String key,String operation, File f, String encKey) {
+    public readCacheFileCustomAsyncTask(Context c, networkCallbackInterface ref, addToMemCacheWhileReadInterface cm, String key, String operation, File f, String encKey) {
         this.ref = ref;
         this.cm = cm;
         this.key = key;
@@ -48,22 +47,21 @@ class readCacheFileNA extends asyncTask {
 
     @Override
     public void run() {
-        Log.i("FWGO","cache load");
         Bitmap b;
         try {
-            preferencesManager pm = new preferencesManager(cref.get());
+            //TODO @me simplify
+            SharedPreferences pref = preferencesManager.getInstance(cref.get()).getPreferences();
 
             FileInputStream inputStream = new FileInputStream(f);
             byte[] input = new byte[(int) f.length()];
             inputStream.read(input);
             inputStream.close();
-            Log.i("FWG0", f.length() + " " + input.length);
 
             byte[] salt;
-            String ivBs64 = pm.getString("enc_salt", "");
+            String ivBs64 = pref.getString("enc_salt", "");
             salt = Base64.decode(ivBs64, Base64.NO_WRAP);
 
-            int ivLength = pm.getInt("enc_iv_length", -1);
+            int ivLength = pref.getInt("enc_iv_length", -1);
             byte[] iv = new byte[ivLength];
             System.arraycopy(input, 0, iv, 0, ivLength);
 
@@ -87,12 +85,10 @@ class readCacheFileNA extends asyncTask {
             b=null;
         }
 
-        Log.i("FWGO","loaded");
         if (b== null) {
             ref.onImageCallback("errorCache",null);
         } else {
             ref.onImageCallback(operation,b);
-            Log.i("FWGO","callback!");
             cm.addToCache(key, b);//add image to memory cache
         }
         stop();

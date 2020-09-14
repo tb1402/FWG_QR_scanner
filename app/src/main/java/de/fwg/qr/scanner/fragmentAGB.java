@@ -12,13 +12,16 @@ import androidx.annotation.NonNull;
 
 import de.fwg.qr.scanner.tools.preferencesManager;
 
+/**
+ * fragment for showing legal disclaimer
+ */
 public class fragmentAGB extends fragmentWrapper {
     private preferencesManager p;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        p = new preferencesManager(c);
+        p =preferencesManager.getInstance(c);
         if (!p.isFirstRun()) {
             showStartIcon();
         }

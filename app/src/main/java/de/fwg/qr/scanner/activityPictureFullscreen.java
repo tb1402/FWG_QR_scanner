@@ -21,6 +21,9 @@ import java.lang.ref.WeakReference;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
+/**
+*Show a picture from a station in fullscreen mode
+*/
 public class activityPictureFullscreen extends AppCompatActivity implements networkCallbackInterface {
 
     private ImageView imageView;

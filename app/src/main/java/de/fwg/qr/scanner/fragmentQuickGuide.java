@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+/**
+ * fragment showing the quick guide
+ */
 public class fragmentQuickGuide extends fragmentWrapper {
 
     @Override

@@ -2,6 +2,7 @@ package de.fwg.qr.scanner.tools.cache;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -51,7 +52,7 @@ class readCacheFileTask extends AsyncTask<File, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(File... files) {
         try {
-            preferencesManager pm=new preferencesManager(cref.get());
+            SharedPreferences pm=preferencesManager.getInstance(cref.get()).getPreferences();
 
             FileInputStream inputStream=new FileInputStream(files[0]);
             byte[] input=new byte[(int) files[0].length()];

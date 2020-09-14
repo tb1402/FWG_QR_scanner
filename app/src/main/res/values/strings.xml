@@ -32,6 +32,8 @@
     <string name="title_activty_error">Error</string>
     <string name="txt_progress_name">Visited stations</string>
     <string name="txt_not_visited_yet_name">Not visited yet</string>
+    <string name="update_dialog_title">Update available</string>
+    <string name="update_dialog_content">A new version is available, pleas update now.</string>
 
     <!-- button strings -->
     <string name="next">Next</string>
@@ -45,6 +47,8 @@
     <string name="basement">Basement</string>
     <string name="second_floor">1st floor</string>
     <string name="third_floor">2nd floor</string>
+    <string name="button_update_dialog_close">Close</string>
+    <string name="button_update_dialog_update">Update</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>

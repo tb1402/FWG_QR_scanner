@@ -23,6 +23,9 @@ import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
+/**
+*Activity which shows information about a station, after code as been scanned
+*/
 public class activityScan extends toolbarWrapper implements networkCallbackInterface {
 
     private ImageView imageView;
@@ -115,7 +118,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     }
 
     /**
-     * Methode for handling Buttons used by ImageSwitcher as well as creating a Button if a video for this station exists
+     * Method for handling Buttons used by ImageSwitcher as well as creating a Button if a video for this station exists
      */
     public void assignButtons() {
         if (Integer.parseInt(bild) > 1) {
