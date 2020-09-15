@@ -54,6 +54,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     private Bitmap result;
 
     private int currentLevel = 0;
+    //Important for hindering user to load same floor over and over again
+    private int check = -2;
     private ArrayList<Integer> allObtainedStationNames;
     private JSONArray stationData;
 
@@ -111,25 +113,33 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             case R.id.radioButton1: //Erdgeschoss
                 if (checked) {
                     currentLevel = 0;
-                    getImages(currentLevel);
+                    if (check != currentLevel) {
+                        getImages(currentLevel);
+                    }
                 }
                 break;
             case R.id.radioButton2: //Untergeschoss
                 if (checked) {
                     currentLevel = -1;
-                    getImages(currentLevel);
+                    if (check != currentLevel) {
+                        getImages(currentLevel);
+                    }
                 }
                 break;
             case R.id.radioButton3: //1. Stock
                 if (checked) {
                     currentLevel = 1;
-                    getImages(currentLevel);
+                    if (check != currentLevel) {
+                        getImages(currentLevel);
+                    }
                     break;
                 }
             case R.id.radioButton4: // 2. Stock
                 if (checked) {
                     currentLevel = 2;
-                    getImages(currentLevel);
+                    if (check != currentLevel) {
+                        getImages(currentLevel);
+                    }
                 }
         }
     }
@@ -193,7 +203,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 default:
                     System.out.println("That shouldn't happen");
             }
-        } else if (name.contentEquals("FloorRequest")) {
+        }
+        if (name.contentEquals("FloorRequest")) {
             if (number != currentLevel) {
                 return;
             }
@@ -288,6 +299,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     public void getImages(int level) {
         canvas = null;
+        check = level;
         if (allObtainedStationNames.size() == 0) {
             net.makeImageRequestWithIDCallback(ref, "FloorRequest", "mapFloors", level, true);
             return;

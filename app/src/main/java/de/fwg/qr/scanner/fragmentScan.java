@@ -211,7 +211,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         pm.saveBoolean("unlocked",false);
                     }
                 }
-                detection();
             }
             catch (JSONException e){
                 Intent i = new Intent(c, activityErrorHandling.class);
@@ -308,7 +307,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-
             }
 
             @Override
@@ -328,8 +326,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private void newIntent() {
         if (i == null && !barcodeValue.contentEquals("")) {
             i = new Intent(getActivity(), activityScan.class);
-            barcodeDetector.release();
-            //detection();
             a.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
