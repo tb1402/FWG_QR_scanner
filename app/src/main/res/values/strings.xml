@@ -32,8 +32,18 @@
     <string name="title_activty_error">Error</string>
     <string name="txt_progress_name">Visited stations</string>
     <string name="txt_not_visited_yet_name">Not visited yet</string>
+
+    <!--dialog strings-->
+    <string name="dialog_message">Please restart the app to fully apply the pending changes</string>
+    <string name="dialog_title">Restart required</string>
     <string name="update_dialog_title">Update available</string>
     <string name="update_dialog_content">A new version is available, please update now.</string>
+    <string name="button_update_dialog_close">Close</string>
+    <string name="button_update_dialog_update">Update</string>
+    <string name="dialog_del_warning_title">Progress will be lost…</string>
+    <string name="dialog_del_warning_content">Your progress and history will be lost, if you proceed.</string>
+    <string name="dialog_del_warning_continue">Continue</string>
+    <string name="dialog_del_warning_cancel">Cancel</string>
 
     <!-- button strings -->
     <string name="next">Next</string>
@@ -47,8 +57,6 @@
     <string name="basement">Basement</string>
     <string name="second_floor">1st floor</string>
     <string name="third_floor">2nd floor</string>
-    <string name="button_update_dialog_close">Close</string>
-    <string name="button_update_dialog_update">Update</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>
@@ -95,8 +103,6 @@
     <string name="scan_qr_code">Please scan the QR code</string>
     <string name="scan_teacher_code">To use this feature, please scan the code from your teacher</string>
     <string name="scan_teacher_success">Successfully scanned teacher code</string>
-    <string name="dialog_message">Please restart the app to fully apply the pending changes</string>
-    <string name="dialog_title">Restart required</string>
     <string name="station_name">station name</string>
     <string name="retrieval_date">retrieval date</string>
 </resources>

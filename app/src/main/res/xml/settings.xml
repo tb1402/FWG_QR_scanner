@@ -9,7 +9,7 @@
 
         <ListPreference
             android:id="@+id/pref_mode"
-            android:defaultValue="0"
+            android:defaultValue="1"
             android:entries="@array/settings_mode_string_values"
             android:entryValues="@array/settings_mode_int_values"
             android:key="mode"

@@ -198,6 +198,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     if (!pm.getPreferences().contains("token")){
                         pm.saveBoolean("unlocked", true);
                         pm.saveString("token", barcodeValue);
+                        pm.saveString("mode",String.valueOf(0));
                         new historyManager(c).clearHistory();
                         Toast.makeText(c, getString(R.string.scan_teacher_success), Toast.LENGTH_SHORT).show();
                     }

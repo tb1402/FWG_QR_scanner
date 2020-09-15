@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
@@ -15,6 +16,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 /**
@@ -32,10 +34,77 @@ public class fragmentSettings extends PreferenceFragmentCompat {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ListPreference mp = findPreference("mode");
+
+        // set listener to darkmode setting
+        ListPreference lp = findPreference("darkmode");
+        Preference.OnPreferenceChangeListener pcl = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                showRestartDialog();
+                return true;
+            }
+        };
+        assert lp != null;
+        lp.setOnPreferenceChangeListener(pcl);
+
+        //ser listener for mode setting
+        Preference.OnPreferenceChangeListener modeChangeListener=new Preference.OnPreferenceChangeListener(){
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int newVal=Integer.parseInt((String)newValue);
+                preferencesManager pm=preferencesManager.getInstance(requireContext());
+                if(pm.areFeaturesUnlocked()){
+                    if(!pm.isRallyeMode()&&newVal==0){
+                        showHistoryDeletionWarningDialog();
+                        return false;
+                    }
+                }
+                else{
+                    if(!pm.isRallyeMode()&&newVal==0){
+                        Toast.makeText(requireContext(), getString(R.string.scan_teacher_code), Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
+        assert mp != null;
+        mp.setOnPreferenceChangeListener(modeChangeListener);
+    }
+
+    /**
+     * Warning, that history will be deleted, shown, when changing from info to rally mode, while having a valid license
+     */
+    private void showHistoryDeletionWarningDialog(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(requireActivity())
+                .setTitle(getString(R.string.dialog_del_warning_title))
+                .setMessage(getString(R.string.dialog_del_warning_content))
+                .setPositiveButton(getString(R.string.dialog_del_warning_continue), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new historyManager(requireContext()).clearHistory();
+                        preferencesManager.getInstance(requireContext()).saveString("mode",String.valueOf(0));
+                        requireActivity().recreate();
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_del_warning_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.create().show();
+    }
+
+    /**
+     * Restart dialog, to prevent issues with darkmode
+     */
+    private void showRestartDialog(){
         //set up the restart prompt
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
+                .setMessage(R.string.dialog_message).setTitle(R.string.dialog_title)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 PendingIntent pi = PendingIntent.getActivity(requireContext(), 0, new Intent(requireContext(), activityMain.class), PendingIntent.FLAG_CANCEL_CURRENT);
@@ -50,25 +119,13 @@ public class fragmentSettings extends PreferenceFragmentCompat {
                     startActivity(i);
                 }
             }
-        });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+        })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
                 requireActivity().recreate();
             }
         });
-        final AlertDialog dialog = builder.create();
-
-        // set listener to darkmode setting
-        ListPreference lp = findPreference("darkmode");
-        Preference.OnPreferenceChangeListener pcl = new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                dialog.show();
-                return true;
-            }
-        };
-        assert lp != null;
-        lp.setOnPreferenceChangeListener(pcl);
+        builder.create().show();
     }
 }

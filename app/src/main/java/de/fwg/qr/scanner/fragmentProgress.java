@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -14,6 +15,7 @@ import de.fwg.qr.scanner.history.taskResultCallback;
 import de.fwg.qr.scanner.progress.progressListAdapter;
 import de.fwg.qr.scanner.progress.progressManager;
 import de.fwg.qr.scanner.progress.visitedStation;
+import de.fwg.qr.scanner.tools.preferencesManager;
 
 /**
  * fragment showing the progress
@@ -44,19 +46,24 @@ public class fragmentProgress extends fragmentWrapper {
         barStationProgress = v.findViewById(R.id.bar_station_progress);
         txtStationProgress = v.findViewById(R.id.txt_station_progress);
 
-        final progressManager manager = new progressManager(c);
-        manager.getProgressAsync(new taskResultCallback<visitedStation[]>() {
-            @Override
-            public void onFinished(visitedStation[] result) {
-                progressListAdapter adapter = new progressListAdapter(c, result);
-                listProgress.setAdapter(adapter);
+        if (preferencesManager.getInstance(c).areFeaturesUnlocked()) {
+            final progressManager manager = new progressManager(c);
+            manager.getProgressAsync(new taskResultCallback<visitedStation[]>() {
+                @Override
+                public void onFinished(visitedStation[] result) {
+                    progressListAdapter adapter = new progressListAdapter(c, result);
+                    listProgress.setAdapter(adapter);
 
-                barStationProgress.setMax(result.length);
-                barStationProgress.setProgress((int) (result.length * manager.OverallProgress));
-                txtStationProgress.setText((getString(R.string.txt_progress_name) + " : " + (int) (result.length * manager.OverallProgress) + " / " + result.length));
+                    barStationProgress.setMax(result.length);
+                    barStationProgress.setProgress((int) (result.length * manager.OverallProgress));
+                    txtStationProgress.setText((getString(R.string.txt_progress_name) + " : " + (int) (result.length * manager.OverallProgress) + " / " + result.length));
 
-            }
-        });
+                }
+            });
+        }
+        else{
+            Toast.makeText(c,getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
+        }
 
 
     }
