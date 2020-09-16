@@ -124,7 +124,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     boolean showRationale = shouldShowRequestPermissionRationale(permission);
                     if (!showRationale) {
                         Toast.makeText(c, getString(R.string.permission_needed), Toast.LENGTH_SHORT).show();
-                        System.out.println("false showRationale");
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", a.getPackageName(), null);
                         intent.setData(uri);
@@ -140,9 +139,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onPostCallback(String operation, String response) {
         pb.setVisibility(View.GONE);
         lockUI(false);
-        /*if (operation.contains("error") || response.contains("Error") || response.contains("error")) {
-            Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT).show();
-        }*/
         if (operation.contentEquals("getInfo")) {
             try {
                 JSONObject object = new JSONObject(response);

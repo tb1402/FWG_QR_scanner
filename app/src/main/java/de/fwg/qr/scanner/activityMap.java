@@ -157,10 +157,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 stationData = mapData.getJSONArray("stations");
                 AMOUNT_OF_STATIONS = stationData.length();
                 AMOUNT_OF_STATIONS_PER_LEVEL = getStationsPerLevel(stationData);
-                for (int i = 0; i < AMOUNT_OF_STATIONS_PER_LEVEL.length; i++) {
-                    System.out.println(AMOUNT_OF_STATIONS_PER_LEVEL[i]);
-                }
-                System.out.println("Value of AMOUNT_OF_STATIONS: " + AMOUNT_OF_STATIONS);
                 getImages(currentLevel);
             } catch (JSONException e) {
                 Intent i = new Intent(this, activityErrorHandling.class);
@@ -200,8 +196,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                         return;
                     }
                     break;
-                default:
-                    System.out.println("That shouldn't happen");
             }
         }
         if (name.contentEquals("FloorRequest")) {
