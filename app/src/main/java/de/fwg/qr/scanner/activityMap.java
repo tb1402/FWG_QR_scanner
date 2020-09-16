@@ -468,15 +468,11 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.tb_item_settings:
-                Intent i = new Intent(getApplicationContext(), activitySettings.class);
-                startActivity(i);
-                return true;
-            case R.id.tb_item_map:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (id == R.id.tb_item_settings) {
+            Intent i = new Intent(getApplicationContext(), activitySettings.class);
+            startActivity(i);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

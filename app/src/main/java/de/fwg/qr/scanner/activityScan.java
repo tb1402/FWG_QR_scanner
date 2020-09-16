@@ -110,7 +110,12 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             i++;
             if (i >= Integer.parseInt(bild)) {
                 lockUI(false);
-                setImageSwitcher();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setImageSwitcher();
+                    }
+                });
             } else {
                 getImages();
             }

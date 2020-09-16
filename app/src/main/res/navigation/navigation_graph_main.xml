@@ -9,7 +9,11 @@
         android:id="@+id/item_frgm_scan"
         android:name="de.fwg.qr.scanner.fragmentScan"
         android:label="@string/item_scan_title"
-        tools:layout="@layout/fragment_scan" />
+        tools:layout="@layout/fragment_scan" >
+        <action
+            android:id="@+id/action_item_frgm_scan_self"
+            app:destination="@id/item_frgm_scan" />
+    </fragment>
     <fragment
         android:id="@+id/item_frgm_agb"
         android:name="de.fwg.qr.scanner.fragmentAGB"
@@ -30,11 +34,6 @@
         android:name="de.fwg.qr.scanner.fragmentHistory"
         android:label="@string/item_history_title"
         tools:layout="@layout/fragment_history" />
-    <fragment
-        android:id="@+id/item_frgm_information"
-        android:name="de.fwg.qr.scanner.fragmentInformation"
-        android:label="@string/item_information_title"
-        tools:layout="@layout/fragment_information" />
     <fragment
         android:id="@+id/item_frgm_progress"
         android:name="de.fwg.qr.scanner.fragmentProgress"

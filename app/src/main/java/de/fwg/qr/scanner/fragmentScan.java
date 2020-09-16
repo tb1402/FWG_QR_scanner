@@ -14,6 +14,8 @@ import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -31,6 +33,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,6 +58,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private SurfaceView surface = null;
     private TextView textView2;
     private ProgressBar pb;
+
+    //boolean used to differentiate between a teacherCode is scanned (true) or not,
+    //needed because the operation getPermission gets called when a code is scanned and on startup to verify the permission,
+    //but the fragment needs only be recreated (otherwise camera and scan issues) when a code was scanned
+    private boolean isTeacherCodeScanned=false;
+
+    private String[] stationIds;
 
     /**
      * Intent made qlobal because of reciveDetection being called multiple times
@@ -137,6 +147,17 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu){
+        if(preferencesManager.getInstance(c).isRallyeMode()){
+            menu.findItem(R.id.tb_item_reset).setVisible(true);
+        }
+        else {
+            menu.findItem(R.id.tb_item_reset).setVisible(false);
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public void onPostCallback(String operation, String response) {
         pb.setVisibility(View.GONE);
         lockUI(false);
@@ -155,7 +176,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             } catch (JSONException e) {
                 //TODO @everyone use resource
                 Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT).show();
-                detection();
+                ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
             }
         } else if (operation.contentEquals("getVersion")) {
             try {
@@ -206,6 +227,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         new historyManager(c).clearHistory();
                         Toast.makeText(c, getString(R.string.scan_teacher_success), Toast.LENGTH_SHORT).show();
                     }
+                    net.makePostRequest(ref,"getMapData","");
                 } else {
                     Log.i("FWGO", response);
                     if (pm.getPreferences().contains("token")) {
@@ -215,8 +237,28 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         pm.saveBoolean("unlocked", false);
                     }
                 }
-                detection();
+                if(isTeacherCodeScanned) ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
             } catch (JSONException e) {
+                Intent i = new Intent(c, activityErrorHandling.class);
+                i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+                startActivity(i);
+            }
+        }
+        else if(operation.contentEquals("getMapData")){
+            try{
+                JSONObject js=new JSONObject(response);
+                if(!js.getString("status").contentEquals("ok")){
+                    Intent i = new Intent(c, activityErrorHandling.class);
+                    i.putExtra(activityErrorHandling.errorNameIntentExtra,"map data error");
+                    startActivity(i);
+                }
+                JSONArray jsa=js.getJSONArray("stations");
+                stationIds=new String[jsa.length()];
+                for (int i=0;i<stationIds.length;i++){
+                    stationIds[i]=jsa.getJSONObject(i).getString("stationId");
+                }
+            }
+            catch (JSONException e){
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
@@ -260,7 +302,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onResume() {
         super.onResume();
         if (!check) {
-            a.recreate();
+            ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
         }
     }
 
@@ -309,7 +351,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      */
     private void detection() {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-
             @Override
             public void release() {
             }
@@ -319,51 +360,12 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 final SparseArray<Barcode> detectedFrames = detections.getDetectedItems();
                 if (detectedFrames.size() != 0 && !updateCheck) {
                     barcodeValue = detectedFrames.valueAt(0).displayValue;
-
                     a.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             newIntent();
                         }
                     });
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            t1 = System.nanoTime();
-                            t2 = System.nanoTime();
-                            dt = t2 - t1 + dt;
-                            if (dt >= (3000000000f) /*&& !barcodeValue.contentEquals(detectedFrames.valueAt(0).displayValue)*/) {
-                                a.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (!check2) {
-                                            check2 = true;
-                                            a.recreate();
-                                        }
-
-                                    }
-                                });
-                                return;
-                            }
-                            while (true) {
-                                t1 = t2;
-                                t2 = System.nanoTime();
-                                dt = t2 - t1 + dt;
-                                if (dt >= (3000000000f) /*&& !barcodeValue.contentEquals(detectedFrames.valueAt(0).displayValue)*/) {
-                                    a.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (!check2) {
-                                                check2 = true;
-                                                a.recreate();
-                                            }
-                                        }
-                                    });
-                                    return;
-                                }
-                            }
-                        }
-                    }.start();
                 }
 
             }
@@ -385,8 +387,21 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 }
             });
             if (barcodeValue.length() == 10) {
+                preferencesManager pm=preferencesManager.getInstance(c);
+                if(pm.isRallyeMode()){
+                    int current=pm.getPreferences().getInt("rallyStationNumber",-1);
+                    if(!barcodeValue.contentEquals(stationIds[current+1])){
+                        Toast.makeText(c,getString(R.string.wrong_station),Toast.LENGTH_SHORT).show();
+                        ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
+                        pb.setVisibility(View.GONE);
+                        lockUI(false);
+                        return;
+                    }
+                    pm.saveInt("rallyStationNumber",current+1);
+                }
                 net.makePostRequest(ref, "getInfo", barcodeValue);
             } else {
+                isTeacherCodeScanned=true;
                 net.makePostRequest(ref, "getPermission", barcodeValue);
             }
         }
@@ -454,5 +469,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         });
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
+    }
+
+    /**
+     * Interface used for the recreation of the fragment after a teacher- or wrong code has been scanned, because resetting the detector caused issues
+     * method is implemented in {@link activityMain} because navigation is handled there
+     */
+    public interface recreateFragmentAfterScanInterface{
+        void recreateFragmentAfterScan();
     }
 }

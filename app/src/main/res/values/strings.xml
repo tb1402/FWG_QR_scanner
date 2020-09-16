@@ -44,6 +44,8 @@
     <string name="dialog_del_warning_content">Your progress and history will be lost, if you proceed.</string>
     <string name="dialog_del_warning_continue">Continue</string>
     <string name="dialog_del_warning_cancel">Cancel</string>
+    <string name="dialog_reset_progress_title">Reset progress</string>
+    <string name="dialog_reset_progress_content">Are you sure to delete your station progress?</string>
 
     <!-- button strings -->
     <string name="next">Next</string>
@@ -105,4 +107,5 @@
     <string name="scan_teacher_success">Successfully scanned teacher code</string>
     <string name="station_name">station name</string>
     <string name="retrieval_date">retrieval date</string>
+    <string name="wrong_station">This is not the next station, please scan the right code.</string>
 </resources>
