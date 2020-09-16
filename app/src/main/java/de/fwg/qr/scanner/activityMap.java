@@ -297,6 +297,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         check = level;
         if (allObtainedStationNames.size() == 0) {
             net.makeImageRequestWithIDCallback(ref, "FloorRequest", "mapFloors", level, true);
+            if (manager.isRallyeMode()) {
+                net.makeImageRequestWithIDCallback(ref, "NextImageRequest", "mapFragments", allObtainedStationNames.size(), true);
+            }
             return;
         }
         if (manager.isRallyeMode() && currentLevel == 0) { //Letzte Station ist Speziallfall, ist nicht nach Stockwerk geordnet und ersetzt den Erdgeschoss
