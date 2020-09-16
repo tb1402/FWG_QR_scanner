@@ -82,7 +82,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         button2 = findViewById(R.id.radioButton2);
         button3 = findViewById(R.id.radioButton3);
         button4 = findViewById(R.id.radioButton4);
-        net.makeImageRequestWithIDCallback(ref, "FloorRequest", "mapFloors", currentLevel, true);
+        //net.makeImageRequestWithIDCallback(ref, "FloorRequest", "mapFloors", currentLevel, true);
         getMapParts(new taskResultCallback<String[]>() {
             @Override
             public void onFinished(String[] result) {
@@ -174,7 +174,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     @Override
     public void onImageCallback(String name, Bitmap image, int number) {
-        if (!name.contentEquals("FloorRequest")) {
+        if (!name.contentEquals("FloorRequest") && !name.contentEquals("FinalStage")) {
             switch (currentLevel) {
                 case 0:
                     if (AMOUNT_OF_STATIONS_PER_LEVEL[1] <= number) {
@@ -231,6 +231,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         } else if (name.contentEquals("FinalStage")) {
             if (currentLevel == 0) {
                 final Bitmap bit = nextImageRequest(image);
+                canvas = null;
                 this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
