@@ -52,7 +52,6 @@ class readCacheFileCustomAsyncTask extends asyncTask {
     public void run() {
         Bitmap b;
         try {
-            //todo @me proper key
             SharedPreferences pref = preferencesManager.getInstance(cref.get()).getPreferences();
 
             //read cache file into byte array

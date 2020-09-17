@@ -153,7 +153,7 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
         String type = Build.TYPE;
         String hw = Build.HARDWARE;
         String fp = Build.FINGERPRINT;
-        String display = Build.DEVICE;
+        String display = Build.DISPLAY;
         String bl = Build.BOOTLOADER;
         String board = Build.BOARD;
         String radio = Build.getRadioVersion();

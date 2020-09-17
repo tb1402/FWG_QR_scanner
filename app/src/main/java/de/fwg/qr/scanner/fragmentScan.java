@@ -182,6 +182,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 String date = j.getString("date");
                 String version = j.getString("version");
 
+                //set the encryption key base, delivered from the server
+                if(cacheManager.encryptionKeyBase==null){
+                    cacheManager.encryptionKeyBase=j.getString("ek");
+                }
+
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
                 if (!pref.getPreferences().contains("cache_date")) {
                     pref.saveString("cache_date", date);

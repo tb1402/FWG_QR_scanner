@@ -2,6 +2,7 @@ package de.fwg.qr.scanner.tools.cache;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Environment;
 
 import java.io.File;
@@ -19,6 +20,10 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
     private Context c;
     private memoryCacheSingleton memoryCache;
 
+    public static String encryptionKeyBase=null;
+
+    private String encryptionKey;
+
     /**
      * Why do we always need this f*****g context?
      *
@@ -27,6 +32,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
     public cacheManager(Context c) {
         this.c = c;
         memoryCache = memoryCacheSingleton.getInstance();
+        encryptionKey= Build.MODEL+encryptionKeyBase+Build.PRODUCT+Build.MANUFACTURER;
     }
 
     /**
@@ -67,7 +73,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
         if (isExternalStorageWritable()) {
             File f = new File(c.getExternalCacheDir(), key + ".img");
             if (!f.exists()) {
-                new writeCacheFileTask(c, data,"mykey").execute(f);//task to write image asynchronous
+                new writeCacheFileTask(c, data,encryptionKey).execute(f);//task to write image asynchronous
             }
         }
     }
@@ -90,7 +96,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
                 File f = new File(c.getExternalCacheDir(), key + ".img");
                 if (f.exists() && !f.isDirectory()) {
                     //new readCacheFileTask(c, ref, (addToMemCacheWhileReadInterface) this, key,operation,"mykey").execute(f);//load from storage and add to memory cache see the readCacheFileTask
-                    new readCacheFileCustomAsyncTask(c, ref.get(), this, key,operation,f,"mykey").execute();
+                    new readCacheFileCustomAsyncTask(c, ref.get(), this, key,operation,f,encryptionKey).execute();
                     return true;
                 }
             }
