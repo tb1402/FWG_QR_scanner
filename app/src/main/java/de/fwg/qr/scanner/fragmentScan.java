@@ -11,11 +11,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -79,12 +77,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      * Boolean for checking if activity is resuming for the first time or not; if it isn't the first time the fragment will be recreated because of camera issues
      */
     private boolean check = true;
-    private boolean check2 = false;
     private boolean updateCheck = true;
 
-    private long t1;
-    private long t2;
-    private long dt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -170,9 +164,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 i.putExtra("Video", object.getString("Video"));
                 startActivity(i);
             } catch (JSONException e) {
-                //TODO @everyone use resource
-                Toast.makeText(c, "Code not found", Toast.LENGTH_SHORT).show();
-                ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
+                Toast.makeText(c, getString(R.string.barcode_not_found), Toast.LENGTH_SHORT).show();
+                ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
             }
         } else if (operation.contentEquals("getVersion")) {
             try {
@@ -207,7 +200,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 }
                 pb.setVisibility(View.VISIBLE);
                 lockUI(true);
-                Log.i("FWGO", preferencesManager.getInstance(c).getPreferences().getString("token", "nof"));
                 net.makePostRequest(ref, "getPermission", preferencesManager.getInstance(c).getPreferences().getString("token", ""));
             } catch (Exception e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
@@ -230,7 +222,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     }
                     net.makePostRequest(ref,"getMapData","");
                 } else {
-                    Log.i("FWGO", response);
                     if (pm.getPreferences().contains("token")) {
                         pm.deleteValue("token");
                     }
