@@ -25,7 +25,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -41,13 +40,14 @@ import de.fwg.qr.scanner.tools.exceptionHandler;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 /**
-* Main (launcher) activity, used to setup navigation, start firstRun screen etc.
-*/
+ * Main (launcher) activity, used to setup navigation, start firstRun screen etc.
+ */
 public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface, fragmentScan.recreateFragmentAfterScanInterface {
 
     private DrawerLayout drawer;
     private NavController navCon;
     private ActionBarDrawerToggle drawerToggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,16 +136,15 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
                 return true;
             case R.id.tb_item_map:
-                if(preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()) {
+                if (preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()) {
                     i = new Intent(getApplicationContext(), activityMap.class);
                     startActivity(i);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.scan_teacher_code), Toast.LENGTH_LONG).show();
                 }
                 return true;
             case R.id.tb_item_reset:
-                if(preferencesManager.getInstance(getApplicationContext()).isRallyeMode()){
+                if (preferencesManager.getInstance(getApplicationContext()).isRallyeMode()) {
                     showResetDialog();
                 }
             default:
@@ -189,12 +188,11 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 show(f);
                 break;
             case R.id.item_frgm_progress:
-                if(preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()){
+                if (preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()) {
                     f = new fragmentProgress();
                     show(f);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.scan_teacher_code), Toast.LENGTH_LONG).show();
                 }
                 break;
             default:
@@ -274,19 +272,19 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void recreateFragmentAfterScan() {
-        Log.i("FWGO","r");
+        Log.i("FWGO", "r");
         navCon.navigate(R.id.action_item_frgm_scan_self);
     }
 
-    private void showResetDialog(){
-        AlertDialog.Builder builder=new AlertDialog.Builder(this)
+    private void showResetDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.dialog_reset_progress_title))
                 .setMessage(getString(R.string.dialog_reset_progress_content))
                 .setPositiveButton(getString(R.string.dialog_del_warning_continue), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         new historyManager(getApplicationContext()).clearHistory();
-                        preferencesManager.getInstance(getApplicationContext()).saveInt("rallyStationNumber",-1);
+                        preferencesManager.getInstance(getApplicationContext()).saveInt("rallyStationNumber", -1);
                         recreateFragmentAfterScan();
                     }
                 })

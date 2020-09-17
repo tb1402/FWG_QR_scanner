@@ -139,6 +139,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         }
     }
 
+
     @Override
     public void onPrepareOptionsMenu(Menu menu){
         if(preferencesManager.getInstance(c).isRallyeMode()){
@@ -382,12 +383,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 preferencesManager pm=preferencesManager.getInstance(c);
                 if(pm.isRallyeMode()){
                     int current=pm.getPreferences().getInt("rallyStationNumber",-1);
-                    if(!barcodeValue.contentEquals(stationIds[current+1])){
-                        Toast.makeText(c,getString(R.string.wrong_station),Toast.LENGTH_SHORT).show();
-                        ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
-                        pb.setVisibility(View.GONE);
-                        lockUI(false);
-                        return;
+                    if (stationIds.length != current + 1) {
+                        if (!barcodeValue.contentEquals(stationIds[current + 1])) {
+                            Toast.makeText(c, getString(R.string.wrong_station), Toast.LENGTH_SHORT).show();
+                            ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
+                            pb.setVisibility(View.GONE);
+                            lockUI(false);
+                            return;
+                        }
                     }
                     pm.saveInt("rallyStationNumber",current+1);
                 }
