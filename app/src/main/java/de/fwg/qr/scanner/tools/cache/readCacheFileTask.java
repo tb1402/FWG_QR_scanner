@@ -29,7 +29,7 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 /**
- * asynchronous task to read files from storage cache
+ * asynchronous task, based on android's implementation (deprecated), to read files from storage cache
  */
 class readCacheFileTask extends AsyncTask<File, Void, Bitmap> {
 
@@ -51,6 +51,7 @@ class readCacheFileTask extends AsyncTask<File, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(File... files) {
+        //see readCacheFileCustomAsyncTask for comments
         try {
             SharedPreferences pm=preferencesManager.getInstance(cref.get()).getPreferences();
 

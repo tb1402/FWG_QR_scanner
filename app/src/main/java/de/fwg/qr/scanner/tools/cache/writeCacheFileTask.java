@@ -29,9 +29,9 @@ import de.fwg.qr.scanner.tools.preferencesManager;
  */
 class writeCacheFileTask extends AsyncTask<File, Void, Void> {
 
-    final Bitmap data;
-    private WeakReference<Context> cref;
-    private String key;
+    final Bitmap data;//bitmap data to write
+    private WeakReference<Context> cref;//weak reference to context, to prevent memory leaks
+    private String key;//encryption key
 
     public writeCacheFileTask(Context c, Bitmap data, String key) {
         this.data = data;
@@ -43,48 +43,54 @@ class writeCacheFileTask extends AsyncTask<File, Void, Void> {
     protected Void doInBackground(File... files) {
         try {
             preferencesManager pm=preferencesManager.getInstance(cref.get());
+
+            //compress the bitmap (png is losless) and write it to a byte array
             ByteArrayOutputStream byteOutput=new ByteArrayOutputStream();
             data.compress(Bitmap.CompressFormat.PNG,100,byteOutput);
             byte[] bytes=byteOutput.toByteArray();
             byteOutput.close();
 
+            //generate or get encryption salt
             byte[] salt = new byte[32];
             if(pm.getPreferences().getString("enc_salt","").contentEquals("")) {
+                //no (valid) slat in sharedPreferences, create new one
                 SecureRandom random = new SecureRandom();
                 random.nextBytes(salt);
                 String saltString = Base64.encodeToString(salt, Base64.NO_WRAP);
                 pm.saveString("enc_salt", saltString);
             }
             else{
+                //read from sharedPreferences
                 salt= Base64.decode(pm.getPreferences().getString("enc_salt",""),Base64.NO_WRAP);
             }
 
+            //setup keyFactory and keySpec to make the encryption key a secretKey
             SecretKeyFactory secretKeyFactory=SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             KeySpec keySpec=new PBEKeySpec(key.toCharArray(),salt,65536,256);
             SecretKey secretKey=new SecretKeySpec(secretKeyFactory.generateSecret(keySpec).getEncoded(),"AES");
 
+            //setup cipher in encrypt mode
             Cipher cipher=Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE,secretKey);
             AlgorithmParameters algorithmParameters=cipher.getParameters();
 
+            //generate initialization vector and write the length to sharedPreferences
             byte[] iv=algorithmParameters.getParameterSpec(IvParameterSpec.class).getIV();
             pm.saveInt("enc_iv_length",iv.length);
 
+            //encrypt the data
             byte[] encrypted=cipher.doFinal(bytes);
+
+            //append iv to the beginning of the file
             byte[] output=new byte[encrypted.length+iv.length];
             System.arraycopy(iv,0,output,0,iv.length);
             System.arraycopy(encrypted,0,output,iv.length,encrypted.length);
 
+            //write to file
             FileOutputStream o = new FileOutputStream(files[0]);
             o.write(output);
             o.flush();
             o.close();
-
-            /*FileOutputStream o = new FileOutputStream(files[0]);
-            data.compress(Bitmap.CompressFormat.PNG, 100, o);
-            o.flush();
-            o.close();
-            Log.i("fwg", "written");*/
         } catch (Exception e) {
             Intent i = new Intent(cref.get(), activityErrorHandling.class);
             i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));

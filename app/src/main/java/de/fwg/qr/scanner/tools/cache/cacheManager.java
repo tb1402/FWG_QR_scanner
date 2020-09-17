@@ -3,7 +3,6 @@ package de.fwg.qr.scanner.tools.cache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -17,7 +16,6 @@ import de.fwg.qr.scanner.tools.preferencesManager;
  */
 public class cacheManager implements addToMemCacheWhileReadInterface {
 
-    public int cacheSaveIndex = 0;//index to count how many pictures have been cached
     private Context c;
     private memoryCacheSingleton memoryCache;
 
@@ -91,15 +89,13 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
             if (isExternalStorageReadable()) {
                 File f = new File(c.getExternalCacheDir(), key + ".img");
                 if (f.exists() && !f.isDirectory()) {
-                    Log.i("FWGO","cached!");
                     //new readCacheFileTask(c, ref, (addToMemCacheWhileReadInterface) this, key,operation,"mykey").execute(f);//load from storage and add to memory cache see the readCacheFileTask
-                    new readCacheFileCustomAsyncTask(c, ref.get(), (addToMemCacheWhileReadInterface) this, key,operation,f,"mykey").execute();
+                    new readCacheFileCustomAsyncTask(c, ref.get(), this, key,operation,f,"mykey").execute();
                     return true;
                 }
             }
         } else {//image found in memory cache, can be given back
             ref.get().onImageCallback(operation,bm);
-            Log.i("FWGO","cached!");
             return true;
         }
         return false;
@@ -114,7 +110,6 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
     @Override
     public void addToCache(String key, Bitmap data) {
         memoryCache.put(key, data);
-        Log.i("FWGO","added");
     }
 
     /**
@@ -126,7 +121,6 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
         memoryCache = memoryCacheSingleton.getInstance();
         File f = new File(c.getExternalCacheDir(), "/");
         new deleteCacheTask(c).execute(f);
-        Log.i("FWGO","del");
     }
 
     /**
