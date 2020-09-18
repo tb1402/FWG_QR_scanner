@@ -220,6 +220,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     if (pm.areFeaturesUnlocked()) {
                         pm.saveBoolean("unlocked", false);
                     }
+                    detection();
                 }
                 if (isTeacherCodeScanned)
                     ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
