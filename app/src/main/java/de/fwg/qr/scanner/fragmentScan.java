@@ -75,16 +75,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      * Value received by detected barcode
      */
     private String barcodeValue = "";
+
     /**
      * Boolean for checking if activity is resuming for the first time or not; if it isn't the first time the fragment will be recreated because of camera issues
      */
     private boolean check = true;
-    private boolean check2 = false;
-    private boolean updateCheck = true;
-
-    private long t1;
-    private long t2;
-    private long dt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,7 +115,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     /**
      * If user always denies camera access, he'll be sent to the settings of his device
      *
-     * @param requestCode  Code for permissonRequest
+     * @param requestCode  Code for permissionRequest
      * @param permissions  All permissions that were asked of user
      * @param grantResults Shows if permissions with same index were granted or denied
      */
@@ -213,9 +208,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
-                return;
             }
-            updateCheck = false;
         } else if (operation.contentEquals("getPermission")) {
             try {
                 JSONObject js = new JSONObject(response);
@@ -359,7 +352,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> detectedFrames = detections.getDetectedItems();
-                if (detectedFrames.size() != 0 && !updateCheck) {
+                if (detectedFrames.size() != 0) {
                     barcodeValue = detectedFrames.valueAt(0).displayValue;
                     a.runOnUiThread(new Runnable() {
                         @Override

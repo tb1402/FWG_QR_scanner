@@ -8,7 +8,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +24,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -68,8 +66,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        //set the default  uncaught exception handler, to redirect all exceptions (in activityMain) to activityErrorHandling
-        //TODO @me add other activities
+        //set the default  uncaught exception handler, to redirect all exceptions (on ui/main thread) to activityErrorHandling
         Thread.UncaughtExceptionHandler eh = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(new exceptionHandler(this, android.os.Process.myPid(), eh));
 
@@ -158,7 +155,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         //handle drawer, if back button is pressed
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -274,8 +272,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void recreateFragmentAfterScan() {
-        Log.i("FWGO","r");
         navCon.navigate(R.id.action_item_frgm_scan_self);
+        navCon.popBackStack();
     }
 
     private void showResetDialog(){
