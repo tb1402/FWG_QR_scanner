@@ -103,7 +103,7 @@ public class fragmentSettings extends PreferenceFragmentCompat {
     private void showRestartDialog(){
         //set up the restart prompt
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
-                .setMessage(R.string.dialog_message).setTitle(R.string.dialog_title)
+                .setMessage(R.string.restart_dialog_message).setTitle(R.string.restart_dialog_title)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button

@@ -10,10 +10,11 @@
 
     <TextView
         android:id="@+id/textViewAGBTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="@string/agb"
+        android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="20sp"
         android:textStyle="bold"

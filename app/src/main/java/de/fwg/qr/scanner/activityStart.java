@@ -26,7 +26,6 @@ public class activityStart extends toolbarWrapper {
 
     @Override
     public void onBackPressed() {
-        //TODO @ben replace text
-        Toast.makeText(getApplicationContext(), "Bitte beenden Sie erst die StartGuide", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.back_start_text, Toast.LENGTH_SHORT).show();
     }
 }

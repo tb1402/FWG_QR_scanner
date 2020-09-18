@@ -27,6 +27,20 @@
     <string name="txt_progress_name">Besuchte Stationen</string>
     <string name="txt_not_visited_yet_name">Noch nicht besucht</string>
 
+    <!--dialog strings-->
+    <string name="restart_dialog_message">Bitte starten Sie die App neu um die Änderungen vollständig anzuwenden</string>
+    <string name="restart_dialog_title">Neustart erforderlich</string>
+    <string name="update_dialog_title">Aktualisierung verfügbar</string>
+    <string name="update_dialog_content">Eine neue Version ist verfügbar. Bitte aktualisieren Sie jetzt.</string>
+    <string name="button_update_dialog_close">Schließen</string>
+    <string name="button_update_dialog_update">Aktualisieren</string>
+    <string name="dialog_del_warning_title">Vortschritt wird verloren gehen…</string>
+    <string name="dialog_del_warning_content">Ihr Fortschritt und Ihr Verlauf gehen verloren, wenn Sie fortfahren.</string>
+    <string name="dialog_del_warning_continue">Fortfahren</string>
+    <string name="dialog_del_warning_cancel">Abbrechen</string>
+    <string name="dialog_reset_progress_title">Fortschritt zurücksetzen</string>
+    <string name="dialog_reset_progress_content">Sind Sie sicher, Ihren Stationsfortschritt zu löschen?</string>
+
     <!-- button strings -->
     <string name="next">Weiter</string>
     <string name="previous">Zurück</string>
@@ -83,8 +97,11 @@
     <string name="network_buffering">Laden…</string>
     <string name="permission_needed">Bitte gewähren Sie dieser App Kamerazugriff</string>
     <string name="scan_qr_code">Bitte scannen Sie den QR-Code ein</string>
-    <string name="dialog_message">Bitte starten Sie die App neu um die Änderungen vollständig anzuwenden</string>
-    <string name="dialog_title">Neustart erforderlich</string>
     <string name="station_name">Stationsname</string>
     <string name="retrieval_date">Abrufdatum</string>
+    <string name="scan_teacher_code">Um diese Funktionalität freizuschalten müssen Sie den QR Code eines Lehrers scannen.</string>
+    <string name="scan_teacher_success">Lehrercode erfolgreich gescannt</string>
+    <string name="wrong_station">Dies ist nicht die nächste Station. Bitte scannen Sie den richtigen Code.</string>
+    <string name="back_start_text">Bitte beenden Sie erst die Startanleitung</string>
+    <string name="code_not_found">Code nicht gefunden</string>
 </resources>
