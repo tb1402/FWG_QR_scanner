@@ -77,8 +77,8 @@ public class activityFullscreenVideoPlayback extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//request landscape mode
 
         //network setup and check if connection is available
-        network net = new network(getApplicationContext());
-        if (!net.isNetworkAvailable()) {
+        network net =network.getInstance(getApplicationContext());
+        if (net.noNetworkAvailable(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), getString(R.string.network_no_connection), Toast.LENGTH_SHORT).show();
             finish();
         }

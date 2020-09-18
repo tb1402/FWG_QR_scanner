@@ -15,7 +15,6 @@ import android.widget.ViewSwitcher;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import de.fwg.qr.scanner.history.historyEntry;
@@ -24,8 +23,8 @@ import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 /**
-*Activity which shows information about a station, after code as been scanned
-*/
+ * Activity which shows information about a station, after code as been scanned
+ */
 public class activityScan extends toolbarWrapper implements networkCallbackInterface {
 
     private ImageView imageView;
@@ -34,9 +33,6 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private Button buttonNext;
     private FloatingActionButton videoButton;
     private ProgressBar progressBar;
-
-    private WeakReference<networkCallbackInterface> ref;
-    private network net;
 
     /**
      * The ID of the visited Station as a String
@@ -67,8 +63,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(R.layout.toolbar_scan, this, "Placeholder");
         super.onCreate(savedInstanceState);
-        net = new network(this);
-        ref = new WeakReference<>((networkCallbackInterface) this);
+
         Intent receivedIntent = getIntent();
         ID = receivedIntent.getStringExtra("ID");
         String name = receivedIntent.getStringExtra("Name");
@@ -76,10 +71,13 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         bild = receivedIntent.getStringExtra("Bild");
         String videoIntentExtra = receivedIntent.getStringExtra("Video");
         video = Integer.parseInt(videoIntentExtra == null ? "-1" : videoIntentExtra);
+
         setToolbarTitle(name);
         setupAbHome();
+
         images = new ArrayList<>();
         imageView = new ImageView(this);
+
         TextView textView = findViewById(R.id.textView);
         textView.setText(text);
         textView.setMovementMethod(new ScrollingMovementMethod());
@@ -90,6 +88,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         buttonNext = findViewById(R.id.buttonNext);
         videoButton = findViewById(R.id.videoButton);
         videoButton.setVisibility(video > 0 ? View.VISIBLE : View.INVISIBLE);
+
         assignButtons();
         clickableImageSwitcher();
         getImages();
@@ -191,8 +190,11 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
      * Method for making image requests
      */
     public void getImages() {
+        if(Integer.parseInt(bild)==0){
+            return;
+        }
         lockUI(true);
-        net.makeImageRequest(ref, "ImagePreview", ID, i, true);
+        network.getInstance(getApplicationContext()).makeImageRequest(this, "ImagePreview", ID, i, true, getApplicationContext());
     }
 
     /**

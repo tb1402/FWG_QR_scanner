@@ -15,14 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.ref.WeakReference;
-
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 /**
-*Show a picture from a station in fullscreen mode
-*/
+ * Show a picture from a station in fullscreen mode
+ */
 public class activityPictureFullscreen extends AppCompatActivity implements networkCallbackInterface {
 
     private ImageView imageView;
@@ -56,9 +54,7 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
         textView = findViewById(R.id.textView);
         progressBar = findViewById(R.id.progressBar);
         assignButton();
-        network net = new network(this);
-        WeakReference<networkCallbackInterface> ref = new WeakReference<>((networkCallbackInterface) this);
-        net.makeImageRequest(ref, "Image", ID, imagePosition, false);
+        network.getInstance(getApplicationContext()).makeImageRequest(this, "Image", ID, imagePosition, false, getApplicationContext());
     }
 
     @Override

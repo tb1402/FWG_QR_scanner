@@ -14,9 +14,6 @@ import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.ref.WeakReference;
-
-import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 /**
@@ -28,9 +25,6 @@ public class fragmentAbout extends fragmentWrapper implements networkCallbackInt
     private ImageView imageView;
     private ProgressBar progressBar;
 
-    private network net;
-    private WeakReference<networkCallbackInterface> ref;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +32,7 @@ public class fragmentAbout extends fragmentWrapper implements networkCallbackInt
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_about, container, false);
     }
 
@@ -50,9 +42,7 @@ public class fragmentAbout extends fragmentWrapper implements networkCallbackInt
         imageView = v.findViewById(R.id.imageView);
         progressBar = v.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        net = new network(c);
-        ref = new WeakReference<>((networkCallbackInterface) this);
-        net.makeImageRequest(ref, "ImageRequest", "GroupPicture", 0, true);
+        net.makeImageRequest(this, "ImageRequest", "groupPicture", 0, true, c);
     }
 
     @Override
@@ -71,7 +61,7 @@ public class fragmentAbout extends fragmentWrapper implements networkCallbackInt
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(c, activityPictureFullscreen.class);
-                    intent.putExtra("ID", "GroupPicture");
+                    intent.putExtra("ID", "groupPicture");
                     intent.putExtra("Position", 0);
                     startActivity(intent);
                 }

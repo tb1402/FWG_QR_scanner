@@ -10,7 +10,6 @@ import org.json.JSONException;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -153,9 +152,6 @@ public class historyManager {
                 else
                     Entries = new ArrayList<>(Arrays.asList(result));
 
-                // Calling the HTTP-Request to get the Stations Names
-                network net = new network(AppContext);
-
                 networkCallbackInterface webCllb = new networkCallbackInterface() {
                     @Override
                     public void onPostCallback(String operation, String response) {
@@ -194,7 +190,9 @@ public class historyManager {
                     public void onImageCallback(String name, Bitmap image) {
                     }
                 };
-                net.makePostRequest(new WeakReference<>(webCllb), "fetchIdAndName", ""); // TODO: Replace Placeholders
+
+                // Calling the HTTP-Request to get the Stations Names
+                network.getInstance(AppContext).makePostRequest(webCllb, "fetchIdAndName", "",AppContext);
 
             }
         });

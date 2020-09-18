@@ -25,7 +25,7 @@ public abstract class fragmentWrapper extends Fragment {
         super.onCreate(savedInstanceState);
         a = requireActivity();
         c = requireContext();
-        net = new network(c);
+        net = network.getInstance(c);
         setHasOptionsMenu(true);
     }
 

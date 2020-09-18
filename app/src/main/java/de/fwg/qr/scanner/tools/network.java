@@ -17,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 
-import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,15 +25,39 @@ import de.fwg.qr.scanner.BuildConfig;
 import de.fwg.qr.scanner.R;
 import de.fwg.qr.scanner.tools.cache.cacheManager;
 
+/**
+ * class used for performing network requests
+ */
 public class network {
     public static String baseURL = "https://srv.tobias-bittner.de";//server url
-    private Context c;
-    private HashMap<String, String> headers;
+    private HashMap<String, String> headers;//headers of the request, used to add authentication and useragent
     private cacheManager cm;
 
-    public network(Context c) {
-        this.c = c;
-        cm=new cacheManager(c);
+    /**
+     * Static field for network instance
+     */
+    private static network network;
+
+    /**
+     * get instance
+     *
+     * @param c context
+     * @return network instance
+     */
+    public static network getInstance(Context c) {
+        if (network == null) {
+            network = new network(c);
+        }
+        return network;
+    }
+
+    /**
+     * constructor
+     *
+     * @param c context
+     */
+    private network(Context c) {
+        cm = new cacheManager(c);
 
         //get version name, needed in userAgent
         String versionName;
@@ -51,31 +74,32 @@ public class network {
         String credentials = "fwgqr:" + BuildConfig.HTTP_AUTH_PW;
         String enc = Base64.encodeToString(credentials.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
 
+        //add headers
         headers.put("User-Agent", "FWG_QR_Scanner_version " + versionName + " on " + Build.DEVICE + " " + Build.VERSION.RELEASE);
         headers.put("Authorization", "Basic " + enc);
     }
 
     /**
-     * Method to check whether network connectivity is available,
-     * despite the warnings in this method there is no alternative, even google uses it until now in their docs
-     * @return network available?
+     * Method to check whether (no) network connectivity is available
+     *
+     * @param c context
+     * @return no network available?
      */
-    public boolean isNetworkAvailable() {
+    public boolean noNetworkAvailable(Context c) {
         ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return activeNetwork == null || !activeNetwork.isConnectedOrConnecting();
     }
 
     /**
      * Method to craft a post request
      *
-     * @param w         reference to callback interface
+     * @param nci         reference to callback interface
      * @param operation name of file that is requested
      * @param data      data that will be sent via post
      * @return StringRequest to be added to requestQueue
      */
-    private StringRequest getPostRequest(WeakReference<networkCallbackInterface> w, final String operation, final String data) {
-        final networkCallbackInterface nci = w.get();
+    private StringRequest getPostRequest(final networkCallbackInterface nci, final String operation, final String data) {
         StringRequest r = new StringRequest(Request.Method.POST, baseURL + "/api/" + operation, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -106,15 +130,15 @@ public class network {
     /**
      * Method to craft an image request
      *
-     * @param w       reference to callback interface
+     * @param nci       reference to callback interface
      * @param name    name of the request to identify it in the callback method
      * @param id      id of the image
      * @param number  number of the image
      * @param preview if true only low quality will be used
+     * @param c       context
      * @return ImageRequest that can be added to the requestQueue
      */
-    private ImageRequest getImageRequest(WeakReference<networkCallbackInterface> w, final String name, final String id, final int number, final boolean preview) {
-        final networkCallbackInterface nci = w.get();
+    private ImageRequest getImageRequest(final networkCallbackInterface nci, final String name, final String id, final int number, final boolean preview, final Context c) {
         String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + preferencesManager.getInstance(c).getImageResolution() + "/" + id + "/" + number + ".png");
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
@@ -140,15 +164,15 @@ public class network {
     /**
      * Method to craft an image request that will also give back the id of the station
      *
-     * @param w       reference to callback interface
+     * @param nci       reference to callback interface
      * @param name    name of the request to identify it in the callback method
      * @param id      id of the image
      * @param number  number of the image
      * @param preview if true only low quality will be used
+     * @param c       context
      * @return ImageRequest that can be added to the requestQueue
      */
-    private ImageRequest getImageRequestWithID(WeakReference<networkCallbackImageID> w, final String name, final String id, final int number, final boolean preview) {
-        final networkCallbackImageID nci = w.get();
+    private ImageRequest getImageRequestWithID(final networkCallbackImageID nci, final String name, final String id, final int number, final boolean preview, final Context c) {
         String url = baseURL + (preview ? "/images/low/" + id + "/" + number + ".png" : "/images/" + preferencesManager.getInstance(c).getImageResolution() + "/" + id + "/" + number + ".png");
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
@@ -177,8 +201,9 @@ public class network {
      * @param nci       reference to networkCallbackInterface for callback
      * @param operation name of requested api file, this value will also be given back in callback method, along with the response from the server
      * @param data      post data to be send to the server
+     * @param c         context
      */
-    public void makePostRequest(WeakReference<networkCallbackInterface> nci, String operation, String data) {
+    public void makePostRequest(networkCallbackInterface nci, String operation, String data, Context c) {
         requestQueueSingleton.getInstance(c).addToRq(getPostRequest(nci, operation, data), c);
     }
 
@@ -190,10 +215,11 @@ public class network {
      * @param id      the id of the station
      * @param number  the number of the image being requested
      * @param preview is image needed for preview only? if so, only low resolution image will be given back
+     * @param c       context
      */
-    public void makeImageRequest(WeakReference<networkCallbackInterface> nci, String name, String id, int number, boolean preview) {
-        if(!cm.loadCachedImage(nci, id, name, number, preview)) {
-            requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, id, number, preview), c);
+    public void makeImageRequest(networkCallbackInterface nci, String name, String id, int number, boolean preview, Context c) {
+        if (!cm.loadCachedImage(nci, id, name, number, preview)) {
+            requestQueueSingleton.getInstance(c).addToRq(getImageRequest(nci, name, id, number, preview, c), c);
         }
     }
 
@@ -205,8 +231,9 @@ public class network {
      * @param id      the id of the station
      * @param number  the number of the image being requested
      * @param preview is image needed for preview only? if so, only low resolution image will be given back
+     * @param c       context
      */
-    public void makeImageRequestWithIDCallback(WeakReference<networkCallbackImageID> nci, String name, String id, int number, boolean preview) {
-        requestQueueSingleton.getInstance(c).addToRq(getImageRequestWithID(nci, name, id, number, preview), c);
+    public void makeImageRequestWithIDCallback(networkCallbackImageID nci, String name, String id, int number, boolean preview, Context c) {
+        requestQueueSingleton.getInstance(c).addToRq(getImageRequestWithID(nci, name, id, number, preview, c), c);
     }
 }

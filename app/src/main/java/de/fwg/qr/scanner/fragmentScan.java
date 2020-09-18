@@ -36,7 +36,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -50,7 +49,6 @@ import de.fwg.qr.scanner.tools.preferencesManager;
  */
 public class fragmentScan extends fragmentWrapper implements networkCallbackInterface {
 
-    private WeakReference<networkCallbackInterface> ref;
     private CameraSource source;
     private BarcodeDetector barcodeDetector;
     private SurfaceView surface = null;
@@ -60,7 +58,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     //boolean used to differentiate between a teacherCode is scanned (true) or not,
     //needed because the operation getPermission gets called when a code is scanned and on startup to verify the permission,
     //but the fragment needs only be recreated (otherwise camera and scan issues) when a code was scanned
-    private boolean isTeacherCodeScanned=false;
+    private boolean isTeacherCodeScanned = false;
 
     private String[] stationIds;
 
@@ -81,8 +79,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ref = new WeakReference<>((networkCallbackInterface) this);
-        if (!net.isNetworkAvailable()) {
+
+        if (net.noNetworkAvailable(c)) {
             Toast.makeText(c, getString(R.string.network_no_connection), Toast.LENGTH_SHORT).show();
             a.finishAffinity();
         }
@@ -103,7 +101,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         pb = v.findViewById(R.id.progressBar);
         lockUI(true);
         pb.setVisibility(View.VISIBLE);
-        net.makePostRequest(ref, "getVersion", "");
+        net.makePostRequest(this, "getVersion", "", c);
         initialize();
         startCamera();
         detection();
@@ -118,7 +116,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      */
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         if (requestCode == 201) {
             for (int i = 0, len = permissions.length; i < len; i++) {
                 String permission = permissions[i];
@@ -138,11 +136,10 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu){
-        if(preferencesManager.getInstance(c).isRallyeMode()){
+    public void onPrepareOptionsMenu(@NotNull Menu menu) {
+        if (preferencesManager.getInstance(c).isRallyeMode()) {
             menu.findItem(R.id.tb_item_reset).setVisible(true);
-        }
-        else {
+        } else {
             menu.findItem(R.id.tb_item_reset).setVisible(false);
         }
         super.onPrepareOptionsMenu(menu);
@@ -174,8 +171,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 String version = j.getString("version");
 
                 //set the encryption key base, delivered from the server
-                if(cacheManager.encryptionKeyBase==null){
-                    cacheManager.encryptionKeyBase=j.getString("ek");
+                if (cacheManager.encryptionKeyBase == null) {
+                    cacheManager.encryptionKeyBase = j.getString("ek");
                 }
 
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
@@ -198,12 +195,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 }
                 pb.setVisibility(View.VISIBLE);
                 lockUI(true);
-                net.makePostRequest(ref, "getPermission", preferencesManager.getInstance(c).getPreferences().getString("token", ""));
+                net.makePostRequest(this, "getPermission", preferencesManager.getInstance(c).getPreferences().getString("token", ""), c);
             } catch (Exception e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
-                return;
             }
         } else if (operation.contentEquals("getPermission")) {
             try {
@@ -217,7 +213,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         new historyManager(c).clearHistory();
                         Toast.makeText(c, getString(R.string.scan_teacher_success), Toast.LENGTH_SHORT).show();
                     }
-                    net.makePostRequest(ref,"getMapData","");
+                    net.makePostRequest(this, "getMapData", "", c);
                 } else {
                     if (pm.getPreferences().contains("token")) {
                         pm.deleteValue("token");
@@ -226,28 +222,26 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         pm.saveBoolean("unlocked", false);
                     }
                 }
-                if(isTeacherCodeScanned) ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
+                if (isTeacherCodeScanned) ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
             } catch (JSONException e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
             }
-        }
-        else if(operation.contentEquals("getMapData")){
-            try{
-                JSONObject js=new JSONObject(response);
-                if(!js.getString("status").contentEquals("ok")){
+        } else if (operation.contentEquals("getMapData")) {
+            try {
+                JSONObject js = new JSONObject(response);
+                if (!js.getString("status").contentEquals("ok")) {
                     Intent i = new Intent(c, activityErrorHandling.class);
-                    i.putExtra(activityErrorHandling.errorNameIntentExtra,"map data error");
+                    i.putExtra(activityErrorHandling.errorNameIntentExtra, "map data error");
                     startActivity(i);
                 }
-                JSONArray jsa=js.getJSONArray("stations");
-                stationIds=new String[jsa.length()];
-                for (int i=0;i<stationIds.length;i++){
-                    stationIds[i]=jsa.getJSONObject(i).getString("stationId");
+                JSONArray jsa = js.getJSONArray("stations");
+                stationIds = new String[jsa.length()];
+                for (int i = 0; i < stationIds.length; i++) {
+                    stationIds[i] = jsa.getJSONObject(i).getString("stationId");
                 }
-            }
-            catch (JSONException e){
+            } catch (JSONException e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 startActivity(i);
@@ -291,7 +285,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onResume() {
         super.onResume();
         if (!check) {
-            ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
+            ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
         }
     }
 
@@ -301,7 +295,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private void startCamera() {
         surface.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
-            public void surfaceCreated(SurfaceHolder holder) {
+            public void surfaceCreated(@NotNull SurfaceHolder holder) {
                 try {
                     if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         return;
@@ -317,11 +311,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            public void surfaceChanged(@NotNull SurfaceHolder holder, int format, int width, int height) {
             }
 
             @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
+            public void surfaceDestroyed(@NotNull SurfaceHolder holder) {
                 try {
                     if (source.getPreviewSize() != null) {
                         source.stop();
@@ -376,22 +370,22 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 }
             });
             if (barcodeValue.length() == 10) {
-                preferencesManager pm=preferencesManager.getInstance(c);
-                if(pm.isRallyeMode()){
-                    int current=pm.getPreferences().getInt("rallyStationNumber",-1);
-                    if(!barcodeValue.contentEquals(stationIds[current+1])){
-                        Toast.makeText(c,getString(R.string.wrong_station),Toast.LENGTH_SHORT).show();
-                        ((recreateFragmentAfterScanInterface)a).recreateFragmentAfterScan();
+                preferencesManager pm = preferencesManager.getInstance(c);
+                if (pm.isRallyeMode()) {
+                    int current = pm.getPreferences().getInt("rallyStationNumber", -1);
+                    if (!barcodeValue.contentEquals(stationIds[current + 1])) {
+                        Toast.makeText(c, getString(R.string.wrong_station), Toast.LENGTH_SHORT).show();
+                        ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
                         pb.setVisibility(View.GONE);
                         lockUI(false);
                         return;
                     }
-                    pm.saveInt("rallyStationNumber",current+1);
+                    pm.saveInt("rallyStationNumber", current + 1);
                 }
-                net.makePostRequest(ref, "getInfo", barcodeValue);
+                net.makePostRequest(this, "getInfo", barcodeValue, c);
             } else {
-                isTeacherCodeScanned=true;
-                net.makePostRequest(ref, "getPermission", barcodeValue);
+                isTeacherCodeScanned = true;
+                net.makePostRequest(this, "getPermission", barcodeValue, c);
             }
         }
     }
@@ -464,7 +458,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      * Interface used for the recreation of the fragment after a teacher- or wrong code has been scanned, because resetting the detector caused issues
      * method is implemented in {@link activityMain} because navigation is handled there
      */
-    public interface recreateFragmentAfterScanInterface{
+    public interface recreateFragmentAfterScanInterface {
         void recreateFragmentAfterScan();
     }
 }

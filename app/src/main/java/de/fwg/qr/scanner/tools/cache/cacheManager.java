@@ -81,14 +81,14 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
     /**
      * Load an image from the cache
      *
-     * @param ref     reference to callback in target class
+     * @param nci     reference to callback in target class
      * @param id      id of the image
      * @param number  number of the image
      * @param preview used for preview
      * @return true means image is in cache and will be loaded and given back via the {@link readCacheCallback} interface,
      * false means no image is in cache
      */
-    public boolean loadCachedImage(WeakReference<networkCallbackInterface> ref, String id, String operation, int number, boolean preview) {
+    public boolean loadCachedImage(networkCallbackInterface nci, String id, String operation, int number, boolean preview) {
         String key = getCacheKey(id, number, preview);
         Bitmap bm = memoryCache.get(key);//get image from memory cache, no need for an asynchronous task, because RAM is very fast ;-)
         if (bm == null) {//if null, image isn't in memoryCache
@@ -96,12 +96,12 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
                 File f = new File(c.getExternalCacheDir(), key + ".img");
                 if (f.exists() && !f.isDirectory()) {
                     //new readCacheFileTask(c, ref, (addToMemCacheWhileReadInterface) this, key,operation,"mykey").execute(f);//load from storage and add to memory cache see the readCacheFileTask
-                    new readCacheFileCustomAsyncTask(c, ref.get(), this, key,operation,f,encryptionKey).execute();
+                    new readCacheFileCustomAsyncTask(c, nci, this, key,operation,f,encryptionKey).execute();
                     return true;
                 }
             }
         } else {//image found in memory cache, can be given back
-            ref.get().onImageCallback(operation,bm);
+            nci.onImageCallback(operation,bm);
             return true;
         }
         return false;

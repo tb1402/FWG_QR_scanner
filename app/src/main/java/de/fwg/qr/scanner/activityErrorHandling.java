@@ -13,7 +13,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 import de.fwg.qr.scanner.tools.network;
@@ -28,7 +27,6 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
 
     public static String errorNameIntentExtra = "error_desc"; //tag for intent extra
     private network net;
-    private WeakReference<networkCallbackInterface> ref;
     private String error_desc;//desc=description
     private boolean isUncaught = false;
     private int rootPID;
@@ -72,8 +70,7 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
         super.onCreate(R.layout.activity_error_handling, this, getString(R.string.title_activty_error));
 
         //network
-        net = new network(getApplicationContext());
-        ref = new WeakReference<networkCallbackInterface>(this);
+        net = network.getInstance(getApplicationContext());
 
         //getIntent extra
         error_desc = getIntent().getStringExtra("error_desc");
@@ -88,7 +85,13 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
         Button but_report = findViewById(R.id.but_report);
         Button but_close = findViewById(R.id.but_close);
 
+        //hide report button, if no network is available
+        if (net.noNetworkAvailable(getApplicationContext())) {
+            but_report.setVisibility(View.GONE);
+        }
+
         //set onClick Listeners
+        final networkCallbackInterface nci=this;
         but_report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,9 +99,9 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
                     JSONObject j = new JSONObject();
                     j.put("device", getDeviceInfo());
                     j.put("error", error_desc);
-                    net.makePostRequest(ref, "error", j.toString());
+                    net.makePostRequest(nci, "error", j.toString(), getApplicationContext());
                 } catch (JSONException e) {
-                    net.makePostRequest(ref, "error", "{\"error\":" + error_desc + ",\"device\":\"error---" + getDeviceInfo() + "\"");
+                    net.makePostRequest(nci, "error", "{\"error\":" + error_desc + ",\"device\":\"error---" + getDeviceInfo() + "\"", getApplicationContext());
                 }
             }
         });
