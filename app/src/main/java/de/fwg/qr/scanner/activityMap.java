@@ -2,8 +2,10 @@ package de.fwg.qr.scanner;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +48,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     private Bitmap bitmapOfImageView;
     private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
 
+    private final int BITMAP_SIDELENGTH = 1254;
+
+
     //Bitmap returned by image request methods
     private Bitmap result;
 
@@ -53,6 +58,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     //Important for hindering user to load same floor over and over again
     private int check = -2;
     private ArrayList<Integer> allObtainedStationNames;
+    private JSONArray stationData;
+
 
     @Override
     public void onCreate(Bundle savedInstanceBundle) {
@@ -93,6 +100,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
      *
      * @param view View provided by radioButtons
      */
+
     public void onRadioButtonClicked(View view) {
 
         boolean checked = ((RadioButton) view).isChecked();
@@ -109,6 +117,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                             textView.setVisibility(View.VISIBLE);
                         }
                         getImages(currentLevel);
+                        getCurrentMarkings(stationData);
+
                     }
                 }
                 break;
@@ -121,6 +131,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                             textView.setVisibility(View.VISIBLE);
                         }
                         getImages(currentLevel);
+                        getCurrentMarkings(stationData);
                     }
                 }
                 break;
@@ -133,6 +144,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                             textView.setVisibility(View.VISIBLE);
                         }
                         getImages(currentLevel);
+                        getCurrentMarkings(stationData);
                     }
                     break;
                 }
@@ -145,11 +157,17 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                             textView.setVisibility(View.VISIBLE);
                         }
                         getImages(currentLevel);
+                        getCurrentMarkings(stationData);
                     }
                 }
         }
     }
 
+    /**
+     * Implementation of the networkCallbackInterface listening for the callback of the {@code ref2} Attribute
+     * @param operation name of requested php file
+     * @param response response from the server
+     */
     @Override
     public void onPostCallback(String operation, String response) {
         if (operation.contentEquals("getMapData")) {
@@ -160,7 +178,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                     i.putExtra(activityErrorHandling.errorNameIntentExtra, "mapData status not ok");
                     startActivity(i);
                 }
-                JSONArray stationData = mapData.getJSONArray("stations");
+                stationData = mapData.getJSONArray("stations");
                 AMOUNT_OF_STATIONS = stationData.length();
                 AMOUNT_OF_STATIONS_PER_LEVEL = getStationsPerLevel(stationData);
                 if (manager.isRallyeMode() && allObtainedStationNames.size() != 0) {
@@ -194,6 +212,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                     }
                 }
                 getImages(currentLevel);
+                getCurrentMarkings(stationData);
             } catch (JSONException e) {
                 Intent i = new Intent(this, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
@@ -307,6 +326,173 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         return array;
     }
 
+
+    /**
+     * Method for drawing the Arrows dependant on the highest index of the station progress
+     */
+    public void getCurrentMarkings(JSONArray stationData){
+        // next station after the highest index in tne visited stations
+        int nextStation;
+        if(allObtainedStationNames.size() == 0){ // No station visited yet
+            nextStation = 0; // Lead to the first station
+        }
+        else
+            nextStation = allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1; // highest indexed station plus 1
+
+
+
+        // get the data about the next station
+        try {
+
+            // find the index of the next object bearing the nextStation Id
+            int nextIndex = -1;
+            for(int i = 0; i <  stationData.length(); i++){
+                if(stationData.getJSONObject(i).getInt("mapId") == nextStation){
+                    nextIndex = i;
+                }
+            }
+
+            JSONObject stationEntry = stationData.getJSONObject(nextIndex);
+            String markerpos = stationEntry.getString("markerPos");
+            int stationFloor = stationEntry.getInt("floor");
+            JSONArray arrows = stationEntry.getJSONArray("arrows");
+
+
+
+            // check if there are two markers:
+            if(markerpos.contains("_")){
+                // use the underscore as a delimiter to determine the multiple coordinates
+                String[] markers =  markerpos.split("_");
+                int[] xPos = new int[markers.length];
+                int[] yPos = new int[markers.length];
+
+                for(int i = 0; i < markers.length; i++){
+                    xPos[i] = Integer.parseInt(markers[i].split(",")[0]);
+                    yPos[i] = Integer.parseInt(markers[i].split(",")[1]);
+
+                }
+
+                for(int i = 0; i < markers.length; i++){
+
+                    bitmapOfImageView = drawMarker(xPos[i], yPos[i], stationFloor); // call the draw method on all points
+                    this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            imageView.setImageBitmap(bitmapOfImageView);
+                        }
+                    });
+                }
+
+            }
+            else{
+                int xPos = Integer.parseInt(markerpos.split(",")[0]);
+                int yPos = Integer.parseInt(markerpos.split(",")[1]);
+                bitmapOfImageView = drawMarker(xPos, yPos, stationFloor); // call the draw method on all points
+                this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(bitmapOfImageView);
+                    }
+                });
+
+            }
+
+            // parse out the Arrows
+            for(int i = 0; i < arrows.length(); i++){
+
+                JSONArray arrow = arrows.getJSONArray(i);
+
+                String[] posdata = arrow.getString(1).split(",");
+                int x =  Integer.parseInt(posdata[0]);
+                int y = Integer.parseInt(posdata[1]);
+
+                String arrowname = arrow.getString(0);
+                int floor = arrow.getInt(2);
+
+
+                bitmapOfImageView = drawArrow(arrowname, x, y, floor); // call the method to draw on each arrow
+                this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(bitmapOfImageView);
+                    }
+                });
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    /**
+     * Method draws a Marker on the canvas
+     * @param x  x-Position of the Marker
+     * @param y y-Position of the Marker
+     * @param floor Floor of the marker, only drawn if the map is currently in the right floor
+     */
+    private Bitmap drawMarker(int x, int y, int floor){
+        if(currentLevel != floor) return null;
+
+        Bitmap markerBmp = BitmapFactory.decodeResource(getResources(), R.raw.marker_next);
+        markerBmp = Bitmap.createScaledBitmap(markerBmp, 128, 128, true);
+
+        if (result == null || canvas == null) {
+            result = Bitmap.createBitmap(BITMAP_SIDELENGTH, BITMAP_SIDELENGTH, markerBmp.getConfig());
+            canvas = new Canvas(result);
+        }
+
+        int markerTipX = 64, markerTipY = 118;
+        float sizeScaling = 1.00f;
+
+        Paint p = new Paint();
+        p.setARGB(100, 0, 100, 100);
+        canvas.drawRect(new Rect(x, y, 0, 0 ), p);
+
+        //calculate fitting startpoint:
+        x -= markerTipX * sizeScaling;
+        y -= markerTipY * sizeScaling;
+
+        markerBmp = Bitmap.createScaledBitmap(markerBmp,
+                (int)(markerBmp.getWidth() * sizeScaling),
+                (int)(markerBmp.getHeight() * sizeScaling),
+                true);
+
+
+        canvas.drawBitmap(markerBmp, x, y, null);
+        p.setARGB(255, 0, 255, 0);
+        canvas.drawRect(new Rect(x, y, 0, 0 ), p);
+        return result;
+    }
+
+    /**
+     * Method draws an Arrow on the mapCanvas
+     * @param name Resource name of the Arrow in question in a String
+     * @param x x-Position of the Arrow
+     * @param y y-Position of the Arrow
+     * @param floor Floor the Arrow is drawn in, only if the floor in question is currently active
+     */
+    private Bitmap drawArrow(String name, int x, int y, int floor){
+        if(currentLevel != floor) return null;
+
+        int resourceId = getResourceByName("R.raw." + name);
+        Bitmap arrowBmp = BitmapFactory.decodeResource(getResources(), resourceId);
+
+        if (result == null || canvas == null) {
+            result = Bitmap.createBitmap(BITMAP_SIDELENGTH, BITMAP_SIDELENGTH, arrowBmp.getConfig());
+            canvas = new Canvas(result);
+        }
+
+        canvas.drawBitmap(arrowBmp, x, y, null);
+        return result;
+    }
+
+    private int getResourceByName(String name){
+        return getApplicationContext().getResources().getIdentifier(name, "string", getApplicationContext().getPackageName());
+    }
+
     /**
      * Method for making all ImageRequests based on the current Level
      *
@@ -332,7 +518,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         net.makeImageRequestWithIDCallback(this, "FloorRequest", "mapFloors", level, true, this);
         switch (level) {
             case 0:
-                for (int j = 0; j < AMOUNT_OF_STATIONS_PER_LEVEL[1]; j++) { //Alle Stationen vom ersten Stock werden durchlauft
+                for (int j = 0; j < AMOUNT_OF_STATIONS_PER_LEVEL[1]; j++) { //Alle Stationen vom ersten Stock werden durchlaufen
                     if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) { // Nur wenn station besucht wurde wird netrequest gemacht
                         net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
                     }
@@ -381,7 +567,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 break;
             default:
                 Intent i = new Intent(this, activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra, "Error with methode getImages; Wrong level id");
+                i.putExtra(activityErrorHandling.errorNameIntentExtra, "Error with method getImages; Wrong level id");
                 startActivity(i);
 
         }
@@ -469,7 +655,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     }
 
     /**
-     * Methode for getting String array with all previously visited stations
+     * Method for getting String array with the Id's of all allowed Map parts, ordered ascending
      *
      * @param callback in order to get string returned
      */
@@ -482,8 +668,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             public void onFinished(historyEntry[] result) {
 
                 JSONArray arr = new JSONArray();
-                for (de.fwg.qr.scanner.history.historyEntry historyEntry : result) {
-                    arr.put(historyEntry.StationId);
+                for (int i = 0; i < result.length; i++) {
+                    arr.put(result[i].StationId);
                 }
                 String json = arr.toString();
 

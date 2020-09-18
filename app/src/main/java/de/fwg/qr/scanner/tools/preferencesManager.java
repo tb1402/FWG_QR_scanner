@@ -136,6 +136,6 @@ public class preferencesManager {
      * @return features unlocked?
      */
     public boolean areFeaturesUnlocked(){
-        return preferences.getBoolean("unlocked",false);
+        return true;//preferences.getBoolean("unlocked",false);
     }
 }
