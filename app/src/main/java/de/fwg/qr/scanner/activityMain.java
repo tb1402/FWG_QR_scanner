@@ -86,7 +86,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         Toolbar tb = findViewById(R.id.toolbar);
         tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
         setSupportActionBar(tb);//set the toolbar as Action bar
-        drawerToggle = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawer, tb,0,0) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) { //Bugfix: Drawer otherwise hidden when starting App for first time
                 super.onDrawerSlide(drawerView, slideOffset);

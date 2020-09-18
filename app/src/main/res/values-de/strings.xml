@@ -55,7 +55,7 @@
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>
-    <string name="mode_rallye">Rallye</string>
+    <string name="mode_rally">Rallye</string>
     <string name="mode">Modus</string>
     <string name="darkmode">Nachtmodus</string>
     <string name="on">Ein</string>

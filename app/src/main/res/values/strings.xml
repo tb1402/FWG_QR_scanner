@@ -7,10 +7,6 @@
     <string name="error_send">Error message was sent! Thank you for your cooperation. The app will now close.</string>
     <string name="barcode_not_found">Barcode could not be found.</string>
 
-    <!--Required by Android Studio-->
-    <string name="msg_navigation_drawer_open" translatable="false">Open Navigation Drawer</string>
-    <string name="msg_navigation_drawer_close" translatable="false">Close Navigation Drawer</string>
-
     <!--strings for the drawer and toolbar title-->
     <string name="item_start_title">Welcome</string>
     <string name="item_scan_title">Scan</string>
@@ -61,7 +57,7 @@
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>
-    <string name="mode_rallye">Rally</string>
+    <string name="mode_rally">Rally</string>
     <string name="mode">Mode</string>
     <string name="darkmode">Dark mode</string>
     <string name="on">On</string>
@@ -95,7 +91,7 @@
 
     <!--Image Strings-->
     <string name="image_loading">Image is loading</string>
-    <string name="image_not_found_with_current_resolution">The image is not available in this resolution. Please try a different resolution.</string>
+    <string name="image_not_found_with_current_resolution">The image is not available in this resolution. Please try a different one.</string>
 
     <!--other strings-->
     <string name="network_no_connection">No network connection</string>
@@ -107,6 +103,6 @@
     <string name="station_name">station name</string>
     <string name="retrieval_date">retrieval date</string>
     <string name="wrong_station">This is not the next station, please scan the right code.</string>
-    <string name="back_start_text">Please finish the start guide</string>
+    <string name="back_start_text">Please finish the start guide first</string>
     <string name="code_not_found">Code not found</string>
 </resources>
