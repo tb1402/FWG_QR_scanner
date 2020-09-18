@@ -104,7 +104,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         net.makePostRequest(this, "getVersion", "", c);
         initialize();
         startCamera();
-        detection();
     }
 
     /**
@@ -241,6 +240,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 for (int i = 0; i < stationIds.length; i++) {
                     stationIds[i] = jsa.getJSONObject(i).getString("stationId");
                 }
+                detection();
             } catch (JSONException e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
