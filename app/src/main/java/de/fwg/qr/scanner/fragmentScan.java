@@ -109,7 +109,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     /**
      * If user always denies camera access, he'll be sent to the settings of his device
      *
-     * @param requestCode  Code for permissonRequest
+     * @param requestCode  Code for permissionRequest
      * @param permissions  All permissions that were asked of user
      * @param grantResults Shows if permissions with same index were granted or denied
      */
