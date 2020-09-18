@@ -140,6 +140,27 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 JSONArray stationData = mapData.getJSONArray("stations");
                 AMOUNT_OF_STATIONS = stationData.length();
                 AMOUNT_OF_STATIONS_PER_LEVEL = getStationsPerLevel(stationData);
+                if (manager.isRallyeMode()) {
+                    currentLevel = getLevelPerId(allObtainedStationNames.get(allObtainedStationNames.size() - 1));
+                    switch (currentLevel) {
+                        case 0:
+                            RadioButton button1 = findViewById(R.id.radioButton1);
+                            button1.setChecked(true);
+                            break;
+                        case -1:
+                            RadioButton button2 = findViewById(R.id.radioButton2);
+                            button2.setChecked(true);
+                            break;
+                        case 1:
+                            RadioButton button3 = findViewById(R.id.radioButton3);
+                            button3.setChecked(true);
+                            break;
+                        case 2:
+                            RadioButton button4 = findViewById(R.id.radioButton4);
+                            button4.setChecked(true);
+                            break;
+                    }
+                }
                 getImages(currentLevel);
             } catch (JSONException e) {
                 Intent i = new Intent(this, activityErrorHandling.class);
@@ -397,6 +418,34 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         paint.setAlpha(100);
         canvas.drawBitmap(bitmap, 0f, 0f, paint);
         return result;
+    }
+
+    /**
+     * Method for knowing which id is on which level
+     *
+     * @param id ID you want to know the floor for
+     * @return number of floor, if not found, return -2
+     */
+    private int getLevelPerId(int id) {
+        int[] array = {0, AMOUNT_OF_STATIONS_PER_LEVEL[1], AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1], AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[2]};
+        for (int i = array.length - 1; i >= 0; i--) {
+            if (array[i] <= id) {
+                switch (i) {
+                    case 3:
+                        return 2;
+                    case 2:
+                        return 1;
+                    case 1:
+                        return -1;
+                    case 0:
+                        return 0;
+                    default:
+                        return 0;
+                }
+
+            }
+        }
+        return -2;
     }
 
     /**
