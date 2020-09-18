@@ -67,7 +67,7 @@ public class activityErrorHandling extends toolbarWrapper implements networkCall
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.onCreate(R.layout.activity_error_handling, this, getString(R.string.title_activty_error));
+        super.onCreate(R.layout.activity_error_handling, this, getString(R.string.title_activity_error));
 
         //network
         net = network.getInstance(getApplicationContext());

@@ -22,7 +22,7 @@
     <string name="quick_guide">Kurzanleitung</string>
     <string name="agb">Allgemeine Geschäftsbedingungen</string>
     <string name="title_activity_fullscreen_video_playback">Videoplayer</string>
-    <string name="title_activty_error">Fehler</string>
+    <string name="title_activity_error">Fehler</string>
     <string name="txt_progress_name">Besuchte Stationen</string>
     <string name="txt_not_visited_yet_name">Noch nicht besucht</string>
 
@@ -33,7 +33,7 @@
     <string name="update_dialog_content">Eine neue Version ist verfügbar. Bitte aktualisieren Sie jetzt.</string>
     <string name="button_update_dialog_close">Schließen</string>
     <string name="button_update_dialog_update">Aktualisieren</string>
-    <string name="dialog_del_warning_title">Vortschritt wird verloren gehen…</string>
+    <string name="dialog_del_warning_title">Fortschritt wird verloren gehen…</string>
     <string name="dialog_del_warning_content">Ihr Fortschritt und Ihr Verlauf gehen verloren, wenn Sie fortfahren.</string>
     <string name="dialog_del_warning_continue">Fortfahren</string>
     <string name="dialog_del_warning_cancel">Abbrechen</string>
@@ -48,10 +48,10 @@
     <string name="start_using">Jetzt starten</string>
     <string name="button_error_report">Fehlermeldung senden</string>
     <string name="button_error_close_app">App schließen</string>
-    <string name="first_floor">Erdgeschoss/Fachklassentrakt</string>
+    <string name="first_floor">Erdgeschoss / Fachklassentrakt</string>
     <string name="basement">Untergeschoss</string>
-    <string name="second_floor">1.Stockwerk</string>
-    <string name="third_floor">2.Stockwerk</string>
+    <string name="second_floor">1. Stockwerk</string>
+    <string name="third_floor">2. Stockwerk</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>
@@ -76,9 +76,9 @@
     <!-- guide strings -->
     <string name="quick_guide_body"><b>Nutzen der App\n</b>Scannen Sie nun einen von Ihnen gefundenen QR Code ein. Bei erfolgreichem Scannen sollte die aktuelle Station und deren Informationen angezeigt werden. Wenn Sie zurück möchten, klicken Sie auf den Pfeil oben links.\nKlicken Sie auf die 3 Linien oben links, um zum Navigationsmenü zu gelangen.\nKlicken Sie das Karten Icon, um zur Karte zu gelangen.\nKlicken Sie die 3 Punkte oben rechts, um zu den Einstellungen zu gelangen.</string>
     <string name="full_guide_body"><b>Nutzen der App\n</b>Klicken Sie auf die 3 Linien oben links, um zum Navigationsmenü zu gelangen.\nWählen Sie <i>Einscannen</i>.\nScannen Sie nun einen von Ihnen gefundenen QR Code ein. Bei erfolgreichem Scannen sollte die aktuelle Station und deren Informationen angezeigt werden.\nWenn Sie zurück möchten, klicken Sie auf den Pfeil oben links.\nKlicken Sie das Karten Icon, um zur Karte zu gelangen.\nKlicken Sie die 3 Punkte oben rechts, um zu den Einstellungen zu gelangen.</string>
-    <string name="full_guide_drawer"><b>Informationen zum Navigationsmenü\n</b>Die aktuelle Seite ist hervorgehoben\nEinscannen: Scannen der QR Codes\nFortschritt: Anzeige aller verfügbarer Stationen\nVerlauf: Anzeige der bereits besuchten Stationen\nAnleitung: Das hier\nÜber uns: Informationen über das Entwicklerteam\nAGB: Allgemeine Geschäftbedingungen</string>
+    <string name="full_guide_drawer"><b>Informationen zum Navigationsmenü\n</b>Die aktuelle Seite ist hervorgehoben\nEinscannen: Scannen der QR Codes\nFortschritt: Anzeige aller verfügbarer Stationen\nVerlauf: Anzeige der bereits besuchten Stationen\nAnleitung: Dies\nÜber uns: Informationen über das Entwicklerteam\nAGB: Allgemeine Geschäftsbedingungen</string>
     <string name="full_guide_map"><b>Informationen zur Karte</b>\nUm auf die Karte zugreifen zu können, ist die Erlaubnis eines Lehrers erforderlich. Diese können Sie erhalten, indem Sie einen vom Lehrer generierten QR Code einscannen. Sobald Sie die Karte freigeschalten haben, können Sie die Teile der Karte sehen, wo Sie die Stationen eingescannt haben. Grau hinterlegt sind die Teile der Karte, die eine Nachbarstation einer bereits absolvierten Station sind oder keiner Station entsprechen. Die Pfeile zeigen zur nächsten Station.</string>
-    <string name="full_guide_options"><b>Informationen zu den Einstellungen\n</b>Allgemein > Modus: Wahl zwischen Schulhaus-Rallye und Information Modus\nAllgemein > Nachtmodus: Einstellungen zum Erscheinungsbild der App (automatisch richtet sich nach den Systemeinstellungen)\nQualität > Videoqualität / Bildqualität: Auflösung der Videos und Bilder festlegen; für die Nutzung mit mobilen Daten ist eine niedrige Auflösung empfehlenswert</string>
+    <string name="full_guide_options"><b>Informationen zu den Einstellungen\n</b>Allgemein > Modus: Wahl zwischen Schulhausrallye und Information Modus\nAllgemein > Nachtmodus: Einstellungen zum Erscheinungsbild der App (<i>automatisch</i> richtet sich nach den Systemeinstellungen)\nQualität > Videoqualität / Bildqualität: Auflösung der Videos und Bilder festlegen (für die Nutzung mit mobilen Daten ist eine niedrige Auflösung empfehlenswert)</string>
 
     <!--Video Strings-->
     <string name="video_url_error">Fehler: Problem mit der Video-URL</string>
@@ -102,5 +102,4 @@
     <string name="scan_teacher_success">Lehrercode erfolgreich gescannt</string>
     <string name="wrong_station">Dies ist nicht die nächste Station. Bitte scannen Sie den richtigen Code.</string>
     <string name="back_start_text">Bitte beenden Sie erst die Startanleitung</string>
-    <string name="code_not_found">Code nicht gefunden</string>
 </resources>

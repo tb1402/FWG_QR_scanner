@@ -14,9 +14,4 @@
     <!-- colors for the progress-view-->
     <color name="progress_item_visited">#0D8104</color>
     <color name="progress_item_not_visited">#BF0404</color>
-
-    <!-- these colors do not work
-    <color name="background">?android:attr/colorBackground</color>
-    <color name="textColor">?android:attr/textColorPrimary</color>
-    <color name="buttonColor">?android:attr/colorButtonNormal</color>-->
 </resources>

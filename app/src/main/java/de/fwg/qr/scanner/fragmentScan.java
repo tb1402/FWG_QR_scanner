@@ -158,7 +158,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 i.putExtra("Video", object.getString("Video"));
                 startActivity(i);
             } catch (JSONException e) {
-                Toast.makeText(c, R.string.code_not_found, Toast.LENGTH_SHORT).show();
+                Toast.makeText(c, R.string.barcode_not_found, Toast.LENGTH_SHORT).show();
                 ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
             }
         } else if (operation.contentEquals("getVersion")) {
@@ -221,7 +221,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         pm.saveBoolean("unlocked", false);
                     }
                 }
-                if (isTeacherCodeScanned) ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
+                if (isTeacherCodeScanned)
+                    ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
             } catch (JSONException e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));

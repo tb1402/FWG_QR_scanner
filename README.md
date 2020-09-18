@@ -11,14 +11,14 @@ QR Code Scanner für das FWG Kronach. Erstellt vom Info Kurs der Q11
 - David Schuberth, [@dave15503](https://github.com/dave15503)
 - Maxim Balajan, [@Deko29](https://github.com/Deko29)
 - Philipp Möckel, [@philippmkl](https://github.com/philippmkl)
-- Nico Fröba,
+- Nico Fröba
 
 ### App (UI), Bilder, Videos
-- Niklas Schoberth, 
+- Niklas Schoberth
 
 ### PHP-Backend
 - Ben Welsch, [@Benni013](https://github.com/benni013)
-- Denis Eckert,
+- Dennis Eckert
 
 ### MySQL Administration
-- Daniel Becker,
+- Daniel Becker
