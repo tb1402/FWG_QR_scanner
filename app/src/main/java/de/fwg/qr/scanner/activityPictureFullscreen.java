@@ -3,7 +3,6 @@ package de.fwg.qr.scanner;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -69,7 +68,6 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
 
     @Override
     public void onImageCallback(String name, final Bitmap image) {
-        Log.i("FWGO",name);
         if (name.contentEquals("Image")) {
             runOnUiThread(new Runnable() {
                 @Override
