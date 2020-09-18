@@ -9,7 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +34,8 @@ import de.fwg.qr.scanner.tools.preferencesManager;
 public class activityMap extends toolbarWrapper implements networkCallbackImageID {
 
     private ImageView imageView;
+    private ProgressBar progressBar;
+    private TextView textView;
 
     private network net;
     private static int AMOUNT_OF_STATIONS = 0;
@@ -62,6 +66,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         }
 
         imageView = findViewById(R.id.imageView);
+        progressBar = findViewById(R.id.progressBar);
+        textView = findViewById(R.id.textView);
         net = network.getInstance(getApplicationContext());
         allObtainedStationNames = new ArrayList<>();
         AMOUNT_OF_STATIONS_PER_LEVEL = new int[4];
@@ -92,11 +98,16 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         boolean checked = ((RadioButton) view).isChecked();
 
 
+
         switch (view.getId()) {
             case R.id.radioButton1: //Erdgeschoss
                 if (checked) {
                     currentLevel = 0;
                     if (check != currentLevel) {
+                        if (progressBar.getVisibility() == View.INVISIBLE || textView.getVisibility() == View.INVISIBLE) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            textView.setVisibility(View.VISIBLE);
+                        }
                         getImages(currentLevel);
                     }
                 }
@@ -105,6 +116,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 if (checked) {
                     currentLevel = -1;
                     if (check != currentLevel) {
+                        if (progressBar.getVisibility() == View.INVISIBLE || textView.getVisibility() == View.INVISIBLE) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            textView.setVisibility(View.VISIBLE);
+                        }
                         getImages(currentLevel);
                     }
                 }
@@ -113,6 +128,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 if (checked) {
                     currentLevel = 1;
                     if (check != currentLevel) {
+                        if (progressBar.getVisibility() == View.INVISIBLE || textView.getVisibility() == View.INVISIBLE) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            textView.setVisibility(View.VISIBLE);
+                        }
                         getImages(currentLevel);
                     }
                     break;
@@ -121,6 +140,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 if (checked) {
                     currentLevel = 2;
                     if (check != currentLevel) {
+                        if (progressBar.getVisibility() == View.INVISIBLE || textView.getVisibility() == View.INVISIBLE) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            textView.setVisibility(View.VISIBLE);
+                        }
                         getImages(currentLevel);
                     }
                 }
@@ -146,19 +169,27 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                     switch (currentLevel) {
                         case 0:
                             RadioButton button1 = findViewById(R.id.radioButton1);
-                            button1.setChecked(true);
+                            if (button1.isChecked()) {
+                                button1.setChecked(true);
+                            }
                             break;
                         case -1:
                             RadioButton button2 = findViewById(R.id.radioButton2);
-                            button2.setChecked(true);
+                            if (button2.isChecked()) {
+                                button2.setChecked(true);
+                            }
                             break;
                         case 1:
                             RadioButton button3 = findViewById(R.id.radioButton3);
-                            button3.setChecked(true);
+                            if (button3.isChecked()) {
+                                button3.setChecked(true);
+                            }
                             break;
                         case 2:
                             RadioButton button4 = findViewById(R.id.radioButton4);
-                            button4.setChecked(true);
+                            if (button4.isChecked()) {
+                                button4.setChecked(true);
+                            }
                             break;
                     }
                 }
@@ -179,6 +210,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     @Override
     public void onImageCallback(String name, Bitmap image, int number) {
+        if (progressBar.getVisibility() == View.VISIBLE || textView.getVisibility() == View.VISIBLE) {
+            progressBar.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.INVISIBLE);
+        }
         if (!name.contentEquals("FloorRequest") && !name.contentEquals("FinalStage")) {
             if (getLevelPerId(number) != currentLevel) {
                 return;
