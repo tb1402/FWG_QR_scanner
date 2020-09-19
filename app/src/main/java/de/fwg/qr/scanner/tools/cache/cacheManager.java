@@ -85,7 +85,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
      * @param id      id of the image
      * @param number  number of the image
      * @param preview used for preview
-     * @return true means image is in cache and will be loaded and given back via the {@link readCacheCallback} interface,
+     * @return true means image is in cache and will be loaded and given back via the {@link networkCallbackInterface} interface,
      * false means no image is in cache
      */
     public boolean loadCachedImage(networkCallbackInterface nci, String id, String operation, int number, boolean preview) {
