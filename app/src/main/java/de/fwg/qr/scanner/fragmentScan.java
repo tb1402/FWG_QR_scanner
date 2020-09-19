@@ -374,6 +374,12 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             if (barcodeValue.length() == 10) {
                 preferencesManager pm = preferencesManager.getInstance(c);
                 if (pm.isRallyeMode()) {
+                    if (stationIds == null) {
+                        ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
+                        pb.setVisibility(View.GONE);
+                        lockUI(false);
+                        return;
+                    }
                     int current = pm.getPreferences().getInt("rallyStationNumber", -1);
                     if (stationIds.length > (current + 1)) {
                         if (!barcodeValue.contentEquals(stationIds[current + 1])) {
