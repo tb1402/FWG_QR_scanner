@@ -9,6 +9,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+/**
+ * wrapper class for common activity resources
+ */
 public abstract class toolbarWrapper extends AppCompatActivity {
     private Toolbar tb;
 
@@ -38,16 +41,29 @@ public abstract class toolbarWrapper extends AppCompatActivity {
         }
     }
 
+    /**
+     * set the toolbar title
+     * @param title value
+     */
     void setToolbarTitle(String title) {
         tb.setTitle(title);
     }
 
-    void lockUI(boolean state) {
-        if (state) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        }
+    /**
+     * (un)lock ui, used during network request to prevent errors
+     * @param state (un)lock
+     */
+    void lockUI(final boolean state) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (state) {
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            }
+        });
     }
 }

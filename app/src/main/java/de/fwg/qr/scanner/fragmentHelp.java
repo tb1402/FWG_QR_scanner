@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Fragment for showing a guide
+ */
 public class fragmentHelp extends fragmentWrapper {
 
     @Override

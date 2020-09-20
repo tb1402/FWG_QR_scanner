@@ -2,11 +2,13 @@ package de.fwg.qr.scanner.tools.cache;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Environment;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import de.fwg.qr.scanner.tools.networkCallbackInterface;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
 /**
@@ -16,8 +18,11 @@ import de.fwg.qr.scanner.tools.preferencesManager;
 public class cacheManager implements addToMemCacheWhileReadInterface {
 
     private Context c;
-    public int cacheSaveIndex = 0;//index to count how many pictures have been cached
     private memoryCacheSingleton memoryCache;
+
+    public static String encryptionKeyBase=null;
+
+    private String encryptionKey;
 
     /**
      * Why do we always need this f*****g context?
@@ -27,6 +32,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
     public cacheManager(Context c) {
         this.c = c;
         memoryCache = memoryCacheSingleton.getInstance();
+        encryptionKey= Build.MODEL+encryptionKeyBase+Build.PRODUCT+Build.MANUFACTURER;
     }
 
     /**
@@ -67,7 +73,7 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
         if (isExternalStorageWritable()) {
             File f = new File(c.getExternalCacheDir(), key + ".img");
             if (!f.exists()) {
-                new writeCacheFileTask(c, data).execute(f);//task to write image asynchronous
+                new writeCacheFileTask(c, data,encryptionKey).execute(f);//task to write image asynchronous
             }
         }
     }
@@ -75,26 +81,27 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
     /**
      * Load an image from the cache
      *
-     * @param ref     reference to callback in target class
+     * @param nci     reference to callback in target class
      * @param id      id of the image
      * @param number  number of the image
-     * @param preview used for previewß
-     * @return true means image is in cache and will be loaded and given back via the {@link readCacheCallback} interface,
+     * @param preview used for preview
+     * @return true means image is in cache and will be loaded and given back via the {@link networkCallbackInterface} interface,
      * false means no image is in cache
      */
-    public boolean loadCachedImage(WeakReference<readCacheCallback> ref, String id, int number, boolean preview) {
+    public boolean loadCachedImage(networkCallbackInterface nci, String id, String operation, int number, boolean preview) {
         String key = getCacheKey(id, number, preview);
         Bitmap bm = memoryCache.get(key);//get image from memory cache, no need for an asynchronous task, because RAM is very fast ;-)
         if (bm == null) {//if null, image isn't in memoryCache
             if (isExternalStorageReadable()) {
                 File f = new File(c.getExternalCacheDir(), key + ".img");
                 if (f.exists() && !f.isDirectory()) {
-                    new readCacheFileTask(c, ref, new WeakReference<>((addToMemCacheWhileReadInterface) this), key).execute(f);//load from storage and add to memory cache see the readCacheFileTask
+                    //new readCacheFileTask(c, ref, (addToMemCacheWhileReadInterface) this, key,operation,"mykey").execute(f);//load from storage and add to memory cache see the readCacheFileTask
+                    new readCacheFileCustomAsyncTask(c, nci, this, key,operation,f,encryptionKey).execute();
                     return true;
                 }
             }
-        } else {//image found in memory cache, can be giving back
-            ref.get().cacheCallback(false, bm);
+        } else {//image found in memory cache, can be given back
+            nci.onImageCallback(operation,bm);
             return true;
         }
         return false;
@@ -131,6 +138,6 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
      * @return crafted key
      */
     private String getCacheKey(String id, int number, boolean preview) {
-        return preview ? "low-" + id + "-" + number : new preferencesManager(c).getImageResolution() + "-" + id + "-" + number;
+        return preview ? "low-" + id + "-" + number : preferencesManager.getInstance(c).getImageResolution() + "-" + id + "-" + number;
     }
 }

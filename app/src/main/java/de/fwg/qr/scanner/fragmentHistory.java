@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -12,7 +13,11 @@ import de.fwg.qr.scanner.history.historyEntry;
 import de.fwg.qr.scanner.history.historyListAdapter;
 import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.history.taskResultCallback;
+import de.fwg.qr.scanner.tools.preferencesManager;
 
+/**
+ * fragment to show the history
+ */
 public class fragmentHistory extends fragmentWrapper {
 
     private ListView listHistory;
@@ -42,20 +47,22 @@ public class fragmentHistory extends fragmentWrapper {
         //manager.addEntry(new historyEntry("EQUgDFPunm"));
         //manager.addEntry(new historyEntry("EsluEnKeHJ"));
 
-        manager.getAssociatedEntriesAsync(new taskResultCallback<historyEntry[]>() {
-            @Override
-            public void onFinished(historyEntry[] result) {
-                historyEntry[] entries = result;
-                // Rearrange the Array to list the entries descending;
-                historyEntry[] hstBuff = new historyEntry[entries.length];
-                for (int i = 0, j = entries.length - 1; i < entries.length; i++, j--) {
-                    hstBuff[i] = entries[j];
+        if (preferencesManager.getInstance(c).areFeaturesUnlocked()) {
+            manager.getAssociatedEntriesAsync(new taskResultCallback<historyEntry[]>() {
+                @Override
+                public void onFinished(historyEntry[] result) {
+                    // Rearrange the Array to list the entries descending;
+                    historyEntry[] hstBuff = new historyEntry[result.length];
+                    for (int i = 0, j = result.length - 1; i < result.length; i++, j--) {
+                        hstBuff[i] = result[j];
+                    }
+                    historyListAdapter adapter = new historyListAdapter(c, hstBuff);
+                    listHistory.setAdapter(adapter);
+                    //lockUI(false);
                 }
-                historyListAdapter adapter = new historyListAdapter(c, hstBuff);
-                listHistory.setAdapter(adapter);
-                //lockUI(false);
-            }
-        }, historyManager.MaxEntries);
-
+            }, historyManager.MaxEntries);
+        } else {
+            Toast.makeText(c, getString(R.string.scan_teacher_code), Toast.LENGTH_LONG).show();
+        }
     }
 }

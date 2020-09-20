@@ -9,219 +9,34 @@
         android:id="@+id/item_frgm_scan"
         android:name="de.fwg.qr.scanner.fragmentScan"
         android:label="@string/item_scan_title"
-        tools:layout="@layout/fragment_scan">
+        tools:layout="@layout/fragment_scan" >
         <action
-            android:id="@+id/action_fragmentScan_to_fragmentAGB"
-            app:destination="@id/item_frgm_agb" />
-        <action
-            android:id="@+id/action_fragmentScan_to_fragmentInformation"
-            app:destination="@id/item_frgm_information" />
-        <action
-            android:id="@+id/action_fragmentScan_to_fragmentHistory"
-            app:destination="@id/item_frgm_history" />
-        <action
-            android:id="@+id/action_fragmentScan_to_fragmentHelp"
-            app:destination="@id/item_frgm_help" />
-        <action
-            android:id="@+id/action_fragmentScan_to_fragmentAbout"
-            app:destination="@id/item_frgm_about" />
-        <action
-            android:id="@+id/action_item_frgm_scan_to_item_frgm_escape_routes"
-            app:destination="@id/item_frgm_escape_routes" />
-        <action
-            android:id="@+id/action_item_frgm_scan_to_item_frgm_progress"
-            app:destination="@id/item_frgm_progress" />
+            android:id="@+id/action_item_frgm_scan_self"
+            app:destination="@id/item_frgm_scan" />
     </fragment>
     <fragment
         android:id="@+id/item_frgm_agb"
         android:name="de.fwg.qr.scanner.fragmentAGB"
         android:label="@string/item_agb_title"
-        tools:layout="@layout/fragment_agb">
-        <action
-            android:id="@+id/action_fragmentAGB_to_fragmentScan"
-            app:destination="@id/item_frgm_scan" />
-        <action
-            android:id="@+id/action_fragmentAGB_to_fragmentHistory"
-            app:destination="@id/item_frgm_history" />
-        <action
-            android:id="@+id/action_fragmentAGB_to_fragmentHelp"
-            app:destination="@id/item_frgm_help" />
-        <action
-            android:id="@+id/action_fragmentAGB_to_fragmentAbout"
-            app:destination="@id/item_frgm_about" />
-        <action
-            android:id="@+id/action_fragmentAGB_to_fragmentInformation"
-            app:destination="@id/item_frgm_information" />
-        <action
-            android:id="@+id/action_item_frgm_agb_to_item_frgm_escape_routes"
-            app:destination="@id/item_frgm_escape_routes" />
-        <action
-            android:id="@+id/action_item_frgm_agb_to_item_frgm_progress"
-            app:destination="@id/item_frgm_progress" />
-    </fragment>
+        tools:layout="@layout/fragment_agb" />
     <fragment
         android:id="@+id/item_frgm_about"
         android:name="de.fwg.qr.scanner.fragmentAbout"
         android:label="@string/item_about_title"
-        tools:layout="@layout/fragment_about">
-        <action
-            android:id="@+id/action_fragmentAbout_to_fragmentAGB"
-            app:destination="@id/item_frgm_agb" />
-        <action
-            android:id="@+id/action_fragmentAbout_to_fragmentInformation"
-            app:destination="@id/item_frgm_information" />
-        <action
-            android:id="@+id/action_fragmentAbout_to_fragmentInformation2"
-            app:destination="@id/item_frgm_information" />
-        <action
-            android:id="@+id/action_fragmentAbout_to_fragmentScan"
-            app:destination="@id/item_frgm_scan" />
-        <action
-            android:id="@+id/action_fragmentAbout_to_fragmentHelp"
-            app:destination="@id/item_frgm_help" />
-        <action
-            android:id="@+id/action_fragmentAbout_to_fragmentHistory"
-            app:destination="@id/item_frgm_history" />
-        <action
-            android:id="@+id/action_item_frgm_about_to_fragmentEscapeRoutes"
-            app:destination="@id/item_frgm_escape_routes" />
-        <action
-            android:id="@+id/action_item_frgm_about_to_item_frgm_progress"
-            app:destination="@id/item_frgm_progress" />
-    </fragment>
+        tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/item_frgm_help"
         android:name="de.fwg.qr.scanner.fragmentHelp"
         android:label="@string/item_help_title"
-        tools:layout="@layout/fragment_help">
-        <action
-            android:id="@+id/action_fragmentHelp_to_fragmentAGB"
-            app:destination="@id/item_frgm_agb" />
-        <action
-            android:id="@+id/action_fragmentHelp_to_fragmentInformation"
-            app:destination="@id/item_frgm_information" />
-        <action
-            android:id="@+id/action_fragmentHelp_to_fragmentScan"
-            app:destination="@id/item_frgm_scan" />
-        <action
-            android:id="@+id/action_fragmentHelp_to_fragmentAbout"
-            app:destination="@id/item_frgm_about" />
-        <action
-            android:id="@+id/action_fragmentHelp_to_fragmentHistory"
-            app:destination="@id/item_frgm_history" />
-        <action
-            android:id="@+id/action_item_frgm_help_to_item_frgm_escape_routes"
-            app:destination="@id/item_frgm_escape_routes" />
-        <action
-            android:id="@+id/action_item_frgm_help_to_item_frgm_progress"
-            app:destination="@id/item_frgm_progress" />
-    </fragment>
+        tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/item_frgm_history"
         android:name="de.fwg.qr.scanner.fragmentHistory"
         android:label="@string/item_history_title"
-        tools:layout="@layout/fragment_history">
-        <action
-            android:id="@+id/action_fragmentHistory_to_fragmentAGB"
-            app:destination="@id/item_frgm_agb" />
-        <action
-            android:id="@+id/action_fragmentHistory_to_fragmentInformation"
-            app:destination="@id/item_frgm_information" />
-        <action
-            android:id="@+id/action_fragmentHistory_to_fragmentScan"
-            app:destination="@id/item_frgm_scan" />
-        <action
-            android:id="@+id/action_fragmentHistory_to_fragmentHelp"
-            app:destination="@id/item_frgm_help" />
-        <action
-            android:id="@+id/action_fragmentHistory_to_fragmentAbout"
-            app:destination="@id/item_frgm_about" />
-        <action
-            android:id="@+id/action_item_frgm_history_to_item_frgm_escape_routes"
-            app:destination="@id/item_frgm_escape_routes" />
-        <action
-            android:id="@+id/action_item_frgm_history_to_item_frgm_progress"
-            app:destination="@id/item_frgm_progress" />
-    </fragment>
-    <fragment
-        android:id="@+id/item_frgm_information"
-        android:name="de.fwg.qr.scanner.fragmentInformation"
-        android:label="@string/item_information_title"
-        tools:layout="@layout/fragment_information">
-        <action
-            android:id="@+id/action_fragmentInformation_to_fragmentAGB"
-            app:destination="@id/item_frgm_agb" />
-        <action
-            android:id="@+id/action_fragmentInformation_to_fragmentScan"
-            app:destination="@id/item_frgm_scan" />
-        <action
-            android:id="@+id/action_fragmentInformation_to_fragmentHistory"
-            app:destination="@id/item_frgm_history" />
-        <action
-            android:id="@+id/action_fragmentInformation_to_fragmentHelp"
-            app:destination="@id/item_frgm_help" />
-        <action
-            android:id="@+id/action_fragmentInformation_to_fragmentAbout"
-            app:destination="@id/item_frgm_about" />
-        <action
-            android:id="@+id/action_item_frgm_information_to_item_frgm_escape_routes"
-            app:destination="@id/item_frgm_escape_routes" />
-        <action
-            android:id="@+id/action_item_frgm_information_to_item_frgm_progress"
-            app:destination="@id/item_frgm_progress" />
-    </fragment>
-    <fragment
-        android:id="@+id/item_frgm_escape_routes"
-        android:name="de.fwg.qr.scanner.fragmentEscapeRoutes"
-        android:label="@string/item_frgm_escape_routes"
-        tools:layout="@layout/fragment_escape_routes">
-        <action
-            android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_about"
-            app:destination="@id/item_frgm_about" />
-        <action
-            android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_information"
-            app:destination="@id/item_frgm_information" />
-        <action
-            android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_agb"
-            app:destination="@id/item_frgm_agb" />
-        <action
-            android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_scan"
-            app:destination="@id/item_frgm_scan" />
-        <action
-            android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_history"
-            app:destination="@id/item_frgm_history" />
-        <action
-            android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_help"
-            app:destination="@id/item_frgm_help" />
-        <action
-            android:id="@+id/action_item_frgm_escape_routes_to_item_frgm_progress"
-            app:destination="@id/item_frgm_progress" />
-    </fragment>
+        tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/item_frgm_progress"
         android:name="de.fwg.qr.scanner.fragmentProgress"
         android:label="@string/item_progress"
-        tools:layout="@layout/fragment_progress">
-        <action
-            android:id="@+id/action_item_frgm_progress_to_item_frgm_about"
-            app:destination="@id/item_frgm_about" />
-        <action
-            android:id="@+id/action_item_frgm_progress_to_item_frgm_information"
-            app:destination="@id/item_frgm_information" />
-        <action
-            android:id="@+id/action_item_frgm_progress_to_item_frgm_agb"
-            app:destination="@id/item_frgm_agb" />
-        <action
-            android:id="@+id/action_item_frgm_progress_to_item_frgm_scan"
-            app:destination="@id/item_frgm_scan" />
-        <action
-            android:id="@+id/action_item_frgm_progress_to_item_frgm_history"
-            app:destination="@id/item_frgm_history" />
-        <action
-            android:id="@+id/action_item_frgm_progress_to_item_frgm_help"
-            app:destination="@id/item_frgm_help" />
-        <action
-            android:id="@+id/action_item_frgm_progress_to_item_frgm_escape_routes"
-            app:destination="@id/item_frgm_escape_routes" />
-    </fragment>
+        tools:layout="@layout/fragment_progress" />
 </navigation>

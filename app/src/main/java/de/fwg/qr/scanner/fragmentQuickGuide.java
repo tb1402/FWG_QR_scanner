@@ -1,5 +1,6 @@
 package de.fwg.qr.scanner;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+/**
+ * fragment showing the quick guide
+ */
 public class fragmentQuickGuide extends fragmentWrapper {
 
     @Override
@@ -27,7 +31,9 @@ public class fragmentQuickGuide extends fragmentWrapper {
         view.findViewById(R.id.btnQuickGuide).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requireActivity().finish();
+                Intent intent = new Intent(a, activityMain.class);
+                startActivity(intent);
+                a.finish();
             }
         });
     }

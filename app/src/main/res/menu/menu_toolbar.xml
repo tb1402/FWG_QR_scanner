@@ -8,6 +8,12 @@
         android:title="@string/item_map"
         app:showAsAction="always" />
     <item
+        android:id="@+id/tb_item_reset"
+        android:icon="@drawable/ic_reset"
+        android:title="@string/dialog_reset_progress_title"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+    <item
         android:id="@+id/tb_item_settings"
         android:title="@string/title_settings" />
 </menu>

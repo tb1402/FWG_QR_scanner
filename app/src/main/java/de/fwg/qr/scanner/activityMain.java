@@ -1,6 +1,8 @@
 package de.fwg.qr.scanner;
 
+import android.app.AlertDialog;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -31,46 +34,59 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.tools.exceptionHandler;
 import de.fwg.qr.scanner.tools.preferencesManager;
 
-public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface {
-    /**
-     * WICHTIG!!!
-     * Diese Klasse bleibt unverändert, hier wird nur Code eingefügt, der zur Navigation dient!!!
-     */
+/**
+* Main (launcher) activity, used to setup navigation, start firstRun screen etc.
+*/
+public class activityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, de.fwg.qr.scanner.tools.drawerToggleInterface, fragmentScan.recreateFragmentAfterScanInterface {
 
     private DrawerLayout drawer;
     private NavController navCon;
-    private ActionBarDrawerToggle abdt;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.UncaughtExceptionHandler eh=Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler(new exceptionHandler(this,android.os.Process.myPid(),eh));
-        //set dark mode
-        preferencesManager pm = new preferencesManager(getApplicationContext());
-        AppCompatDelegate.setDefaultNightMode(pm.getDarkMode() == 0 || pm.getDarkMode() > 1 ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        setContentView(R.layout.activity_main);
 
-        //check if first run
+        //set dark/light mode, depending on users settings
+        preferencesManager pm = preferencesManager.getInstance(getApplicationContext());
+        switch (pm.getDarkMode()) {
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case 2:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+            default:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+        }
+
+        //set the default  uncaught exception handler, to redirect all exceptions (in activityMain) to activityErrorHandling
+        Thread.UncaughtExceptionHandler eh = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(new exceptionHandler(this, android.os.Process.myPid(), eh));
+
+        //check if first run and if so, show start activity
         if (pm.isFirstRun()) {
             Intent intent = new Intent(this, activityStart.class);
             startActivity(intent);
+            finish();
         }
 
-        setContentView(R.layout.activity_main);
-
-        //initialize variables
+        //initialize variables for navigation
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);//needed for navigation controller
         navCon = Navigation.findNavController(this, R.id.host_fragment);
-        Toolbar tb = findViewById(R.id.toolbar);
 
         //Toolbar and Drawer toggle setup
+        Toolbar tb = findViewById(R.id.toolbar);
         tb.setTitle(getString(R.string.app_name));//set toolbar Title to app name
         setSupportActionBar(tb);//set the toolbar as Action bar
-        abdt = new ActionBarDrawerToggle(this, drawer, tb, R.string.msg_navigation_drawer_open, R.string.msg_navigation_drawer_close) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawer, tb,0,0) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) { //Bugfix: Drawer otherwise hidden when starting App for first time
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -78,8 +94,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 drawer.requestLayout();
             }
         };
-        drawer.addDrawerListener(abdt);
-        abdt.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
+        drawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();//VERY IMPORTANT TO APPLY CHANGES!!
 
         //setup Navigation
         NavigationUI.setupActionBarWithNavController(this, navCon, drawer);
@@ -108,6 +124,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //handle toolbar items
         int id = item.getItemId();
         Intent i;
         switch (id) {
@@ -116,9 +133,18 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
                 return true;
             case R.id.tb_item_map:
-                i = new Intent(getApplicationContext(), activityMap.class);
-                startActivity(i);
+                if(preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()) {
+                    i = new Intent(getApplicationContext(), activityMap.class);
+                    startActivity(i);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
+                }
                 return true;
+            case R.id.tb_item_reset:
+                if(preferencesManager.getInstance(getApplicationContext()).isRallyeMode()){
+                    showResetDialog();
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -129,22 +155,21 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         //handle drawer, if back button is pressed
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
             super.onBackPressed();
+            finish();
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        //handle drawer items
         int id = item.getItemId();
         Fragment f;
         switch (id) {
             case R.id.item_frgm_history:
                 f = new fragmentHistory();
-                show(f);
-                break;
-            case R.id.item_frgm_information:
-                f = new fragmentInformation();
                 show(f);
                 break;
             case R.id.item_frgm_about:
@@ -162,13 +187,14 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 f = new fragmentScan();
                 show(f);
                 break;
-            case R.id.item_frgm_escape_routes:
-                f = new fragmentEscapeRoutes();
-                show(f);
-                break;
             case R.id.item_frgm_progress:
-                f = new fragmentProgress();
-                show(f);
+                if(preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()){
+                    f = new fragmentProgress();
+                    show(f);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
+                }
                 break;
             default:
                 return false;
@@ -194,7 +220,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Implementation of corresponding method in  tools.drawerToggleInterface
+     * Implementation of corresponding method in tools.drawerToggleInterface
      * Shows the hamburger icon in toolbar,
      * to be able to open/close the drawer
      */
@@ -203,8 +229,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         ActionBar a = getSupportActionBar();
         if (a != null) {
             a.setDisplayHomeAsUpEnabled(false);
-            abdt.setDrawerIndicatorEnabled(true);
-            abdt.syncState();
+            drawerToggle.setDrawerIndicatorEnabled(true);
+            drawerToggle.syncState();
         }
     }
 
@@ -218,8 +244,8 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
         ActionBar a = getSupportActionBar();
         if (a != null) {
             a.setDisplayHomeAsUpEnabled(true);
-            abdt.setDrawerIndicatorEnabled(false);
-            abdt.syncState();
+            drawerToggle.setDrawerIndicatorEnabled(false);
+            drawerToggle.syncState();
         }
     }
 
@@ -243,5 +269,31 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         recreate();
+    }
+
+    @Override
+    public void recreateFragmentAfterScan() {
+        navCon.navigate(R.id.action_item_frgm_scan_self);
+    }
+
+    private void showResetDialog(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.dialog_reset_progress_title))
+                .setMessage(getString(R.string.dialog_reset_progress_content))
+                .setPositiveButton(getString(R.string.dialog_del_warning_continue), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new historyManager(getApplicationContext()).clearHistory();
+                        preferencesManager.getInstance(getApplicationContext()).saveInt("rallyStationNumber",-1);
+                        recreateFragmentAfterScan();
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_del_warning_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.create().show();
     }
 }

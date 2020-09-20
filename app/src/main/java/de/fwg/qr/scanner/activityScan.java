@@ -15,17 +15,17 @@ import android.widget.ViewSwitcher;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import de.fwg.qr.scanner.history.historyEntry;
 import de.fwg.qr.scanner.history.historyManager;
-import de.fwg.qr.scanner.tools.cache.cacheManager;
-import de.fwg.qr.scanner.tools.cache.readCacheCallback;
 import de.fwg.qr.scanner.tools.network;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
-public class activityScan extends toolbarWrapper implements networkCallbackInterface, readCacheCallback {
+/**
+ * Activity which shows information about a station, after code as been scanned
+ */
+public class activityScan extends toolbarWrapper implements networkCallbackInterface {
 
     private ImageView imageView;
     private ImageSwitcher imageSwitcher;
@@ -34,28 +34,36 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private FloatingActionButton videoButton;
     private ProgressBar progressBar;
 
-    private WeakReference<networkCallbackInterface> ref;
-    private WeakReference<readCacheCallback> cacheRef;
-    private network net;
-
+    /**
+     * The ID of the visited Station as a String
+     */
     private String ID = "";
+    /**
+     * String with how many pictures this station hast
+     */
     private String bild = "";
+    /**
+     * Value for indicating if this station has a video; (-1 || 0): no video, (>=1): video existing
+     */
     private int video = -1;
-
+    /**
+     * Value for indicating which picture schould be displayed by ImageSwitcher
+     */
     private int imagePosition = 0;
+    /**
+     * Value for knowing which picture should be loaded next
+     */
     private int i = 0;
-    private int imageRequestCount = 0;
+    /**
+     * ArrayList for all bitmaps given back by ImageCallback
+     */
     private ArrayList<Bitmap> images;
-    private cacheManager cm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(R.layout.toolbar_scan, this,"Placeholder");
+        super.onCreate(R.layout.toolbar_scan, this, "Placeholder");
         super.onCreate(savedInstanceState);
-        net = new network(this);
-        ref = new WeakReference<>((networkCallbackInterface) this);
-        cacheRef = new WeakReference<>((readCacheCallback) this);
-        cm = new cacheManager(getApplicationContext());
+
         Intent receivedIntent = getIntent();
         ID = receivedIntent.getStringExtra("ID");
         String name = receivedIntent.getStringExtra("Name");
@@ -63,10 +71,13 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         bild = receivedIntent.getStringExtra("Bild");
         String videoIntentExtra = receivedIntent.getStringExtra("Video");
         video = Integer.parseInt(videoIntentExtra == null ? "-1" : videoIntentExtra);
+
         setToolbarTitle(name);
         setupAbHome();
+
         images = new ArrayList<>();
         imageView = new ImageView(this);
+
         TextView textView = findViewById(R.id.textView);
         textView.setText(text);
         textView.setMovementMethod(new ScrollingMovementMethod());
@@ -77,6 +88,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         buttonNext = findViewById(R.id.buttonNext);
         videoButton = findViewById(R.id.videoButton);
         videoButton.setVisibility(video > 0 ? View.VISIBLE : View.INVISIBLE);
+
         assignButtons();
         clickableImageSwitcher();
         getImages();
@@ -94,35 +106,24 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     public void onImageCallback(String name, Bitmap image) {
         if (name.contentEquals("ImagePreview")) {
             images.add(image);
-            cm.cacheImage(ID, cm.cacheSaveIndex, image, true);
-            cm.cacheSaveIndex++;
             i++;
             if (i >= Integer.parseInt(bild)) {
                 lockUI(false);
-                setImageSwitcher();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setImageSwitcher();
+                    }
+                });
             } else {
                 getImages();
             }
         }
     }
 
-    @Override
-    public void cacheCallback(boolean error, Bitmap image) {
-        if (!error) {
-            images.add(image);
-            i++;
-            if (i >= Integer.parseInt(bild) || imageRequestCount == Integer.parseInt(bild) - 1) {
-                lockUI(false);
-                setImageSwitcher();
-            }
-            imageRequestCount++;
-            if (i < Integer.parseInt(bild)) {
-                getImages();
-            }
-
-        }
-    }
-
+    /**
+     * Method for handling Buttons used by ImageSwitcher as well as creating a Button if a video for this station exists
+     */
     public void assignButtons() {
         if (Integer.parseInt(bild) > 1) {
             buttonPre.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +166,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         }
     }
 
+    /**
+     * Initialization of ImageSwitcher; Removal of progressBar when initialized successfully
+     */
     public void setImageSwitcher() {
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -182,13 +186,20 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
 
     }
 
+    /**
+     * Method for making image requests
+     */
     public void getImages() {
-        lockUI(true);
-        if (!cm.loadCachedImage(cacheRef, ID, i, true)) {
-            net.makeImageRequest(ref, "ImagePreview", ID, i, true);
+        if(Integer.parseInt(bild)==0){
+            return;
         }
+        lockUI(true);
+        network.getInstance(getApplicationContext()).makeImageRequest(this, "ImagePreview", ID, i, true, getApplicationContext());
     }
 
+    /**
+     * Method for setting onCLickListener on ImageSwitcher to display pictures in Fullscreen via the activity activityPictureFullscreen
+     */
     public void clickableImageSwitcher() {
         imageSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
