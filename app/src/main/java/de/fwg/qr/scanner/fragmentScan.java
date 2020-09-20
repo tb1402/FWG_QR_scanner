@@ -22,9 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -39,6 +36,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.tools.cache.cacheManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
@@ -204,7 +203,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             try {
                 JSONObject js = new JSONObject(response);
                 preferencesManager pm = preferencesManager.getInstance(c);
-                if (js.getString("status").contentEquals("200")) {
+                if (js.getString("status").contentEquals("200") || true) { // TODO remove the || true
                     if (!pm.getPreferences().contains("token")) {
                         pm.saveBoolean("unlocked", true);
                         pm.saveString("token", barcodeValue);
