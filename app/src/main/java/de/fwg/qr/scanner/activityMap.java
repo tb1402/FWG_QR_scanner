@@ -40,6 +40,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     private network net;
     private static int AMOUNT_OF_STATIONS = 0;
+    private static int AMOUNT_OF_IMAGE_REQUESTS = -1;
     private preferencesManager manager;
 
     //Canvas where all bitmaps get drawn to
@@ -188,25 +189,25 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                     switch (currentLevel) {
                         case 0:
                             RadioButton button1 = findViewById(R.id.radioButton1);
-                            if (button1.isChecked()) {
+                            if (!button1.isChecked()) {
                                 button1.setChecked(true);
                             }
                             break;
                         case -1:
                             RadioButton button2 = findViewById(R.id.radioButton2);
-                            if (button2.isChecked()) {
+                            if (!button2.isChecked()) {
                                 button2.setChecked(true);
                             }
                             break;
                         case 1:
                             RadioButton button3 = findViewById(R.id.radioButton3);
-                            if (button3.isChecked()) {
+                            if (!button3.isChecked()) {
                                 button3.setChecked(true);
                             }
                             break;
                         case 2:
                             RadioButton button4 = findViewById(R.id.radioButton4);
-                            if (button4.isChecked()) {
+                            if (!button4.isChecked()) {
                                 button4.setChecked(true);
                             }
                             break;
@@ -240,6 +241,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 return;
             }
         }
+        AMOUNT_OF_IMAGE_REQUESTS--;
         if (name.contentEquals("FloorRequest")) {
             if (number != currentLevel) {
                 return;
@@ -251,7 +253,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                     imageView.setImageBitmap(bitmapOfImageView);
                 }
             });
-
         } else if (name.contentEquals("ImageRequest")) {
             bitmapOfImageView = imageRequest(image);
             this.runOnUiThread(new Runnable() {
@@ -273,6 +274,42 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             });
 
             // request the data where to draw the arrows exactly:
+            /*net.makePostRequest(new networkCallbackInterface() {
+                @Override
+                public void onPostCallback(String operation, String response) {
+                    try {
+                        arrowCoords = new JSONArray(response);
+
+                        // Next Image Request is only called in ralley mode, arrows and markers are drawn in ralley mode aswell,
+                        // drawing them after the images to avoid wrong layering
+                        getCurrentMarkings(stationData);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onImageCallback(String name, Bitmap image) {
+
+                }
+            }, "ArrowCoords", "", getApplicationContext());*/
+
+
+        } else if (name.contentEquals("FinalStage")) {
+            if (currentLevel == 0) {
+                final Bitmap bit = nextImageRequest(image);
+                canvas = null;
+                this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(bit);
+                    }
+                });
+            }
+        }
+        if (AMOUNT_OF_IMAGE_REQUESTS == 0) {
+            // request the data where to draw the arrows exactly:
             net.makePostRequest(new networkCallbackInterface() {
                 @Override
                 public void onPostCallback(String operation, String response) {
@@ -293,20 +330,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
                 }
             }, "ArrowCoords", "", getApplicationContext());
-
-
-        } else if (name.contentEquals("FinalStage")) {
-            if (currentLevel == 0) {
-                final Bitmap bit = nextImageRequest(image);
-                canvas = null;
-                this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageView.setImageBitmap(bit);
-                    }
-                });
-            }
-
         }
     }
 
@@ -375,8 +398,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
             // find the index of the next object bearing the nextStation Id
             int nextIndex = -1;
-            for(int i = 0; i <  stationData.length(); i++){
-                if(stationData.getJSONObject(i).getInt("mapId") == nextStation){
+            for (int i = 0; i < stationData.length(); i++) { //Todo nullPointerException
+                if (stationData.getJSONObject(i).getInt("mapId") == nextStation) {
                     nextIndex = i;
                 }
             }
@@ -527,7 +550,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
      * @param floor Floor of the marker, only drawn if the map is currently in the right floor
      */
     private Bitmap drawNextMarker(int x, int y, int floor){
-        if(currentLevel != floor) return null;
+        if (currentLevel != floor) return result;
 
         Bitmap markerBmp = BitmapFactory.decodeResource(getResources(), R.raw.marker_next);
 
@@ -570,7 +593,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             canvas.drawBitmap(markerBmp, x, y, getMarkerOpacity());
             return result;
         }
-        return null;
+        return result;
     }
 
     /**
@@ -581,7 +604,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
      * @param floor Floor the Arrow is drawn in, only if the floor in question is currently active
      */
     private Bitmap drawArrow(String name, int x, int y, int floor) throws JSONException{
-        if(currentLevel != floor) return null;
+        if (currentLevel != floor) return result;
 
         int resourceId = getResourceByName(name);
         Bitmap arrowBmp = BitmapFactory.decodeResource(getResources(), resourceId);
@@ -606,7 +629,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             }
 
         }
-        return null;
+        return result;
 
 
     }
@@ -624,30 +647,37 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     public void getImages(int level) {
         canvas = null;
         check = level;
+        AMOUNT_OF_IMAGE_REQUESTS = 0;
         if (allObtainedStationNames.size() == 0) {
             net.makeImageRequestWithIDCallback(this, "FloorRequest", "mapFloors", level, true, this);
+            AMOUNT_OF_IMAGE_REQUESTS++;
             if (manager.isRallyeMode()) {
                 net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.size(), true, this);
+                AMOUNT_OF_IMAGE_REQUESTS++;
             }
             return;
         }
         if (manager.isRallyeMode() && currentLevel == 0) { //Letzte Station ist Speziallfall, ist nicht nach Stockwerk geordnet und ersetzt den Erdgeschoss
             if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) == (AMOUNT_OF_STATIONS - 2)) {
                 net.makeImageRequestWithIDCallback(this, "FinalStage", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
+                AMOUNT_OF_IMAGE_REQUESTS++;
                 return;
             }
         }
         net.makeImageRequestWithIDCallback(this, "FloorRequest", "mapFloors", level, true, this);
+        AMOUNT_OF_IMAGE_REQUESTS++;
         switch (level) {
             case 0:
                 for (int j = 0; j < AMOUNT_OF_STATIONS_PER_LEVEL[1]; j++) { //Alle Stationen vom ersten Stock werden durchlaufen
                     if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) { // Nur wenn station besucht wurde wird netrequest gemacht
                         net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
+                        AMOUNT_OF_IMAGE_REQUESTS++;
                     }
                 }
                 if (manager.isRallyeMode()) {
                     if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && currentLevel == level) { // Wenn die letzte eingescannte station nicht die letzte Station des Stockwerkes ist, wird die nächste Station geladen (AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1, weil das bei 1 beginnt, die erhaltenen Stationen bei 0
                         net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
+                        AMOUNT_OF_IMAGE_REQUESTS++;
                     }
                 }
                 break;
@@ -655,11 +685,13 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 for (int j = AMOUNT_OF_STATIONS_PER_LEVEL[1]; j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0]); j++) {
                     if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
                         net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
+                        AMOUNT_OF_IMAGE_REQUESTS++;
                     }
                 }
                 if (manager.isRallyeMode()) {
                     if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1 && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && currentLevel == level) {
                         net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
+                        AMOUNT_OF_IMAGE_REQUESTS++;
                     }
                 }
                 break;
@@ -667,23 +699,27 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 for (int j = (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0]); j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2]); j++) {
                     if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
                         net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
+                        AMOUNT_OF_IMAGE_REQUESTS++;
                     }
                 }
                 if (manager.isRallyeMode()) {
                     if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= (AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] - 1) && currentLevel == level) {
                         net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
+                        AMOUNT_OF_IMAGE_REQUESTS++;
                     }
                 }
                 break;
             case 2:
-                for (int j = (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2]); j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3] - 1); j++) { // -1 in for-Schleife wirchtig, letzte station gehört zum Erdgeschoss
+                for (int j = (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2]); j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3] - 1); j++) { // -1 in for-Schleife wichtig, letzte station gehört zum Erdgeschoss
                     if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
                         net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
+                        AMOUNT_OF_IMAGE_REQUESTS++;
                     }
                 }
                 if (manager.isRallyeMode()) {
                     if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] - 1) && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3] - 2) && currentLevel == level) { //-2 wegen selben gründen wie bei der for-schleife
                         net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
+                        AMOUNT_OF_IMAGE_REQUESTS++;
                     }
                 }
                 break;
