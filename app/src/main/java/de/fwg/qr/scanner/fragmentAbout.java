@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -21,7 +20,6 @@ import de.fwg.qr.scanner.tools.networkCallbackInterface;
  */
 public class fragmentAbout extends fragmentWrapper implements networkCallbackInterface {
 
-    private TextView textView; //TODO: Load text either through network call or just plainly use setText()
     private ImageView imageView;
     private ProgressBar progressBar;
 
@@ -38,7 +36,6 @@ public class fragmentAbout extends fragmentWrapper implements networkCallbackInt
 
     @Override
     public void onViewCreated(@NotNull View v, @Nullable Bundle sis) {
-        textView = v.findViewById(R.id.textView);
         imageView = v.findViewById(R.id.imageView);
         progressBar = v.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
