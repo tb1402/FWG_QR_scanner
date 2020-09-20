@@ -40,6 +40,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     private network net;
     private static int AMOUNT_OF_STATIONS = 0;
+    //Variable for knowing how many imageRequests were made
     private static int AMOUNT_OF_IMAGE_REQUESTS = -1;
     private preferencesManager manager;
 
@@ -197,24 +198,28 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                             RadioButton button1 = findViewById(R.id.radioButton1);
                             if (!button1.isChecked()) {
                                 button1.setChecked(true);
+                                button1.setTextColor(getResources().getColor(R.color.textColor));
                             }
                             break;
                         case -1:
                             RadioButton button2 = findViewById(R.id.radioButton2);
                             if (!button2.isChecked()) {
                                 button2.setChecked(true);
+                                button2.setTextColor(getResources().getColor(R.color.textColor));
                             }
                             break;
                         case 1:
                             RadioButton button3 = findViewById(R.id.radioButton3);
                             if (!button3.isChecked()) {
                                 button3.setChecked(true);
+                                button3.setTextColor(getResources().getColor(R.color.textColor));
                             }
                             break;
                         case 2:
                             RadioButton button4 = findViewById(R.id.radioButton4);
                             if (!button4.isChecked()) {
                                 button4.setChecked(true);
+                                button4.setTextColor(getResources().getColor(R.color.textColor));
                             }
                             break;
                     }
@@ -279,33 +284,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 }
             });
 
-            // request the data where to draw the arrows exactly:
-            /*net.makePostRequest(new networkCallbackInterface() {
-                @Override
-                public void onPostCallback(String operation, String response) {
-                    try {
-                        arrowCoords = new JSONArray(response);
-
-                        // Next Image Request is only called in ralley mode, arrows and markers are drawn in ralley mode aswell,
-                        // drawing them after the images to avoid wrong layering
-                        getCurrentMarkings(stationData);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onImageCallback(String name, Bitmap image) {
-
-                }
-            }, "ArrowCoords", "", getApplicationContext());*/
-
-
         } else if (name.contentEquals("FinalStage")) {
             if (currentLevel == 0) {
                 final Bitmap bit = nextImageRequest(image);
-                canvas = null;
                 this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -314,7 +295,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 });
             }
         }
-        if (AMOUNT_OF_IMAGE_REQUESTS == 0) {
+        if (AMOUNT_OF_IMAGE_REQUESTS == 0 && manager.isRallyeMode()) {
             // request the data where to draw the arrows exactly:
             net.makePostRequest(new networkCallbackInterface() {
                 @Override
@@ -325,6 +306,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                         // Next Image Request is only called in ralley mode, arrows and markers are drawn in ralley mode aswell,
                         // drawing them after the images to avoid wrong layering
                         getCurrentMarkings(stationData);
+                        changeColorOfNextStation();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -404,7 +386,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
             // find the index of the next object bearing the nextStation Id
             int nextIndex = -1;
-            for (int i = 0; i < stationData.length(); i++) { //Todo nullPointerException
+            for (int i = 0; i < stationData.length(); i++) {
                 if (stationData.getJSONObject(i).getInt("mapId") == nextStation) {
                     nextIndex = i;
                 }
@@ -802,7 +784,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
      * @return number of floor, if not found, return -2
      */
     private int getLevelPerId(int id) {
-        if (id >= (AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3] - 1)) {
+        if (id >= (AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3])) {
             return 0;
         }
         int[] array = {0, AMOUNT_OF_STATIONS_PER_LEVEL[1], AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1], AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[2]};
@@ -824,6 +806,43 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             }
         }
         return -2;
+    }
+
+    /**
+     * Method for changing Color of RadioButtons text where next station would be; does nothing when all stations were already scanned
+     */
+    private void changeColorOfNextStation() {
+        int i = 0;
+        if (allObtainedStationNames.size() != 0) {
+            i = getLevelPerId(allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1);
+            //checks if all stations were already scanned with varable x
+            int x = 0;
+            for (int u = 0; u < AMOUNT_OF_STATIONS_PER_LEVEL.length; u++) {
+                x += AMOUNT_OF_STATIONS_PER_LEVEL[u];
+            }
+            if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) == x) {
+                return;
+            }
+        }
+        RadioButton button;
+        switch (i) {
+            case 0:
+                button = findViewById(R.id.radioButton1);
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                break;
+            case -1:
+                button = findViewById(R.id.radioButton2);
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                break;
+            case 1:
+                button = findViewById(R.id.radioButton3);
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                break;
+            case 2:
+                button = findViewById(R.id.radioButton4);
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                break;
+        }
     }
 
     /**
