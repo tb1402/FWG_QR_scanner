@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -49,11 +48,11 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     // Constants for drawing
     private final int BITMAP_SIDELENGTH = 1254;
-    private final float NEXT_MARKER_TIP_X = 64f / 128f;
-    private final float NEXT_MARKER_TIP_Y = 118f / 128f;
-    private final float MARKER_SIZE_SCALING = 0.37f;
+    private int NEXT_MARKER_TIP_X;
+    private int NEXT_MARKER_TIP_Y;
+    private final float MARKER_SIZE_SCALING = 1f;//0.37f;
     private final float CURRENT_MARKER_MIDPOINT = 0.5f;
-    private final float ARROW_SIZE_SCALING = 0.50f;
+    private final float ARROW_SIZE_SCALING = 1f;//0.50f;
     private final float MARKINGS_OPACITY = 0.60f;
     private JSONArray arrowCoords;
 
@@ -69,7 +68,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     @Override
     public void onCreate(Bundle savedInstanceBundle) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);//prevent screenshots and video capture (not supported by some devices)
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);//prevent screenshots and video capture (not supported by some devices)
         super.onCreate(R.layout.activity_map, this, getString(R.string.item_map));
         super.onCreate(savedInstanceBundle);
 
@@ -179,6 +178,12 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                     i.putExtra(activityErrorHandling.errorNameIntentExtra, "mapData status not ok");
                     startActivity(i);
                 }
+
+                String translation = mapData.getString("translationValue");
+                String[] translationValues = translation.split(",");
+                NEXT_MARKER_TIP_X = Math.abs(Integer.parseInt(translationValues[0]));
+                NEXT_MARKER_TIP_Y = Math.abs(Integer.parseInt(translationValues[1]));
+
                 stationData = mapData.getJSONArray("stations");
                 AMOUNT_OF_STATIONS = stationData.length();
                 AMOUNT_OF_STATIONS_PER_LEVEL = getStationsPerLevel(stationData);
@@ -529,8 +534,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     private Bitmap drawNextMarker(int x, int y, int floor){
         if(currentLevel != floor) return null;
 
-        Bitmap markerBmp = BitmapFactory.decodeResource(getResources(), R.raw.marker_next);
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inScaled = false;
 
+        Bitmap markerBmp = BitmapFactory.decodeResource(getResources(), R.raw.marker_next, opt);
         if (result == null || canvas == null) {
             result = Bitmap.createBitmap(BITMAP_SIDELENGTH, BITMAP_SIDELENGTH, markerBmp.getConfig());
             canvas = new Canvas(result);
@@ -538,10 +545,11 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
 
         //calculate fitting startpoint:
-        x -= markerBmp.getWidth() * NEXT_MARKER_TIP_X * MARKER_SIZE_SCALING;
-        y -= markerBmp.getHeight() * NEXT_MARKER_TIP_Y * MARKER_SIZE_SCALING;
+        x -= NEXT_MARKER_TIP_X * MARKER_SIZE_SCALING;
+        y -= NEXT_MARKER_TIP_Y * MARKER_SIZE_SCALING;
 
         markerBmp = Bitmap.createScaledBitmap(markerBmp, (int)(markerBmp.getWidth() * MARKER_SIZE_SCALING), (int)(markerBmp.getHeight() * MARKER_SIZE_SCALING), true);
+        markerBmp.setDensity(Bitmap.DENSITY_NONE);
         canvas.drawBitmap(markerBmp, x, y, getMarkerOpacity());
         return result;
     }
@@ -557,7 +565,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     public Bitmap drawCurrentMarker(int x, int y, int floor){
 
         if(currentLevel == floor) {
-            Bitmap markerBmp = BitmapFactory.decodeResource(getResources(), R.raw.marker_current);
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inScaled = false;
+            Bitmap markerBmp = BitmapFactory.decodeResource(getResources(), R.raw.marker_current, opt);
             if (result == null || canvas == null) {
                 result = Bitmap.createBitmap(BITMAP_SIDELENGTH, BITMAP_SIDELENGTH, markerBmp.getConfig());
                 canvas = new Canvas(result);
@@ -566,8 +576,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             y -= markerBmp.getWidth() * CURRENT_MARKER_MIDPOINT * MARKER_SIZE_SCALING;
 
             markerBmp = Bitmap.createScaledBitmap(markerBmp, (int) (markerBmp.getWidth() * MARKER_SIZE_SCALING), (int) (markerBmp.getHeight() * MARKER_SIZE_SCALING), true);
-
-            canvas.drawBitmap(markerBmp, x, y, getMarkerOpacity());
+            markerBmp.setDensity(Bitmap.DENSITY_NONE);
+            canvas.drawBitmap(markerBmp, x, y,  getMarkerOpacity());
             return result;
         }
         return null;
@@ -584,7 +594,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         if(currentLevel != floor) return null;
 
         int resourceId = getResourceByName(name);
-        Bitmap arrowBmp = BitmapFactory.decodeResource(getResources(), resourceId);
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inScaled = false;
+        Bitmap arrowBmp = BitmapFactory.decodeResource(getResources(), resourceId, opt);
 
         if (result == null || canvas == null) {
             result = Bitmap.createBitmap(BITMAP_SIDELENGTH, BITMAP_SIDELENGTH, arrowBmp.getConfig());
@@ -597,10 +609,11 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             JSONObject obj = arrowCoords.getJSONObject(i);
             if(obj.getString("name").contentEquals(name)){
 
-                x -= obj.getInt("tipX") * ARROW_SIZE_SCALING;
-                y -= obj.getInt("tipY") * ARROW_SIZE_SCALING;
+                //x -= obj.getInt("tipX") * ARROW_SIZE_SCALING;
+                //y -= obj.getInt("tipY") * ARROW_SIZE_SCALING;
 
                 arrowBmp = Bitmap.createScaledBitmap(arrowBmp, (int)(arrowBmp.getWidth() * ARROW_SIZE_SCALING), (int)(arrowBmp.getHeight() * ARROW_SIZE_SCALING), true);
+                arrowBmp.setDensity(Bitmap.DENSITY_NONE);
                 canvas.drawBitmap(arrowBmp, x, y, getMarkerOpacity());
                 return result;
             }
