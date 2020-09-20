@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -69,7 +70,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     @Override
     public void onCreate(Bundle savedInstanceBundle) {
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);//prevent screenshots and video capture (not supported by some devices)
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);//prevent screenshots and video capture (not supported by some devices)
         super.onCreate(R.layout.activity_map, this, getString(R.string.item_map));
         super.onCreate(savedInstanceBundle);
 
