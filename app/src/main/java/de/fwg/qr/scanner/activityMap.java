@@ -53,11 +53,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     private final int BITMAP_SIDELENGTH = 1254;
     private int NEXT_MARKER_TIP_X;
     private int NEXT_MARKER_TIP_Y;
-    private final float MARKER_SIZE_SCALING = 1f;//0.37f;
-    private final float CURRENT_MARKER_MIDPOINT = 0.5f;
-    private final float ARROW_SIZE_SCALING = 1f;//0.50f;
     private final float MARKINGS_OPACITY = 0.60f;
-    private JSONArray arrowCoords;
 
     //Bitmap returned by image request methods
     private Bitmap result;
@@ -280,9 +276,12 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 public void run() {
                     imageView.setImageBitmap(bitmapOfImageView);
 
-
+                    // request the data where to draw the arrows exactly:
+                    getCurrentMarkings(stationData);
                 }
             });
+
+
 
         } else if (name.contentEquals("FinalStage")) {
             if (currentLevel == 0) {
@@ -297,27 +296,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         }
         if (AMOUNT_OF_IMAGE_REQUESTS == 0 && manager.isRallyeMode()) {
             // request the data where to draw the arrows exactly:
-            net.makePostRequest(new networkCallbackInterface() {
-                @Override
-                public void onPostCallback(String operation, String response) {
-                    try {
-                        arrowCoords = new JSONArray(response);
-
-                        // Next Image Request is only called in ralley mode, arrows and markers are drawn in ralley mode aswell,
-                        // drawing them after the images to avoid wrong layering
-                        getCurrentMarkings(stationData);
-                        changeColorOfNextStation();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onImageCallback(String name, Bitmap image) {
-
-                }
-            }, "ArrowCoords", "", getApplicationContext());
+            getCurrentMarkings(stationData);
+            changeColorOfNextStation();
         }
     }
 
@@ -551,10 +531,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
 
         //calculate fitting startpoint:
-        x -= NEXT_MARKER_TIP_X * MARKER_SIZE_SCALING;
-        y -= NEXT_MARKER_TIP_Y * MARKER_SIZE_SCALING;
+        x -= NEXT_MARKER_TIP_X ;
+        y -= NEXT_MARKER_TIP_Y ;
 
-        markerBmp = Bitmap.createScaledBitmap(markerBmp, (int)(markerBmp.getWidth() * MARKER_SIZE_SCALING), (int)(markerBmp.getHeight() * MARKER_SIZE_SCALING), true);
+        //markerBmp = Bitmap.createScaledBitmap(markerBmp, (int)(markerBmp.getWidth() * MARKER_SIZE_SCALING), (int)(markerBmp.getHeight() * MARKER_SIZE_SCALING), true);
         markerBmp.setDensity(Bitmap.DENSITY_NONE);
         canvas.drawBitmap(markerBmp, x, y, getMarkerOpacity());
         return result;
@@ -578,10 +558,8 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 result = Bitmap.createBitmap(BITMAP_SIDELENGTH, BITMAP_SIDELENGTH, markerBmp.getConfig());
                 canvas = new Canvas(result);
             }
-            x -= markerBmp.getWidth() * CURRENT_MARKER_MIDPOINT * MARKER_SIZE_SCALING;
-            y -= markerBmp.getWidth() * CURRENT_MARKER_MIDPOINT * MARKER_SIZE_SCALING;
 
-            markerBmp = Bitmap.createScaledBitmap(markerBmp, (int) (markerBmp.getWidth() * MARKER_SIZE_SCALING), (int) (markerBmp.getHeight() * MARKER_SIZE_SCALING), true);
+            //markerBmp = Bitmap.createScaledBitmap(markerBmp, (int) (markerBmp.getWidth()), (int) (markerBmp.getHeight()), true);
             markerBmp.setDensity(Bitmap.DENSITY_NONE);
             canvas.drawBitmap(markerBmp, x, y,  getMarkerOpacity());
             return result;
@@ -609,24 +587,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             canvas = new Canvas(result);
         }
 
-        // get the offset out of the data array
-        // find the entry where the arrow name equals the searched one
-        for(int i = 0; i < arrowCoords.length(); i++){
-            JSONObject obj = arrowCoords.getJSONObject(i);
-            if(obj.getString("name").contentEquals(name)){
-
-                //x -= obj.getInt("tipX") * ARROW_SIZE_SCALING;
-                //y -= obj.getInt("tipY") * ARROW_SIZE_SCALING;
-
-                arrowBmp = Bitmap.createScaledBitmap(arrowBmp, (int)(arrowBmp.getWidth() * ARROW_SIZE_SCALING), (int)(arrowBmp.getHeight() * ARROW_SIZE_SCALING), true);
-                arrowBmp.setDensity(Bitmap.DENSITY_NONE);
-                canvas.drawBitmap(arrowBmp, x, y, getMarkerOpacity());
-                return result;
-            }
-
-        }
+        //arrowBmp = Bitmap.createScaledBitmap(arrowBmp, (int)(arrowBmp.getWidth()), (int)(arrowBmp.getHeight()), true);
+        arrowBmp.setDensity(Bitmap.DENSITY_NONE);
+        canvas.drawBitmap(arrowBmp, x, y, getMarkerOpacity());
         return result;
-
 
     }
 
