@@ -205,28 +205,28 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                             RadioButton button1 = findViewById(R.id.radioButton1);
                             if (!button1.isChecked()) {
                                 button1.setChecked(true);
-                                button1.setTextColor(getResources().getColor(R.color.textColor));
+                                button1.setTextColor(getResources().getColor(R.color.textColor, null));
                             }
                             break;
                         case -1:
                             RadioButton button2 = findViewById(R.id.radioButton2);
                             if (!button2.isChecked()) {
                                 button2.setChecked(true);
-                                button2.setTextColor(getResources().getColor(R.color.textColor));
+                                button2.setTextColor(getResources().getColor(R.color.textColor, null));
                             }
                             break;
                         case 1:
                             RadioButton button3 = findViewById(R.id.radioButton3);
                             if (!button3.isChecked()) {
                                 button3.setChecked(true);
-                                button3.setTextColor(getResources().getColor(R.color.textColor));
+                                button3.setTextColor(getResources().getColor(R.color.textColor, null));
                             }
                             break;
                         case 2:
                             RadioButton button4 = findViewById(R.id.radioButton4);
                             if (!button4.isChecked()) {
                                 button4.setChecked(true);
-                                button4.setTextColor(getResources().getColor(R.color.textColor));
+                                button4.setTextColor(getResources().getColor(R.color.textColor, null));
                             }
                             break;
                     }
@@ -541,7 +541,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         }
 
 
-        //calculate fitting startpoint:
+        //calculate fitting starting point:
         x -= NEXT_MARKER_TIP_X ;
         y -= NEXT_MARKER_TIP_Y ;
 
@@ -554,10 +554,11 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     /**
      * Method that draws the marker on the current, last visited station
      * (different method because it draws a different marker with different calculation of positions)
-     * @param x x-position of the markers midpoint
-     * @param y y-position of the markers midpoint
+     *
+     * @param x     x-position of the markers midpoint
+     * @param y     y-position of the markers midpoint
      * @param floor only drawn if the maplayer is currently showing that floor
-     * @return
+     * @return Bitmap that underlies the canvas
      */
     public Bitmap drawCurrentMarker(int x, int y, int floor){
 
@@ -580,12 +581,13 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     /**
      * Method draws an Arrow on the mapCanvas
-     * @param name Resource name of the Arrow in question in a String
-     * @param x x-Position of the Arrow
-     * @param y y-Position of the Arrow
+     *
+     * @param name  Resource name of the Arrow in question in a String
+     * @param x     x-Position of the Arrow
+     * @param y     y-Position of the Arrow
      * @param floor Floor the Arrow is drawn in, only if the floor in question is currently active
      */
-    private Bitmap drawArrow(String name, int x, int y, int floor) throws JSONException{
+    private Bitmap drawArrow(String name, int x, int y, int floor) /*throws JSONException*/ {
         if (currentLevel != floor) return result;
 
         int resourceId = getResourceByName(name);
@@ -785,8 +787,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                         return -1;
                     case 0:
                         return 0;
-                    default:
-                        return 0;
                 }
 
             }
@@ -801,10 +801,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         int i = 0;
         if (allObtainedStationNames.size() != 0) {
             i = getLevelPerId(allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1);
-            //checks if all stations were already scanned with varable x
+            //checks if all stations were already scanned with variable x
             int x = 0;
-            for (int u = 0; u < AMOUNT_OF_STATIONS_PER_LEVEL.length; u++) {
-                x += AMOUNT_OF_STATIONS_PER_LEVEL[u];
+            for (int value : AMOUNT_OF_STATIONS_PER_LEVEL) {
+                x += value;
             }
             if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) == x) {
                 return;
@@ -814,19 +814,19 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         switch (i) {
             case 0:
                 button = findViewById(R.id.radioButton1);
-                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited, null));
                 break;
             case -1:
                 button = findViewById(R.id.radioButton2);
-                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited, null));
                 break;
             case 1:
                 button = findViewById(R.id.radioButton3);
-                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited, null));
                 break;
             case 2:
                 button = findViewById(R.id.radioButton4);
-                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited, null));
                 break;
         }
     }
