@@ -22,6 +22,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -36,8 +39,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import de.fwg.qr.scanner.history.historyManager;
 import de.fwg.qr.scanner.tools.cache.cacheManager;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
@@ -119,7 +120,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             for (int i = 0, len = permissions.length; i < len; i++) {
                 String permission = permissions[i];
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    boolean showRationale = shouldShowRequestPermissionRationale(permission);
+                    boolean showRationale = shouldShowRequestPermissionRationale(permission); // Variable for knowing if user has always denied camera access, if so user gets sent to settings of his device
                     if (!showRationale) {
                         Toast.makeText(c, getString(R.string.permission_needed), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -133,6 +134,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         }
     }
 
+    /**
+     * Method that checks if reset button for rally mode data should be shown, only visible in rally mode
+     *
+     * @param menu menu provided by app
+     */
     @Override
     public void onPrepareOptionsMenu(@NotNull Menu menu) {
         if (preferencesManager.getInstance(c).isRallyeMode()) {
@@ -149,7 +155,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         lockUI(false);
         if (operation.contentEquals("getInfo")) {
             try {
-                JSONObject object = new JSONObject(response);
+                JSONObject object = new JSONObject(response); //All data provided by server is parsed to activityScan through intent
                 i.putExtra("ID", barcodeValue);
                 i.putExtra("Name", object.getString("Name"));
                 i.putExtra("Text", object.getString("Text"));
