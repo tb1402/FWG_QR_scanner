@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 /**
- * fragment showing information about the developers
+ * fragment showing information about the developers (hey da bin ja ich)
  */
 public class fragmentAbout extends fragmentWrapper implements networkCallbackInterface {
 

@@ -31,7 +31,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private ImageSwitcher imageSwitcher;
     private Button buttonPre;
     private Button buttonNext;
-    private FloatingActionButton videoButton;
+    private FloatingActionButton videoButton; //Button if video is available; feature currently unused
     private ProgressBar progressBar;
 
     /**
@@ -64,6 +64,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         super.onCreate(R.layout.toolbar_scan, this, "Placeholder");
         super.onCreate(savedInstanceState);
 
+        //Data of Intent is received from fragmentScan
         Intent receivedIntent = getIntent();
         ID = receivedIntent.getStringExtra("ID");
         String name = receivedIntent.getStringExtra("Name");
@@ -206,7 +207,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), activityPictureFullscreen.class);
                 intent.putExtra("ID", ID);
-                intent.putExtra("Position", imagePosition);
+                intent.putExtra("Position", imagePosition); //Parses imagePosition in order to display correct picture in fullscreen
                 startActivity(intent);
             }
         });
