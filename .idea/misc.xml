@@ -2,6 +2,7 @@
 <project version="4">
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/temp/jd" />
+    <option name="OPTION_SCOPE" value="private" />
     <option name="OPTION_LINK_TO_JDK_DOCS" value="true" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">

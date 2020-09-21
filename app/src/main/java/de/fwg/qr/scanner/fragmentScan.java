@@ -203,7 +203,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             try {
                 JSONObject js = new JSONObject(response);
                 preferencesManager pm = preferencesManager.getInstance(c);
-                if (js.getString("status").contentEquals("200") || true) { // TODO remove the || true
+                if (js.getString("status").contentEquals("200")) {
                     if (!pm.getPreferences().contains("token")) {
                         pm.saveBoolean("unlocked", true);
                         pm.saveString("token", barcodeValue);
