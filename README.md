@@ -1,5 +1,5 @@
 # FWG QR scanner
-QR Code Scanner für das FWG Kronach. Erstellt vom Info Kurs der Q11
+QR Code Scanner für das FWG Kronach. Erstellt vom Info Kurs der Q12 2020/2021
 
 ## Mitwirkende
 
