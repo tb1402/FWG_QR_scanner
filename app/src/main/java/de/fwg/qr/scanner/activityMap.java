@@ -659,7 +659,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         }
         for (int i = 0; i < allObtainedStationNames.size() - j; i++) { //variable j to decrease amount of loops by one when last station was already scanned
             if (currentLevel == getLevelPerId(allObtainedStationNames.get(i)) && level == currentLevel) { //Checks if station would be on right floor, is later checked in onImageCallback() as well to prevent wrong drawing
-                net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", i, true, this);
+                net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", allObtainedStationNames.get(i), true, this);
                 AMOUNT_OF_IMAGE_REQUESTS++;
             }
         }
