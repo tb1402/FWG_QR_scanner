@@ -636,7 +636,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         check = level;
         int j = 0; //Variable for decreasing ImageRequests by 1 in order to prevent last station to be drawn over normal main floor
         AMOUNT_OF_IMAGE_REQUESTS = 0;
-        if (allObtainedStationNames.size() == 0) { //Check if no stations haven't been scanned before, otherwise nextImageRequest for first stations could't be made
+        if (allObtainedStationNames.size() == 0) { //Check if no stations haven't been scanned before, otherwise nextImageRequest for first station couldn't be made
             net.makeImageRequestWithIDCallback(this, "FloorRequest", "mapFloors", level, true, this);
             AMOUNT_OF_IMAGE_REQUESTS++;
             if (manager.isRallyeMode()) {
