@@ -44,11 +44,12 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     private TextView textView;
 
     private network net;
+    private preferencesManager manager;
+
     //Variable for indicating how many stations there are in total
     private static int AMOUNT_OF_STATIONS = 0;
     //Variable for indicating how many stations are per Level; for reference see method getStationsPerLevel(JSONArray stationData)
     private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
-    private preferencesManager manager;
     //Variable for knowing how many imageRequests were made
     private static int AMOUNT_OF_IMAGE_REQUESTS = -1;
 
@@ -108,10 +109,12 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     /**
      * Method for changing between radioButtons grouped under radioGroup
-     * All RadioButtons: *1 Main floor
-     * *2 Basement
-     * *3 First floor
-     * *4 Second floor
+     * <p>
+     * All RadioButtons:
+     * - 1 Main floor
+     * - 2 Basement
+     * - 3 First floor
+     * - 4 Second floor
      *
      * @param view View provided by radioButtons
      */
@@ -631,8 +634,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     public void getImages(int level) {
         canvas = null;
         check = level;
+        int j = 0; //Variable for decreasing ImageRequests by 1 in order to prevent last station to be drawn over normal main floor
         AMOUNT_OF_IMAGE_REQUESTS = 0;
-        if (allObtainedStationNames.size() == 0) {
+        if (allObtainedStationNames.size() == 0) { //Check if no stations haven't been scanned before, otherwise nextImageRequest for first stations could't be made
             net.makeImageRequestWithIDCallback(this, "FloorRequest", "mapFloors", level, true, this);
             AMOUNT_OF_IMAGE_REQUESTS++;
             if (manager.isRallyeMode()) {
@@ -650,68 +654,20 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         }
         net.makeImageRequestWithIDCallback(this, "FloorRequest", "mapFloors", level, true, this);
         AMOUNT_OF_IMAGE_REQUESTS++;
-        switch (level) {
-            case 0:
-                for (int j = 0; j < AMOUNT_OF_STATIONS_PER_LEVEL[1]; j++) { //All stations of main floor are traversed
-                    if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) { // Network request only if station was visited and if the level still equals the level provided be currentLevel (currentLevel can change asynchronous)
-                        net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                if (manager.isRallyeMode()) {
-                    if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && currentLevel == level) { //If app is in rally mode and next station that should be obtained is on this floor network request will be made (AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1, because mapIDs provided by stations start counting with 0, this starts with 1)
-                        net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                break;
-            case -1:
-                for (int j = AMOUNT_OF_STATIONS_PER_LEVEL[1]; j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0]); j++) { //All stations of basement are traversed
-                    if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                if (manager.isRallyeMode()) {
-                    if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1 && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                break;
-            case 1:
-                for (int j = (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0]); j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2]); j++) { //All stations of first floor are traversed
-                    if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                if (manager.isRallyeMode()) {
-                    if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= (AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] - 1) && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                break;
-            case 2:
-                for (int j = (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2]); j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3]); j++) { //All stations of second floor are traversed
-                    if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                if (manager.isRallyeMode()) {
-                    if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] - 1) && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3] - 1) && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                break;
-            default:
-                Intent i = new Intent(this, activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra, "Error with method getImages; Wrong level id");
-                startActivity(i);
-
+        if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= (AMOUNT_OF_STATIONS - 1)) { //see initialization of int variable j
+            j++;
+        }
+        for (int i = 0; i < allObtainedStationNames.size() - j; i++) { //variable j to decrease amount of loops by one when last station was already scanned
+            if (currentLevel == getLevelPerId(allObtainedStationNames.get(i)) && level == currentLevel) { //Checks if station would be on right floor, is later checked in onImageCallback() as well to prevent wrong drawing
+                net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", i, true, this);
+                AMOUNT_OF_IMAGE_REQUESTS++;
+            }
+        }
+        if (manager.isRallyeMode()) { //Makes request for upcoming station in order to draw it opaque; for reference see onImageCallback()
+            if (currentLevel == getLevelPerId(allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1)) { //Only if station would be on the current floor
+                net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
+                AMOUNT_OF_IMAGE_REQUESTS++;
+            }
         }
     }
 
@@ -788,7 +744,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                     case 0:
                         return 0;
                 }
-
             }
         }
         return -2;
