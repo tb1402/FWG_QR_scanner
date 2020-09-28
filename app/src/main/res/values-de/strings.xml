@@ -102,4 +102,5 @@
     <string name="scan_teacher_success">Lehrercode erfolgreich gescannt</string>
     <string name="wrong_station">Dies ist nicht die nächste Station. Bitte scannen Sie den richtigen Code.</string>
     <string name="back_start_text">Bitte beenden Sie erst die Startanleitung</string>
+    <string name="scan_teacher_error">Lehrercode konnte nicht überprüft werden, da er wahrscheinlich ungültig ist.</string>
 </resources>

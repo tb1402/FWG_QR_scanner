@@ -100,6 +100,7 @@
     <string name="scan_qr_code">Please scan the QR code</string>
     <string name="scan_teacher_code">To use this feature, please scan the code from your teacher</string>
     <string name="scan_teacher_success">Successfully scanned teacher code</string>
+    <string name="scan_teacher_error">Error verifying teacher code, it may be expired.</string>
     <string name="station_name">station name</string>
     <string name="retrieval_date">retrieval date</string>
     <string name="wrong_station">This is not the next station, please scan the right code.</string>

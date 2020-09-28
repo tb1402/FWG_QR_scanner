@@ -219,6 +219,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     }
                     net.makePostRequest(this, "getMapData", "", c);
                 } else {
+                    Toast.makeText(c, getString(R.string.scan_teacher_error), Toast.LENGTH_SHORT).show();
                     if (pm.getPreferences().contains("token")) {
                         pm.deleteValue("token");
                     }
