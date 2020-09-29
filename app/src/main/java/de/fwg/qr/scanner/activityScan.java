@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -63,6 +64,8 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(R.layout.toolbar_scan, this, "Placeholder");
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);//prevent screenshots and video capture (not supported by some devices)
 
         //Data of Intent is received from fragmentScan
         Intent receivedIntent = getIntent();
