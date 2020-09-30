@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -362,16 +364,14 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     /**
      * Method for drawing the Arrows dependant on the highest index of the station progress
      */
-    public void getCurrentMarkings(JSONArray stationData){
-
+    public void getCurrentMarkings(@NonNull JSONArray stationData) {
 
 
         // next station after the highest index in tne visited stations
         int nextStation;
-        if(allObtainedStationNames.size() == 0){ // No station visited yet
+        if (allObtainedStationNames.size() == 0) { // No station visited yet
             nextStation = 0; // Lead to the first station
-        }
-        else
+        } else
             nextStation = allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1; // highest indexed station plus 1
 
 
