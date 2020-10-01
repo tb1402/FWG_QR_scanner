@@ -55,6 +55,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private TextView textView2;
     private ProgressBar pb;
 
+    private preferencesManager pm;
+
     //boolean used to differentiate between a teacherCode is scanned (true) or not,
     //needed because the operation getPermission gets called when a code is scanned and on startup to verify the permission,
     //but the fragment needs only be recreated (otherwise camera and scan issues) when a code was scanned
@@ -75,6 +77,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      * Boolean for checking if activity is resuming for the first time or not; if it isn't the first time the fragment will be recreated because of camera issues
      */
     private boolean check = true;
+
+    /**
+     * Integer to know which station was scanned last
+     */
+    private int current;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,6 +108,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         pb = v.findViewById(R.id.progressBar);
         lockUI(true);
         pb.setVisibility(View.VISIBLE);
+        pm = preferencesManager.getInstance(c);
         net.makePostRequest(this, "getVersion", "", c);
         initialize();
         startCamera();
@@ -155,6 +163,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         lockUI(false);
         if (operation.contentEquals("getInfo")) {
             try {
+                pm.saveInt("rallyStationNumber", current + 1);
                 JSONObject object = new JSONObject(response); //All data provided by server is parsed to activityScan through intent
                 i.putExtra("ID", barcodeValue);
                 i.putExtra("Name", object.getString("Name"));
@@ -208,7 +217,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         } else if (operation.contentEquals("getPermission")) {
             try {
                 JSONObject js = new JSONObject(response);
-                preferencesManager pm = preferencesManager.getInstance(c);
                 if (js.getString("status").contentEquals("200")) {
                     if (!pm.getPreferences().contains("token")) {
                         pm.saveBoolean("unlocked", true);
@@ -386,7 +394,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         lockUI(false);
                         return;
                     }
-                    int current = pm.getPreferences().getInt("rallyStationNumber", -1);
+                    current = pm.getPreferences().getInt("rallyStationNumber", -1);
                     if (stationIds.length > (current + 1)) {
                         if (!barcodeValue.contentEquals(stationIds[current + 1])) {
                             Toast.makeText(c, getString(R.string.wrong_station), Toast.LENGTH_SHORT).show();
@@ -396,7 +404,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                             return;
                         }
                     }
-                    pm.saveInt("rallyStationNumber", current + 1); //Todo: change placement of line; if getInfo isn't working, this statement will break rally mode
+                    pm.saveInt("rallyStationNumber", current + 1);
                 }
                 net.makePostRequest(this, "getInfo", barcodeValue, c);
             } else {

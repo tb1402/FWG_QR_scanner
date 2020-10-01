@@ -159,6 +159,6 @@ public class progressManager {
             public void onImageCallback(String name, Bitmap image) {
             }
         };
-        network.getInstance(context).makePostRequest(webCllb, "fetchIdAndName", "", context); //TODO: Problem with fetchIdAndName.php; This will always throw JSONArray exception because of no data be found
+        network.getInstance(context).makePostRequest(webCllb, "fetchIdAndName", "", context);
     }
 }
