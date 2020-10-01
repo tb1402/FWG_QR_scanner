@@ -396,7 +396,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                             return;
                         }
                     }
-                    pm.saveInt("rallyStationNumber", current + 1); //Todo: change placement of line; if getInfo isnt working, this statement will break rally mode
+                    pm.saveInt("rallyStationNumber", current + 1); //Todo: change placement of line; if getInfo isn't working, this statement will break rally mode
                 }
                 net.makePostRequest(this, "getInfo", barcodeValue, c);
             } else {
