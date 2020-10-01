@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#303030"
     android:layout_marginTop="?attr/actionBarSize"
     tools:showIn="@layout/activity_map">
 
@@ -16,12 +17,12 @@
                 android:id="@+id/radioButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/textColor"
+                android:buttonTint="#FFFFFF"
                 android:checked="true"
                 android:onClick="onRadioButtonClicked"
                 android:text="@string/first_floor"
                 android:textAlignment="center"
-                android:textColor="@color/textColor" />
+                android:textColor="#FFFFFF" />
 
 
             <RadioButton
@@ -29,29 +30,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:buttonTint="@color/textColor"
+                android:buttonTint="#FFFFFF"
                 android:onClick="onRadioButtonClicked"
                 android:text="@string/basement"
-                android:textColor="@color/textColor" />
+                android:textColor="#FFFFFF" />
 
             <RadioButton
                 android:id="@+id/radioButton3"
                 android:layout_width="136dp"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/textColor"
+                android:buttonTint="#FFFFFF"
                 android:onClick="onRadioButtonClicked"
                 android:text="@string/second_floor"
-                android:textColor="@color/textColor" />
+                android:textColor="#FFFFFF" />
 
             <RadioButton
                 android:id="@+id/radioButton4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/textColor"
+                android:buttonTint="#FFFFFF"
                 android:onClick="onRadioButtonClicked"
                 android:text="@string/third_floor"
                 android:textAlignment="center"
-                android:textColor="@color/textColor" />
+                android:textColor="#FFFFFF" />
 
         </RadioGroup>
 
@@ -77,7 +78,7 @@
         android:layout_below="@+id/progressBar"
         android:layout_centerHorizontal="true"
         android:text="@string/image_loading"
-        android:textColor="@color/textColor"
+        android:textColor="#FFFFFF"
         android:textSize="25sp" />
 
 </RelativeLayout>
