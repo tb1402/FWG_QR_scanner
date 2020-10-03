@@ -103,4 +103,5 @@
     <string name="wrong_station">Dies ist nicht die nächste Station. Bitte scannen Sie den richtigen Code.</string>
     <string name="back_start_text">Bitte beenden Sie erst die Startanleitung</string>
     <string name="scan_teacher_error">Lehrercode konnte nicht überprüft werden, da er wahrscheinlich ungültig ist.</string>
+    <string name="button_scan_back">Zurück zum Einscannen</string>
 </resources>

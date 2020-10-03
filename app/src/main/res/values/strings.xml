@@ -54,6 +54,7 @@
     <string name="basement">Basement</string>
     <string name="second_floor">1st floor</string>
     <string name="third_floor">2nd floor</string>
+    <string name="button_scan_back">Back to scan</string>
 
     <!--preferences strings-->
     <string name="mode_info">Info</string>

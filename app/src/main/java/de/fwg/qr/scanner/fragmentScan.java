@@ -224,6 +224,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         pm.saveString("mode", String.valueOf(0));
                         new historyManager(c).clearHistory();
                         Toast.makeText(c, getString(R.string.scan_teacher_success), Toast.LENGTH_SHORT).show();
+                        pm.saveInt("rallyStationNumber",-1);
                     }
                     net.makePostRequest(this, "getMapData", "", c);
                 } else {
@@ -235,6 +236,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     }
                     if (pm.areFeaturesUnlocked()) {
                         pm.saveBoolean("unlocked", false);
+                    }
+                    if(pm.isRallyeMode()){
+                        pm.saveString("mode","1");
                     }
                     detection();
                 }
@@ -453,7 +457,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private void updateAlert() {
         final String appPackageName = c.getPackageName();
         AlertDialog.Builder alert;
-        alert = new AlertDialog.Builder(c);
+        alert = new AlertDialog.Builder(a);
         alert.setCancelable(false);
         alert.setTitle(getString(R.string.update_dialog_title));
         alert.setMessage(getString(R.string.update_dialog_content));

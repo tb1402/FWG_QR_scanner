@@ -9,8 +9,8 @@ android {
         applicationId "de.fwg.qr.scanner"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 10
-        versionName "0.1.0 beta"
+        versionCode 11
+        versionName "0.1.1 beta"
 
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

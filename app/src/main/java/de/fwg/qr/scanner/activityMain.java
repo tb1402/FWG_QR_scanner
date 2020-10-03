@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -135,7 +136,7 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
             case R.id.tb_item_map:
                 if(preferencesManager.getInstance(getApplicationContext()).areFeaturesUnlocked()) {
                     i = new Intent(getApplicationContext(), activityMap.class);
-                    startActivity(i);
+                    startActivityForResult(i,123);
                 }
                 else{
                     Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
@@ -295,5 +296,20 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                     }
                 });
         builder.create().show();
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode,int resultCode,Intent data){
+        if(requestCode==123){
+            if(resultCode==189){//result code given, when back to scan button in activityMap pressed
+                new Handler().postDelayed(new Runnable() {//start fragmentScan delayed, otherwise it would crash
+                    @Override
+                    public void run() {
+                        show(new fragmentScan());
+                    }
+                },200);
+            }
+        }
+        super.onActivityResult(requestCode,resultCode,data);
     }
 }

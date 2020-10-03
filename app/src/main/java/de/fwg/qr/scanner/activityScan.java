@@ -125,6 +125,16 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         }
     }
 
+    @Override
+    protected void onActivityResult (int requestCode,int resultCode,Intent data){
+        if(requestCode==123){
+            if(resultCode==189){//result code given, when back to scan button in activityMap pressed
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode,resultCode,data);
+    }
+
     /**
      * Method for handling Buttons used by ImageSwitcher as well as creating a Button if a video for this station exists
      */
@@ -227,7 +237,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
                 return true;
             case R.id.tb_item_map:
                 i = new Intent(getApplicationContext(), activityMap.class);
-                startActivity(i);
+                startActivityForResult(i,123);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

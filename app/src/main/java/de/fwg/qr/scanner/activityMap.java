@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -87,6 +88,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
         manager = preferencesManager.getInstance(this);
         if (!manager.areFeaturesUnlocked()) {
+            Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -105,6 +107,15 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                     allObtainedStationNames.add(Integer.parseInt(s));
                 }
                 net.makePostRequest(nci, "getMapData", "", getApplicationContext());
+            }
+        });
+
+        //setup back to scan button
+        findViewById(R.id.but_scan_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(189);
+                finish();
             }
         });
     }
