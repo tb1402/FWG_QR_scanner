@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="@color/background"
+    android:background="#303030"
     tools:showIn="@layout/activity_map">
 
     <RadioGroup
