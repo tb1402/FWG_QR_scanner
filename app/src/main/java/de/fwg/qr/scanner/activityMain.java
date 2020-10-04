@@ -305,9 +305,11 @@ public class activityMain extends AppCompatActivity implements NavigationView.On
                 new Handler().postDelayed(new Runnable() {//start fragmentScan delayed, otherwise it would crash
                     @Override
                     public void run() {
-                        show(new fragmentScan());
+                        //show(new fragmentScan());
+                        navCon.navigate(R.id.item_frgm_scan);
                     }
                 },200);
+
             }
         }
         super.onActivityResult(requestCode,resultCode,data);
