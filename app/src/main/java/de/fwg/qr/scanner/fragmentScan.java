@@ -83,6 +83,10 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      */
     private int current;
 
+    //boolean necessary because of barcode and cameraSource initialisation needing to be called when creating view; Checks if
+    //processing of scan should take place
+    private boolean detectionCheck = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,12 +114,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         pb.setVisibility(View.VISIBLE);
         pm = preferencesManager.getInstance(c);
         net.makePostRequest(this, "getVersion", "", c);
-        initialize();
-        startCamera();
+        detection();
     }
 
     /**
-     * If user always denies camera access, he'll be sent to the settings of his device
+     * If user always denies camera access, they'll be sent to the settings of his device
      *
      * @param requestCode  Code for permissionRequest
      * @param permissions  All permissions that were asked of user
@@ -224,11 +227,11 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         pm.saveString("mode", String.valueOf(0));
                         new historyManager(c).clearHistory();
                         Toast.makeText(c, getString(R.string.scan_teacher_success), Toast.LENGTH_SHORT).show();
-                        pm.saveInt("rallyStationNumber",-1);
+                        pm.saveInt("rallyStationNumber", -1);
                     }
                     net.makePostRequest(this, "getMapData", "", c);
                 } else {
-                    if(isTeacherCodeScanned) {
+                    if (isTeacherCodeScanned) {
                         Toast.makeText(c, getString(R.string.scan_teacher_error), Toast.LENGTH_SHORT).show();
                     }
                     if (pm.getPreferences().contains("token")) {
@@ -237,10 +240,10 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                     if (pm.areFeaturesUnlocked()) {
                         pm.saveBoolean("unlocked", false);
                     }
-                    if(pm.isRallyeMode()){
-                        pm.saveString("mode","1");
+                    if (pm.isRallyeMode()) {
+                        pm.saveString("mode", "1");
                     }
-                    detection();
+                    detectionCheck = true;
                 }
                 if (isTeacherCodeScanned)
                     ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
@@ -262,7 +265,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 for (int i = 0; i < stationIds.length; i++) {
                     stationIds[i] = jsa.getJSONObject(i).getString("stationId");
                 }
-                detection();
+                detectionCheck = true;
             } catch (JSONException e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
@@ -275,24 +278,15 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onImageCallback(String name, Bitmap image) {
     }
 
-    /**
-     * Initializes both barcodeDetector as well as CameraSource where the detector is underlined
-     */
-    private void initialize() {
-        i = null;
-        barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
-        source = new CameraSource.Builder(c, barcodeDetector)
-                .setAutoFocusEnabled(true)
-                .setRequestedFps(20)
-                .setRequestedPreviewSize(1920, 1080)
-                .setFacing(CameraSource.CAMERA_FACING_BACK).build();
-    }
 
     @Override
     public void onPause() {
         super.onPause();
         check = false;
         try {
+            if (source == null) {
+                return;
+            }
             if (source.getPreviewSize() != null) {
                 source.stop();
             }
@@ -315,6 +309,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      * Method for starting usage of camera
      */
     private void startCamera() {
+
+        source = new CameraSource.Builder(c, barcodeDetector)
+                .setAutoFocusEnabled(true)
+                .setRequestedFps(20)
+                .setRequestedPreviewSize(1920, 1080)
+                .setFacing(CameraSource.CAMERA_FACING_BACK).build();
+
         surface.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(@NotNull SurfaceHolder holder) {
@@ -349,12 +350,17 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 }
             }
         });
+
     }
 
     /**
      * Method for handling situation where barcode is detected, starts newIntent afterwards
      */
     private void detection() {
+        i = null;
+        barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
+
+        barcodeDetector = new BarcodeDetector.Builder(requireContext()).setBarcodeFormats(Barcode.QR_CODE).build();
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
@@ -363,7 +369,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> detectedFrames = detections.getDetectedItems();
-                if (detectedFrames.size() != 0) {
+                if (detectedFrames.size() != 0 && detectionCheck) {
                     barcodeValue = detectedFrames.valueAt(0).displayValue;
                     a.runOnUiThread(new Runnable() {
                         @Override
@@ -375,6 +381,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
             }
         });
+        startCamera();
+
     }
 
 
