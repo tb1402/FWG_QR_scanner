@@ -113,6 +113,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
         lockUI(true);
         pb.setVisibility(View.VISIBLE);
         pm = preferencesManager.getInstance(c);
+        detectionCheck = false;
         net.makePostRequest(this, "getVersion", "", c);
         detection();
     }
