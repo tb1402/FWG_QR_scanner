@@ -9,9 +9,8 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <RadioButton
             android:id="@+id/radioButton1"
@@ -66,20 +65,25 @@
         android:background="#303030"
         android:contentDescription="@string/item_map" />
 
-    <Button
-        android:id="@+id/but_scan_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginBottom="48dp"
-        android:background="@color/buttonColor"
-        android:text="@string/button_scan_back"
-        android:textAllCaps="false"
-        android:textColor="@color/textColor" />
+        android:layout_toRightOf="@+id/radioGroup">
+
+        <Button
+            android:id="@+id/but_scan_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@color/buttonColor"
+            android:gravity="center"
+            android:text="@string/button_scan_back"
+            android:textAllCaps="false"
+            android:textColor="@color/textColor" />
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
