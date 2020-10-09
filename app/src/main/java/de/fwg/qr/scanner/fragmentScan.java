@@ -9,9 +9,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -303,7 +303,16 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     public void onResume() {
         super.onResume();
         if (!check) {
-            ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
+            String[] num = Build.VERSION.RELEASE.split("\\.");
+            int n;
+            if (num.length == 0) {
+                n = Integer.parseInt(Build.VERSION.RELEASE);
+            } else {
+                n = Integer.parseInt(num[0]);
+            }
+            if (n < 8) { //Only for fixing bug with Android version 7.X.X or lower; Otherwise camera would't manually start when resuming the app
+                ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
+            }
         }
     }
 
