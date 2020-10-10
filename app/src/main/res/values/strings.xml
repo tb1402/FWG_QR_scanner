@@ -72,9 +72,9 @@
     <string name="image_quality_low">Low (640x360px)</string>
 
     <!-- content strings-->
-    <string name="welcome_message">The FWG QR scanner is an app with which you can call up information on important locations in the Frankenwald-Gymnasium Kronach with the help of a QR code, which can be found at the locations themselves. The development takes place in the form of an open source project, so that you can view the source code of the app on Github at any time.</string>
+    <string name="welcome_message">The FWG QR scanner is an app with which you can call up information on important locations in the Frankenwald-Gymnasium Kronach with the help of a QR code, which can be found at the locations themselves.</string>
     <string name="dev_team">Development team:\nQ12 computer science course at the Frankenwald-Gymnasium Kronach consisting of Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth and Ben Welsch</string>
-    <string name="github_link"><!--Github link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a>\n<a href="https://github.com/FWG-coder">https://github.com/FWG-coder</a>--></string>
+    <string name="github_link"><!--Github link:\n<a href="https://github.com/FWG-coder">https://github.com/FWG-coder</a>--></string>
 
     <!-- guide strings -->
     <string name="quick_guide_body"><b>Use of the app\n</b>Scan a QR code you have found. If the scan was successful, the current station and its information should be displayed. If you want to go back, click on the arrow in the top left.\nClick on the 3 lines in the top left to get to the navigation menu.\nClick the map icon to get to the map.\nClick the 3 dots in the top right to get to the settings.</string>
