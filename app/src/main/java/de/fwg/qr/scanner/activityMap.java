@@ -260,8 +260,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     @Override
     public void onImageCallback(String name, Bitmap image) {
-
-
     }
 
     @Override
@@ -280,7 +278,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             if (number != currentLevel) {
                 return;
             }
-            bitmapOfImageView = floorRequest(image);
+            bitmapOfImageView = imageRequest(image);
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -683,29 +681,13 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     }
 
     /**
-     * Method for adding image to canvas
+     * Method for adding image to canvas; also used for loading floor image
      *
      * @param bitmap new bitmap drawn on canvas
      * @return bitmap of canvas
      */
 
     public Bitmap imageRequest(Bitmap bitmap) {
-        if (result == null || canvas == null) {
-            result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-            canvas = new Canvas(result);
-        }
-        canvas.drawBitmap(bitmap, 0f, 0f, null);
-        return result;
-    }
-
-    /**
-     * Method for adding image of floor to canvas (Method obsolete, just made to make code more understandable)
-     *
-     * @param bitmap floor gets drawn on canvas
-     * @return bitmap of canvas
-     */
-
-    public Bitmap floorRequest(Bitmap bitmap) {
         if (result == null || canvas == null) {
             result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
             canvas = new Canvas(result);
