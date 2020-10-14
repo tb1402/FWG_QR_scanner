@@ -142,6 +142,8 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         startActivity(intent);
                         a.finishAffinity();
                     }
+                } else {
+                    ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
                 }
             }
         }
@@ -310,7 +312,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             } else {
                 n = Integer.parseInt(num[0]);
             }
-            if (n < 8) { //Only for fixing bug with Android version 7.X.X or lower; Otherwise camera would't manually start when resuming the app
+            if (n < 8 || (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) { //Only for fixing bug with Android version 7.X.X or lower; Otherwise camera would't manually start when resuming the app
                 ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
             }
         }
