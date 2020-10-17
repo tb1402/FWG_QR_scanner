@@ -48,11 +48,17 @@ public class fragmentAbout extends fragmentWrapper implements networkCallbackInt
     }
 
     @Override
-    public void onImageCallback(String name, Bitmap image) {
+    public void onImageCallback(String name, final Bitmap image) {
         if (name.contentEquals("ImageRequest")) {
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.GONE);
             }
+            a.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.setImageBitmap(image);
+                }
+            });
             imageView.setImageBitmap(image);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
