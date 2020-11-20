@@ -11,6 +11,7 @@ import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
+import java.lang.Exception;
 
 import de.fwg.qr.scanner.activityErrorHandling;
 
@@ -30,7 +31,15 @@ public class historyFileReadTask extends AsyncTask<Object, Object, historyEntry[
     protected historyEntry[] doInBackground(Object... objects) {
 
         // Simple Try to eliminate Errors in File Reading and Writing
-        if (historyManager.FileLocked) return null;
+        if (historyManager.FileLocked)
+        {
+            Exception e = new Exception("HistoryFile access violation error");
+            // Really should never happen, but if it happens there is no chance for the FileLock to be unlocked without a reset of the app or a successfull execution of the method, 
+            // whilst the latter wont happen with a locked file
+            Intent i = new Intent(cref.get(), activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+            cref.get().startActivity(i);
+        }
         else historyManager.FileLocked = true;
 
         ArrayList<historyEntry> entries = new ArrayList<>();
@@ -66,6 +75,8 @@ public class historyFileReadTask extends AsyncTask<Object, Object, historyEntry[
                 fileStream.close();
 
             } catch (Exception e) {
+                // would cause exception because the lock wouldnt be flipped back as on end of this method
+                // but the error handling activity resets the app so the lock is reset aswell
                 Intent i = new Intent(cref.get(), activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
                 cref.get().startActivity(i);
