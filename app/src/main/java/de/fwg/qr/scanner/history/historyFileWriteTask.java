@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
+import java.lang.Exception;
 
 import de.fwg.qr.scanner.activityErrorHandling;
 
