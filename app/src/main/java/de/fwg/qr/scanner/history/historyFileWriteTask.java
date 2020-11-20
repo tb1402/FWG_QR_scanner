@@ -26,13 +26,17 @@ public class historyFileWriteTask extends AsyncTask<historyEntry, Object, Object
     }
 
     @Override
-    protected Object doInBackground(historyEntry... Entries) throws Exception {
+    protected Object doInBackground(historyEntry... Entries){
 
         // Simple Try to eliminate Errors in File Reading and Writing
         if (historyManager.FileLocked){
             // should never happen if all methods are properly executed and code is only resumed in callback method
             // Exception handling anyhow
-            throw new Exception("HistoryFile access violation error");
+            Exception e = new Exception("HistoryFile access violation error");
+            Intent i = new Intent(cref.get(), activityErrorHandling.class);
+            i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
+            cref.get().startActivity(i);
+            
         }
         else historyManager.FileLocked = true;
 
