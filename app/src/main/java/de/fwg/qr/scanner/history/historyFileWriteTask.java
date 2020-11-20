@@ -25,10 +25,14 @@ public class historyFileWriteTask extends AsyncTask<historyEntry, Object, Object
     }
 
     @Override
-    protected Object doInBackground(historyEntry... Entries) {
+    protected Object doInBackground(historyEntry... Entries) throws Exception {
 
         // Simple Try to eliminate Errors in File Reading and Writing
-        if (historyManager.FileLocked) return null;
+        if (historyManager.FileLocked){
+            // should never happen if all methods are properly executed and code is only resumed in callback method
+            // Exception handling anyhow
+            throw new Exception("HistoryFile access violation error");
+        }
         else historyManager.FileLocked = true;
 
         // No need to check if the file exists, we overwrite it completely so we don't care
