@@ -111,7 +111,7 @@ public class historyManager {
             @Override
             public void onFinished(historyEntry[] result) {
                 
-                Entries = result.length == 0 ? new ArrayList<>() : new ArrayList<>(Arrays.asList(result));
+                Entries = result.length == 0 ? new ArrayList<historyEntry>() : new ArrayList<>(Arrays.asList(result));
                 
                 // No check for length, we save all entries and just display the uppermost part of them on reading the file
                 // this is essential for the Progess system to work, otherwise if the entries were deleted it would affect the users progress
