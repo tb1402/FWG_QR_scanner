@@ -62,15 +62,15 @@ public class fragmentAbout extends fragmentWrapper implements networkCallbackInt
                 @Override
                 public void run() {
                     imageView.setImageBitmap(image);
-                }
-            });
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(c, activityPictureFullscreen.class);
-                    intent.putExtra("ID", "groupPicture");
-                    intent.putExtra("Position", 0);
-                    startActivity(intent);
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(c, activityPictureFullscreen.class);
+                            intent.putExtra("ID", "groupPicture");
+                            intent.putExtra("Position", 0);
+                            startActivity(intent);
+                        }
+                    });
                 }
             });
         }

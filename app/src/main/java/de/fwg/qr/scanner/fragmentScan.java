@@ -380,7 +380,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             }
 
             @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
+            public void receiveDetections(Detector.Detections<Barcode> detections) { //TODO: Bug where scanning wont work immediately if user goes back to scan from map or activityScan
                 final SparseArray<Barcode> detectedFrames = detections.getDetectedItems();
                 if (detectedFrames.size() != 0 && detectionCheck) {
                     barcodeValue = detectedFrames.valueAt(0).displayValue;
