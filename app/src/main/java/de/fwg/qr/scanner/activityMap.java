@@ -221,28 +221,28 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                             RadioButton button1 = findViewById(R.id.radioButton1);
                             if (!button1.isChecked()) {
                                 button1.setChecked(true);
-                                button1.setTextColor(0xFFFFFF);
+                                //button1.setTextColor(0xFFFFFF);
                             }
                             break;
                         case -1:
                             RadioButton button2 = findViewById(R.id.radioButton2);
                             if (!button2.isChecked()) {
                                 button2.setChecked(true);
-                                button2.setTextColor(0xFFFFFF);
+                                // button2.setTextColor(0xFFFFFF);
                             }
                             break;
                         case 1:
                             RadioButton button3 = findViewById(R.id.radioButton3);
                             if (!button3.isChecked()) {
                                 button3.setChecked(true);
-                                button3.setTextColor(0xFFFFFF);
+                                //button3.setTextColor(0xFFFFFF);
                             }
                             break;
                         case 2:
                             RadioButton button4 = findViewById(R.id.radioButton4);
                             if (!button4.isChecked()) {
                                 button4.setChecked(true);
-                                button4.setTextColor(0xFFFFFF);
+                                //button4.setTextColor(0xFFFFFF);
                             }
                             break;
                     }
