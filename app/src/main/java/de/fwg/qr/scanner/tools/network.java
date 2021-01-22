@@ -29,7 +29,7 @@ import de.fwg.qr.scanner.tools.cache.cacheManager;
  * class used for performing network requests
  */
 public class network {
-    public static String baseURL = "https://www.fwgkc.de";//server url
+    public static String baseURL = "https://fwgqr.ml";//server url
     private HashMap<String, String> headers;//headers of the request, used to add authentication and useragent
     private cacheManager cm;
 
