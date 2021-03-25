@@ -285,7 +285,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onPause() {
         super.onPause();
-        check = false;
+       /* check = false; //TODO: Fix not working probably; Fragment needs to be reworked in order for fix to work
         try {
             if (source == null) {
                 return;
@@ -297,13 +297,13 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             Intent i = new Intent(c, activityErrorHandling.class);
             i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
             startActivity(i);
-        }
+        }*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        /*if (!check) { //TODO: Fix not working probably; Fragment needs to be reworked in order for fix to work
+        /*if (!check) {
             String[] num = Build.VERSION.RELEASE.split("\\.");
             int n;
             if (num.length == 0) {
