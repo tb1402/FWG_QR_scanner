@@ -285,7 +285,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onPause() {
         super.onPause();
-       /* check = false; //TODO: Fix not working probably; Fragment needs to be reworked in order for fix to work
+        check = false; //TODO: Fix not working probably; Fragment needs to be reworked in order for fix to work
         try {
             if (source == null) {
                 return;
@@ -297,7 +297,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             Intent i = new Intent(c, activityErrorHandling.class);
             i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
             startActivity(i);
-        }*/
+        }
     }
 
     @Override
@@ -315,6 +315,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                 ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
             }
         }*/
+        ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
     }
 
     /**
