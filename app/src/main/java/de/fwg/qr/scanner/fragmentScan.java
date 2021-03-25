@@ -303,8 +303,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onResume() {
         super.onResume();
-        /*if (!check) {
-            String[] num = Build.VERSION.RELEASE.split("\\.");
+        if (!check) {
+            ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
+            /*String[] num = Build.VERSION.RELEASE.split("\\.");
             int n;
             if (num.length == 0) {
                 n = Integer.parseInt(Build.VERSION.RELEASE);
@@ -313,9 +314,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             }
             if (n < 8 || (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) { //Only for fixing bug with Android version 7.X.X or lower; Otherwise camera would't manually start when resuming the app
                 ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
-            }
-        }*/
-        ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
+            }*/
+        }
+
     }
 
     /**
