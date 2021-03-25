@@ -9,7 +9,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.SparseArray;
@@ -304,7 +303,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     @Override
     public void onResume() {
         super.onResume();
-        if (!check) {
+        /*if (!check) { //TODO: Fix not working probably; Fragment needs to be reworked in order for fix to work
             String[] num = Build.VERSION.RELEASE.split("\\.");
             int n;
             if (num.length == 0) {
@@ -315,7 +314,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             if (n < 8 || (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) { //Only for fixing bug with Android version 7.X.X or lower; Otherwise camera would't manually start when resuming the app
                 ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
             }
-        }
+        }*/
     }
 
     /**
