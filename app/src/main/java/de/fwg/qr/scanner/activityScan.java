@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -31,7 +32,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
     private ImageSwitcher imageSwitcher;
     private Button buttonPre;
     private Button buttonNext;
-    private FloatingActionButton videoButton;
+    private FloatingActionButton videoButton; //Button if video is available; feature currently unused
     private ProgressBar progressBar;
 
     /**
@@ -64,6 +65,9 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
         super.onCreate(R.layout.toolbar_scan, this, "Placeholder");
         super.onCreate(savedInstanceState);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);//prevent screenshots and video capture (not supported by some devices)
+
+        //Data of Intent is received from fragmentScan
         Intent receivedIntent = getIntent();
         ID = receivedIntent.getStringExtra("ID");
         String name = receivedIntent.getStringExtra("Name");
@@ -119,6 +123,16 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
                 getImages();
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode,int resultCode,Intent data){
+        if(requestCode==123){
+            if(resultCode==189){//result code given, when back to scan button in activityMap pressed
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode,resultCode,data);
     }
 
     /**
@@ -206,7 +220,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), activityPictureFullscreen.class);
                 intent.putExtra("ID", ID);
-                intent.putExtra("Position", imagePosition);
+                intent.putExtra("Position", imagePosition); //Parses imagePosition in order to display correct picture in fullscreen
                 startActivity(intent);
             }
         });
@@ -223,7 +237,7 @@ public class activityScan extends toolbarWrapper implements networkCallbackInter
                 return true;
             case R.id.tb_item_map:
                 i = new Intent(getApplicationContext(), activityMap.class);
-                startActivity(i);
+                startActivityForResult(i,123);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

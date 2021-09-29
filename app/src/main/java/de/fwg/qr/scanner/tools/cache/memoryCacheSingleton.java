@@ -10,7 +10,7 @@ class memoryCacheSingleton {
     private static memoryCacheSingleton memoryCacheSingleton;//instance
     private final int memMaxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);//get maximal available ram in kb
     final int memCacheSize = memMaxMemory / 4;//only use one quarter of available for cache
-    private LruCache<String, Bitmap> memoryCache;//memory cache
+    private final LruCache<String, Bitmap> memoryCache;//memory cache
 
     private memoryCacheSingleton() {
         memoryCache = new LruCache<String, Bitmap>(memCacheSize) {
@@ -31,10 +31,11 @@ class memoryCacheSingleton {
     }
 
     /**
-     * invalidate (remove) the memory cache
+     * invalidate (remove and recreate) the memory cache
      */
     static void invalidate() {
         memoryCacheSingleton = null;
+        memoryCacheSingleton=new memoryCacheSingleton();
     }
 
     /**

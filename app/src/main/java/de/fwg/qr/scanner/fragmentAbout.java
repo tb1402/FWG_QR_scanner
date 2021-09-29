@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import de.fwg.qr.scanner.tools.networkCallbackInterface;
 
 /**
- * fragment showing information about the developers
+ * fragment showing information about the developers (hey da bin ja ich)
  */
 public class fragmentAbout extends fragmentWrapper implements networkCallbackInterface {
 
@@ -48,19 +48,29 @@ public class fragmentAbout extends fragmentWrapper implements networkCallbackInt
     }
 
     @Override
-    public void onImageCallback(String name, Bitmap image) {
+    public void onImageCallback(String name, final Bitmap image) {
         if (name.contentEquals("ImageRequest")) {
             if (progressBar.getVisibility() == View.VISIBLE) {
-                progressBar.setVisibility(View.GONE);
+                a.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
             }
-            imageView.setImageBitmap(image);
-            imageView.setOnClickListener(new View.OnClickListener() {
+            a.runOnUiThread(new Runnable() {
                 @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(c, activityPictureFullscreen.class);
-                    intent.putExtra("ID", "groupPicture");
-                    intent.putExtra("Position", 0);
-                    startActivity(intent);
+                public void run() {
+                    imageView.setImageBitmap(image);
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(c, activityPictureFullscreen.class);
+                            intent.putExtra("ID", "groupPicture");
+                            intent.putExtra("Position", 0);
+                            startActivity(intent);
+                        }
+                    });
                 }
             });
         }

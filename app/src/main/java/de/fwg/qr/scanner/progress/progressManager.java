@@ -159,6 +159,6 @@ public class progressManager {
             public void onImageCallback(String name, Bitmap image) {
             }
         };
-        network.getInstance(context).makePostRequest(webCllb, "fetchIdAndName", "",context);
+        network.getInstance(context).makePostRequest(webCllb, "fetchIdAndName", "", context);
     }
 }

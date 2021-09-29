@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import de.fwg.qr.scanner.tools.network;
 
 public class fragmentStart extends fragmentWrapper {
 
@@ -34,5 +37,11 @@ public class fragmentStart extends fragmentWrapper {
         });
         TextView tvg = view.findViewById(R.id.textViewStartGithub);
         tvg.setMovementMethod(LinkMovementMethod.getInstance());
+
+        //exit, if no network connectivity present
+        if(network.getInstance(c).noNetworkAvailable(c)){
+            Toast.makeText(c,getString(R.string.network_no_connection),Toast.LENGTH_SHORT).show();
+            a.finishAffinity();
+        }
     }
 }

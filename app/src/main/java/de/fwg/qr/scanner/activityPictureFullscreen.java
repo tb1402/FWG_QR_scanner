@@ -40,6 +40,7 @@ public class activityPictureFullscreen extends AppCompatActivity implements netw
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);//prevent screenshots and video capture (not supported by some devices)
         requestWindowFeature(Window.FEATURE_NO_TITLE);//hide status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//set fullscreen mode
         setContentView(R.layout.activity_picture_fullscreen);

@@ -110,19 +110,11 @@ public class historyManager {
         historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback<historyEntry[]>() {
             @Override
             public void onFinished(historyEntry[] result) {
-                if (result.length == 0)
-                    Entries = new ArrayList<>();
-                else
-                    Entries = new ArrayList<>(Arrays.asList(result));
-
-                /*
-                // Delete the first if the size exceeds the maximum define in the constant
-                if(Entries.size() + 1 >= historyManager.MaxEntries){
-                    Entries.remove(0);
-                }
-                */
-
-
+                
+                Entries = result.length == 0 ? new ArrayList<historyEntry>() : new ArrayList<>(Arrays.asList(result));
+                
+                // No check for length, we save all entries and just display the uppermost part of them on reading the file
+                // this is essential for the Progess system to work, otherwise if the entries were deleted it would affect the users progress
                 Entries.add(newEntry);
                 historyFileWriteTask writeTask = new historyFileWriteTask(AppContext, getHistoryFile(), new taskCallback() {
                     @Override
@@ -131,7 +123,7 @@ public class historyManager {
                             callback.onFinished();
                     }
                 });
-                writeTask.execute(Entries.toArray(new historyEntry[0]));
+                writeTask.execute(Entries.toArray(new historyEntry[0])); // possible it won't execute because of the possibility of a locked file
             }
         });
         readTask.execute();
@@ -237,7 +229,7 @@ public class historyManager {
     /**
      * Asynchronously gets a list of all visited StationIds
      *
-     * @param callback callback Interface gets called on exexutionFinish and provides a string[] result
+     * @param callback callback Interface gets called on the end of execution and provides a string[] result
      */
     public void getVisitedStationsAsync(final taskResultCallback<String[]> callback) {
         historyFileReadTask readTask = new historyFileReadTask(AppContext, getHistoryFile(), new taskResultCallback<historyEntry[]>() {
@@ -268,7 +260,9 @@ public class historyManager {
             DataOutputStream dataStream = new DataOutputStream(fileStream);
             dataStream.writeInt(0); // write the amount of Entries in the file which is 0
         } catch (Exception ex) {
-            // Dont care because if this is the case, there is no history because the file does not exist
+            // May occur if the user decides to delete his history before ever having visited any station
+            // Dont car if that is the case, there is no history to be deleted so this is no problem if execution fails
+            // if it has another reason for crash, well find out at the execption handling on the next read or write
         }
     }
 

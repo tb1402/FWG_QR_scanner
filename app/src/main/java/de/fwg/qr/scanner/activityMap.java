@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +34,11 @@ import de.fwg.qr.scanner.tools.preferencesManager;
 
 /**
  * Activity to display and manage the map
+ * <p>
+ * Things to consider when changing class:
+ * - Possible to add more stations then there are currently, but database needs to be changed in order for everything to match (also the final stage always needs to be the same, otherwise code would break)
+ * - Newly added stations have to be ordered by their floor-value just how they are sorted in the database, otherwise code would break (0<-1<1<2)
+ * - If, for whatever reason, new floors would be added code would need to change drastically
  */
 public class activityMap extends toolbarWrapper implements networkCallbackImageID {
 
@@ -39,15 +47,19 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     private TextView textView;
 
     private network net;
+    private preferencesManager manager;
+
+    //Variable for indicating how many stations there are in total
     private static int AMOUNT_OF_STATIONS = 0;
+    //Variable for indicating how many stations are per Level; for reference see method getStationsPerLevel(JSONArray stationData)
+    private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
     //Variable for knowing how many imageRequests were made
     private static int AMOUNT_OF_IMAGE_REQUESTS = -1;
-    private preferencesManager manager;
 
     //Canvas where all bitmaps get drawn to
     private Canvas canvas;
+    //Bitmap used by ImageView
     private Bitmap bitmapOfImageView;
-    private static int[] AMOUNT_OF_STATIONS_PER_LEVEL;
 
     // Constants for drawing
     private final int BITMAP_SIDELENGTH = 1254;
@@ -58,10 +70,13 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     //Bitmap returned by image request methods
     private Bitmap result;
 
+    //Variable for indicating current Level
     private int currentLevel = 0;
-    //Important for hindering user to load same floor over and over again
+    //Important for hindering user to load same floor over and over again; Always gets value of currentLevel when getImages(int level) is called
     private int check = -2;
+    //ArrayList containing all mapIDs of the ones already scanned by the user; obtained through network request ("getMapData")
     private ArrayList<Integer> allObtainedStationNames;
+    //JSONArray containing all Data regarding the station; obtainded through network request ("getMapData")
     private JSONArray stationData;
 
 
@@ -73,6 +88,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
         manager = preferencesManager.getInstance(this);
         if (!manager.areFeaturesUnlocked()) {
+            Toast.makeText(getApplicationContext(),getString(R.string.scan_teacher_code),Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -93,14 +109,25 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 net.makePostRequest(nci, "getMapData", "", getApplicationContext());
             }
         });
+
+        //setup back to scan button
+        findViewById(R.id.but_scan_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(189);
+                finish();
+            }
+        });
     }
 
     /**
      * Method for changing between radioButtons grouped under radioGroup
-     * All RadioButtons: *1 Main floor
-     * *2 Basement
-     * *3 First floor
-     * *4 Second floor
+     * <p>
+     * All RadioButtons:
+     * - 1 Main floor
+     * - 2 Basement
+     * - 3 First floor
+     * - 4 Second floor
      *
      * @param view View provided by radioButtons
      */
@@ -115,7 +142,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             case R.id.radioButton1: //Erdgeschoss
                 if (checked) {
                     currentLevel = 0;
-                    if (check != currentLevel) {
+                    if (check != currentLevel) { // Check and currentLevel get compared. If they are the same, the picture of this floor has already been drawn
                         if (progressBar.getVisibility() == View.INVISIBLE || textView.getVisibility() == View.INVISIBLE) {
                             progressBar.setVisibility(View.VISIBLE);
                             textView.setVisibility(View.VISIBLE);
@@ -127,7 +154,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             case R.id.radioButton2: //Untergeschoss
                 if (checked) {
                     currentLevel = -1;
-                    if (check != currentLevel) {
+                    if (check != currentLevel) { // Check and currentLevel get compared. If they are the same, the picture of this floor has already been drawn
                         if (progressBar.getVisibility() == View.INVISIBLE || textView.getVisibility() == View.INVISIBLE) {
                             progressBar.setVisibility(View.VISIBLE);
                             textView.setVisibility(View.VISIBLE);
@@ -139,7 +166,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             case R.id.radioButton3: //1. Stock
                 if (checked) {
                     currentLevel = 1;
-                    if (check != currentLevel) {
+                    if (check != currentLevel) { // Check and currentLevel get compared. If they are the same, the picture of this floor has already been drawn
                         if (progressBar.getVisibility() == View.INVISIBLE || textView.getVisibility() == View.INVISIBLE) {
                             progressBar.setVisibility(View.VISIBLE);
                             textView.setVisibility(View.VISIBLE);
@@ -151,7 +178,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             case R.id.radioButton4: // 2. Stock
                 if (checked) {
                     currentLevel = 2;
-                    if (check != currentLevel) {
+                    if (check != currentLevel) { // Check and currentLevel get compared. If they are the same, the picture of this floor has already been drawn
                         if (progressBar.getVisibility() == View.INVISIBLE || textView.getVisibility() == View.INVISIBLE) {
                             progressBar.setVisibility(View.VISIBLE);
                             textView.setVisibility(View.VISIBLE);
@@ -186,7 +213,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 stationData = mapData.getJSONArray("stations");
                 AMOUNT_OF_STATIONS = stationData.length();
                 AMOUNT_OF_STATIONS_PER_LEVEL = getStationsPerLevel(stationData);
-                if (manager.isRallyeMode() && allObtainedStationNames.size() != 0) {
+                if (manager.isRallyeMode() && allObtainedStationNames.size() != 0) { //This if case's responsible for starting the activity with the right floor, otherwise it would always start with Main floor
 
                     currentLevel = getLevelPerId(allObtainedStationNames.get(allObtainedStationNames.size() - 1));
                     switch (currentLevel) {
@@ -194,28 +221,28 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                             RadioButton button1 = findViewById(R.id.radioButton1);
                             if (!button1.isChecked()) {
                                 button1.setChecked(true);
-                                button1.setTextColor(getResources().getColor(R.color.textColor));
+                                //button1.setTextColor(0xFFFFFF);
                             }
                             break;
                         case -1:
                             RadioButton button2 = findViewById(R.id.radioButton2);
                             if (!button2.isChecked()) {
                                 button2.setChecked(true);
-                                button2.setTextColor(getResources().getColor(R.color.textColor));
+                                // button2.setTextColor(0xFFFFFF);
                             }
                             break;
                         case 1:
                             RadioButton button3 = findViewById(R.id.radioButton3);
                             if (!button3.isChecked()) {
                                 button3.setChecked(true);
-                                button3.setTextColor(getResources().getColor(R.color.textColor));
+                                //button3.setTextColor(0xFFFFFF);
                             }
                             break;
                         case 2:
                             RadioButton button4 = findViewById(R.id.radioButton4);
                             if (!button4.isChecked()) {
                                 button4.setChecked(true);
-                                button4.setTextColor(getResources().getColor(R.color.textColor));
+                                //button4.setTextColor(0xFFFFFF);
                             }
                             break;
                     }
@@ -233,8 +260,6 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     @Override
     public void onImageCallback(String name, Bitmap image) {
-
-
     }
 
     @Override
@@ -244,16 +269,16 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             textView.setVisibility(View.INVISIBLE);
         }
         if (!name.contentEquals("FloorRequest") && !name.contentEquals("FinalStage")) {
-            if (getLevelPerId(number) != currentLevel) {
+            if (getLevelPerId(number) != currentLevel) { //Checks if this image from callback should be drawn or not, otherwise wrong pictures could be displayed on wrong floors
                 return;
             }
         }
-        AMOUNT_OF_IMAGE_REQUESTS--;
+        AMOUNT_OF_IMAGE_REQUESTS--; //If this variable becomes 0 it means this was the callback of the last request made by the activity
         if (name.contentEquals("FloorRequest")) {
             if (number != currentLevel) {
                 return;
             }
-            bitmapOfImageView = floorRequest(image);
+            bitmapOfImageView = imageRequest(image);
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -297,7 +322,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         if (AMOUNT_OF_IMAGE_REQUESTS == 0 && manager.isRallyeMode()) {
             // request the data where to draw the arrows exactly:
             getCurrentMarkings(stationData);
-            changeColorOfNextStation();
+            changeColorOfNextStation(); //Text of radioButton representing the Floor containing the next station is drawn red
         }
     }
 
@@ -340,7 +365,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                 startActivity(i);
             }
         }
-        array[1]--; //Wegen Weg zur Sporthalle, ansonsten später Fehler bei getImages()
+        array[1]--; //Because of last station being a special case with having a floor value of 0 as well, otherwise later error in getImages(int level)
         return array;
     }
 
@@ -348,16 +373,14 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     /**
      * Method for drawing the Arrows dependant on the highest index of the station progress
      */
-    public void getCurrentMarkings(JSONArray stationData){
-
+    public void getCurrentMarkings(@NonNull JSONArray stationData) {
 
 
         // next station after the highest index in tne visited stations
         int nextStation;
-        if(allObtainedStationNames.size() == 0){ // No station visited yet
+        if (allObtainedStationNames.size() == 0) { // No station visited yet
             nextStation = 0; // Lead to the first station
-        }
-        else
+        } else
             nextStation = allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1; // highest indexed station plus 1
 
 
@@ -530,7 +553,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         }
 
 
-        //calculate fitting startpoint:
+        //calculate fitting starting point:
         x -= NEXT_MARKER_TIP_X ;
         y -= NEXT_MARKER_TIP_Y ;
 
@@ -543,10 +566,11 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     /**
      * Method that draws the marker on the current, last visited station
      * (different method because it draws a different marker with different calculation of positions)
-     * @param x x-position of the markers midpoint
-     * @param y y-position of the markers midpoint
+     *
+     * @param x     x-position of the markers midpoint
+     * @param y     y-position of the markers midpoint
      * @param floor only drawn if the maplayer is currently showing that floor
-     * @return
+     * @return Bitmap that underlies the canvas
      */
     public Bitmap drawCurrentMarker(int x, int y, int floor){
 
@@ -569,12 +593,13 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     /**
      * Method draws an Arrow on the mapCanvas
-     * @param name Resource name of the Arrow in question in a String
-     * @param x x-Position of the Arrow
-     * @param y y-Position of the Arrow
+     *
+     * @param name  Resource name of the Arrow in question in a String
+     * @param x     x-Position of the Arrow
+     * @param y     y-Position of the Arrow
      * @param floor Floor the Arrow is drawn in, only if the floor in question is currently active
      */
-    private Bitmap drawArrow(String name, int x, int y, int floor) throws JSONException{
+    private Bitmap drawArrow(String name, int x, int y, int floor) /*throws JSONException*/ {
         if (currentLevel != floor) return result;
 
         int resourceId = getResourceByName(name);
@@ -594,12 +619,23 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
 
     }
 
-    private int getResourceByName(String name){
+    /**
+     * Method for obtaining a resource's id by giving it's name as a parameter
+     *
+     * @param name Name of the resource
+     * @return id of the resource
+     */
+
+    private int getResourceByName(String name) {
         return getApplicationContext().getResources().getIdentifier(name, "raw", getApplicationContext().getPackageName());
     }
 
     /**
-     * Method for making all ImageRequests based on the current Level
+     * Method for making all ImageRequests based on the current Level;
+     * <p>
+     * Things to consider:
+     * - before doing any requests canvas will be set null
+     * - Amount of requests are counted by method (for reference see onImageCallback())
      *
      * @param level current Level
      */
@@ -607,8 +643,9 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
     public void getImages(int level) {
         canvas = null;
         check = level;
+        int j = 0; //Variable for decreasing ImageRequests by 1 in order to prevent last station to be drawn over normal main floor
         AMOUNT_OF_IMAGE_REQUESTS = 0;
-        if (allObtainedStationNames.size() == 0) {
+        if (allObtainedStationNames.size() == 0) { //Check if no stations haven't been scanned before, otherwise nextImageRequest for first station couldn't be made
             net.makeImageRequestWithIDCallback(this, "FloorRequest", "mapFloors", level, true, this);
             AMOUNT_OF_IMAGE_REQUESTS++;
             if (manager.isRallyeMode()) {
@@ -617,7 +654,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
             }
             return;
         }
-        if (manager.isRallyeMode() && currentLevel == 0) { //Letzte Station ist Speziallfall, ist nicht nach Stockwerk geordnet und ersetzt den Erdgeschoss
+        if (manager.isRallyeMode() && currentLevel == 0) { //Last station is special case; not ordered correctly in database as well as having the property of being able to replace the main floor
             if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) == (AMOUNT_OF_STATIONS - 2)) {
                 net.makeImageRequestWithIDCallback(this, "FinalStage", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
                 AMOUNT_OF_IMAGE_REQUESTS++;
@@ -626,95 +663,31 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         }
         net.makeImageRequestWithIDCallback(this, "FloorRequest", "mapFloors", level, true, this);
         AMOUNT_OF_IMAGE_REQUESTS++;
-        switch (level) {
-            case 0:
-                for (int j = 0; j < AMOUNT_OF_STATIONS_PER_LEVEL[1]; j++) { //Alle Stationen vom ersten Stock werden durchlaufen
-                    if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) { // Nur wenn station besucht wurde wird netrequest gemacht
-                        net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                if (manager.isRallyeMode()) {
-                    if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && currentLevel == level) { // Wenn die letzte eingescannte station nicht die letzte Station des Stockwerkes ist, wird die nächste Station geladen (AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1, weil das bei 1 beginnt, die erhaltenen Stationen bei 0
-                        net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                break;
-            case -1:
-                for (int j = AMOUNT_OF_STATIONS_PER_LEVEL[1]; j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0]); j++) {
-                    if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                if (manager.isRallyeMode()) {
-                    if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1 && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                break;
-            case 1:
-                for (int j = (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0]); j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2]); j++) {
-                    if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                if (manager.isRallyeMode()) {
-                    if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= (AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[1] - 1) && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] - 1) && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                break;
-            case 2:
-                for (int j = (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2]); j < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3]); j++) {
-                    if (allObtainedStationNames.lastIndexOf(j) != -1 && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", j, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                if (manager.isRallyeMode()) {
-                    if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] - 1) && allObtainedStationNames.get(allObtainedStationNames.size() - 1) < (AMOUNT_OF_STATIONS_PER_LEVEL[1] + AMOUNT_OF_STATIONS_PER_LEVEL[0] + AMOUNT_OF_STATIONS_PER_LEVEL[2] + AMOUNT_OF_STATIONS_PER_LEVEL[3] - 1) && currentLevel == level) {
-                        net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
-                        AMOUNT_OF_IMAGE_REQUESTS++;
-                    }
-                }
-                break;
-            default:
-                Intent i = new Intent(this, activityErrorHandling.class);
-                i.putExtra(activityErrorHandling.errorNameIntentExtra, "Error with method getImages; Wrong level id");
-                startActivity(i);
-
+        if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) >= (AMOUNT_OF_STATIONS - 1)) { //see initialization of int variable j
+            j++;
+        }
+        for (int i = 0; i < allObtainedStationNames.size() - j; i++) { //variable j to decrease amount of loops by one when last station was already scanned
+            if (currentLevel == getLevelPerId(allObtainedStationNames.get(i)) && level == currentLevel) { //Checks if station would be on right floor, is later checked in onImageCallback() as well to prevent wrong drawing
+                net.makeImageRequestWithIDCallback(this, "ImageRequest", "mapFragments", allObtainedStationNames.get(i), true, this);
+                AMOUNT_OF_IMAGE_REQUESTS++;
+            }
+        }
+        if (manager.isRallyeMode()) { //Makes request for upcoming station in order to draw it opaque; for reference see onImageCallback()
+            if (currentLevel == getLevelPerId(allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1)) { //Only if station would be on the current floor
+                net.makeImageRequestWithIDCallback(this, "NextImageRequest", "mapFragments", allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1, true, this);
+                AMOUNT_OF_IMAGE_REQUESTS++;
+            }
         }
     }
 
     /**
-     * Method for adding image to canvas
+     * Method for adding image to canvas; also used for loading floor image
      *
      * @param bitmap new bitmap drawn on canvas
      * @return bitmap of canvas
      */
 
     public Bitmap imageRequest(Bitmap bitmap) {
-        if (result == null || canvas == null) {
-            result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-            canvas = new Canvas(result);
-        }
-        canvas.drawBitmap(bitmap, 0f, 0f, null);
-        return result;
-    }
-
-    /**
-     * Method for adding image of floor to canvas
-     *
-     * @param bitmap floor gets drawn on canvas
-     * @return bitmap of canvas
-     */
-
-    public Bitmap floorRequest(Bitmap bitmap) {
         if (result == null || canvas == null) {
             result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
             canvas = new Canvas(result);
@@ -763,10 +736,7 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
                         return -1;
                     case 0:
                         return 0;
-                    default:
-                        return 0;
                 }
-
             }
         }
         return -2;
@@ -779,10 +749,10 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         int i = 0;
         if (allObtainedStationNames.size() != 0) {
             i = getLevelPerId(allObtainedStationNames.get(allObtainedStationNames.size() - 1) + 1);
-            //checks if all stations were already scanned with varable x
+            //checks if all stations were already scanned with variable x
             int x = 0;
-            for (int u = 0; u < AMOUNT_OF_STATIONS_PER_LEVEL.length; u++) {
-                x += AMOUNT_OF_STATIONS_PER_LEVEL[u];
+            for (int value : AMOUNT_OF_STATIONS_PER_LEVEL) {
+                x += value;
             }
             if (allObtainedStationNames.get(allObtainedStationNames.size() - 1) == x) {
                 return;
@@ -792,19 +762,19 @@ public class activityMap extends toolbarWrapper implements networkCallbackImageI
         switch (i) {
             case 0:
                 button = findViewById(R.id.radioButton1);
-                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited, null));
                 break;
             case -1:
                 button = findViewById(R.id.radioButton2);
-                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited, null));
                 break;
             case 1:
                 button = findViewById(R.id.radioButton3);
-                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited, null));
                 break;
             case 2:
                 button = findViewById(R.id.radioButton4);
-                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited));
+                button.setTextColor(getResources().getColor(R.color.progress_item_not_visited, null));
                 break;
         }
     }

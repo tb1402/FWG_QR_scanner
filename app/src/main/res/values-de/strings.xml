@@ -69,9 +69,9 @@
     <string name="image_quality_low">Niedrig (640x360px)</string>
 
     <!-- content strings-->
-    <string name="welcome_message">Der FWG QR Scanner ist eine App, mit der Sie Informationen zu wichtigen Orten im Frankenwald-Gymnasiums Kronach mit Hilfe eines QR Codes, welcher an den Orten selbst auffindbar ist, abrufen können. Die Entwicklung erfolgt in Form eines Open-Source-Projektes, sodass Sie jederzeit den Quellcode der App auf Github anschauen können.</string>
+    <string name="welcome_message">Der FWG QR Scanner ist eine App, mit der Sie Informationen zu wichtigen Orten im Frankenwald-Gymnasiums Kronach mit Hilfe eines QR Codes, welcher an den Orten selbst auffindbar ist, abrufen können.</string>
     <string name="dev_team">Entwicklerteam:\nQ12 Informatik Kurs des Frankenwald-Gymnasiums Kronach bestehend aus Maxim Balajan, Daniel Becker, Tobias Bittner, Dennis Eckert, Nico Fröba, Philipp Möckel, Niklas Schoberth, David Schuberth und Ben Welsch</string>
-    <string name="github_link">Github Link:\n<a href="https://github.com/tb1402/FWG_QR_scanner">https://github.com/tb1402/FWG_QR_scanner</a>\n<a href="https://github.com/FWG-coder">https://github.com/FWG-coder</a></string>
+    <string name="github_link"><!--Github Link:\n<a href="https://github.com/FWG-coder">https://github.com/FWG-coder</a>--></string>
 
     <!-- guide strings -->
     <string name="quick_guide_body"><b>Nutzen der App\n</b>Scannen Sie nun einen von Ihnen gefundenen QR Code ein. Bei erfolgreichem Scannen sollte die aktuelle Station und deren Informationen angezeigt werden. Wenn Sie zurück möchten, klicken Sie auf den Pfeil oben links.\nKlicken Sie auf die 3 Linien oben links, um zum Navigationsmenü zu gelangen.\nKlicken Sie das Karten Icon, um zur Karte zu gelangen.\nKlicken Sie die 3 Punkte oben rechts, um zu den Einstellungen zu gelangen.</string>
@@ -102,4 +102,6 @@
     <string name="scan_teacher_success">Lehrercode erfolgreich gescannt</string>
     <string name="wrong_station">Dies ist nicht die nächste Station. Bitte scannen Sie den richtigen Code.</string>
     <string name="back_start_text">Bitte beenden Sie erst die Startanleitung</string>
+    <string name="scan_teacher_error">Lehrercode konnte nicht überprüft werden, da er wahrscheinlich ungültig ist.</string>
+    <string name="button_scan_back">Zurück zum Einscannen</string>
 </resources>
