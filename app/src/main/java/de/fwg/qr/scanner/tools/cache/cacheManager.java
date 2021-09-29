@@ -122,11 +122,9 @@ public class cacheManager implements addToMemCacheWhileReadInterface {
      * Delete all cached images, this method is triggered remotely by changing a value on the server
      * Needed if we update pictures
      */
-    public void invalidateCache() {
+    public static void invalidateCache(Context c) {
         memoryCacheSingleton.invalidate();
-        memoryCache = memoryCacheSingleton.getInstance();
-        File f = new File(c.getExternalCacheDir(), "/");
-        new deleteCacheTask(c).execute(f);
+        new deleteCacheTask(c).execute( new File(c.getExternalCacheDir(), "/"));//delete cached files
     }
 
     /**

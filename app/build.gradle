@@ -9,8 +9,8 @@ android {
         applicationId "de.fwg.qr.scanner"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 11
-        versionName "0.1.1 beta"
+        versionCode 40
+        versionName "0.4.0 beta"
 
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -40,15 +40,20 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation 'com.google.android.material:material:1.2.1'
+
     implementation 'com.android.volley:volley:1.1.1'
+    implementation 'androidx.webkit:webkit:1.4.0'
+
     implementation "androidx.navigation:navigation-fragment:2.3.0"
     implementation "androidx.navigation:navigation-ui:2.3.0"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.0"
+
     implementation 'androidx.preference:preference:1.1.1'
+
     //implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //testImplementation 'junit:junit:4.13'
     //androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     //androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.google.android.gms:play-services-vision:20.1.2'
 
+    implementation 'com.google.android.gms:play-services-vision:20.1.2'
 }

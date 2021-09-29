@@ -65,7 +65,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
     private String[] stationIds;
 
     /**
-     * Intent made qlobal because of reciveDetection being called multiple times
+     * Intent made global to prevent (possibly multiple) called receiveDetection(s) to start a new intent each time
      */
     private Intent i = null;
 
@@ -125,7 +125,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      * @param permissions  All permissions that were asked of user
      * @param grantResults Shows if permissions with same index were granted or denied
      */
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         if (requestCode == 201) {
@@ -155,11 +154,7 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      */
     @Override
     public void onPrepareOptionsMenu(@NotNull Menu menu) {
-        if (preferencesManager.getInstance(c).isRallyeMode()) {
-            menu.findItem(R.id.tb_item_reset).setVisible(true);
-        } else {
-            menu.findItem(R.id.tb_item_reset).setVisible(false);
-        }
+        menu.findItem(R.id.tb_item_reset).setVisible(preferencesManager.getInstance(c).isRallyeMode());
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -187,28 +182,24 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
 
                 JSONObject j = new JSONObject(response);
                 String date = j.getString("date");
-                String version = j.getString("version");
 
                 //set the encryption key base, delivered from the server
-                if (cacheManager.encryptionKeyBase == null) {
-                    cacheManager.encryptionKeyBase = j.getString("ek");
-                }
+                if (cacheManager.encryptionKeyBase == null) cacheManager.encryptionKeyBase = j.getString("ek");
 
+                //get required data and check if cache needs to be deleted
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
-                if (!pref.getPreferences().contains("cache_date")) {
-                    pref.saveString("cache_date", date);
-                }
+                if (!pref.getPreferences().contains("cache_date")) pref.saveString("cache_date", date);//set date if none present
 
                 String savedDateString = pref.getPreferences().getString("cache_date", "2020-01-01");
 
-                //compare the locally and the server date for cache update, if server data is larger, cached files will be deleted
+                //compare the locally and the server date for cache update, if server date is larger, cached files will be deleted
                 if (df.parse(date).getTime() > df.parse(savedDateString).getTime()) {
-                    new cacheManager(c).invalidateCache();
+                    cacheManager.invalidateCache(c);
                     pref.saveString("cache_date", date);
                 }
 
                 //check for update
-                if (checkUpdate(version)) {
+                if (checkUpdate(j.getString("version"))) {
                     updateAlert();
                     return;
                 }
@@ -233,23 +224,14 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
                         pm.saveInt("rallyStationNumber", -1);
                     }
                     net.makePostRequest(this, "getMapData", "", c);
-                } else {
-                    if (isTeacherCodeScanned) {
-                        Toast.makeText(c, getString(R.string.scan_teacher_error), Toast.LENGTH_SHORT).show();
-                    }
-                    if (pm.getPreferences().contains("token")) {
-                        pm.deleteValue("token");
-                    }
-                    if (pm.areFeaturesUnlocked()) {
-                        pm.saveBoolean("unlocked", false);
-                    }
-                    if (pm.isRallyeMode()) {
-                        pm.saveString("mode", "1");
-                    }
+                } else {//error returned by server, lock all features
+                    if (isTeacherCodeScanned) Toast.makeText(c, getString(R.string.scan_teacher_error), Toast.LENGTH_SHORT).show();
+                    if (pm.getPreferences().contains("token")) pm.deleteValue("token");
+                    if (pm.areFeaturesUnlocked()) pm.saveBoolean("unlocked", false);
+                    if (pm.isRallyeMode()) pm.saveString("mode", "1");
                     detectionCheck = true;
                 }
-                if (isTeacherCodeScanned)
-                    ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
+                if (isTeacherCodeScanned) ((recreateFragmentAfterScanInterface) a).recreateFragmentAfterScan();
             } catch (JSONException e) {
                 Intent i = new Intent(c, activityErrorHandling.class);
                 i.putExtra(activityErrorHandling.errorNameIntentExtra, activityErrorHandling.stackTraceToString(e));
@@ -372,9 +354,9 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
      */
     private void detection() {
         i = null;
-        barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
+        //barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
 
-        barcodeDetector = new BarcodeDetector.Builder(requireContext()).setBarcodeFormats(Barcode.QR_CODE).build();
+        barcodeDetector = new BarcodeDetector.Builder(c).setBarcodeFormats(Barcode.QR_CODE).build();
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
@@ -396,7 +378,6 @@ public class fragmentScan extends fragmentWrapper implements networkCallbackInte
             }
         });
         startCamera();
-
     }
 
 
